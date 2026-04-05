@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>OPP_TABLE_V32_PINUX</title>
+    <style>
+        :root { --main: #007aff; --bg: #f2f2f7; --card: #fff; --text: #1c1c1e; --gold: #eeb928; --green: #34c759; --red: #ff3b30; }
+        html,body{height:100%;margin:0;}
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--text);}
+        .topline-sticky-bar { position:sticky; top:0; background:rgba(242,242,247,0.98); z-index:1117; box-shadow:0 2px 15px 0 rgba(44,62,80,0.045);}
+        .topline-flex { display:flex; align-items:flex-end; justify-content:space-between; padding:16px 25px 6px 25px;}
+        .topline-left { display: flex; gap: 12px; align-items: center; }
+        .block-tabs { display: flex; gap: 10px; }
+        .block-tab { background: #222; color: #fff; border-radius: 25px; padding: 7px 27px; font-size: 18px; font-weight: 900; cursor: pointer; transition: 0.1s; box-shadow: 0 2px 13px rgba(50,80,140,0.06);}
+        .block-tab.active { background: var(--main);}
+        .summary-grid { display: flex; gap: 10px; margin-left: 13px;}
+        .summary-item { background:var(--card); padding:7px 11px; border-radius:12px; border:1.5px solid #d1d1d6; cursor:pointer; transition:0.21s; box-shadow:0 2px 8px rgba(0,0,0,0.03); min-width:110px; font-size:14px;}
+        .summary-item.active, .summary-item:hover { border-color:var(--main); transform:scale(1.06);}
+        .sum-label { font-size:9.5px; color:#8e8e93; text-transform:uppercase; font-weight:800;}
+        .sum-val { font-size:15px; font-weight:800; margin-top:2px; color:var(--main);}
+        .topline-right { display:flex; gap:12px; align-items:center;}
+        .btn-cmd { background:var(--main); color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:800; padding:0 16px; height:38px; cursor:pointer;}
+        .btn-danger { background:var(--red);}
+        .btn-grey { background:#8e8e93;}
+        .btn-excel-mini { width:38px; min-width:38px; height:38px; border-radius:50%; background:#16acff; color:#fff; border:none; font-size:19px; font-weight:900; margin-left:2px; display:flex; align-items:center; justify-content:center;}
+        .showonly{display:none;}
+        #resetFilterBtn {margin-left:6px;}
+        .fast-search { max-width:200px;}
+        .search-box { background:#f8f8f9; padding:10px 11px; border-radius:10px; border:1px solid #d1d1d6; font-size:15px; outline:none; min-width:0; }
+        .search-box:focus { border-color:#2997ff;}
+        .excel-import-block {position:sticky; top:58px; z-index:1018; padding:8px 28px 10px 28px; background:rgba(242,242,247,0.97); display:flex; align-items:center; gap:13px;}
+        .excel-form-title { flex-shrink:0; text-transform:uppercase; font-size:11px; font-weight:700; margin-right:9px; color:#8e8e93;}
+        #excelInput { width:100%; min-width:600px; min-height:38px; border:1.4px solid #d1d1d6; border-radius:10px; padding:8px; font-size:14.3px; outline:none; background:#fff; box-shadow:0 0 10px rgba(80,80,160,.01);}
+        #excelInput:focus{border-color:#2997ff;}
+        .excel-form-btn { background:var(--green); color:#fff; font-weight:800; border:none; border-radius:10px; padding:0 19px; height:39px; cursor:pointer; }
+        .excel-hide-btn {margin-left:15px; font-size:10px; background:#e5e5ea; color:#444; border:none; border-radius:9px; cursor:pointer; padding:5px 14px;}
+        .table-wrap { margin-top:5px; }
+        table { width:100%; border-collapse:separate; border-spacing:0 6px;}
+        thead th {
+            background:#1c1c1e;
+            color:#fff;
+            font-weight:800;
+            text-transform:uppercase;
+            font-size:13px;
+            padding:14px 10px;
+        }
+        td { background:var(--card); padding:10px 12px; font-size:13px; border-top:1px solid #eee; border-bottom:1px solid #eee; min-width: 80px;}
+        td:first-child, th:first-child { border-radius:12px 0 0 12px; border-left:1px solid #eee;}
+        td:last-child, th:last-child { border-radius:0 12px 12px 0; border-right:1px solid #eee;}
+        .c-red { background:#ff3b30 !important; color:#fff !important;}
+        .c-green { background:#34c759 !important; color:#fff !important;}
+        .done-row { background:#f2fff3 !important; border-left:5px solid var(--green) !important;}
+        .hidden { display: none !important;}
+        select { width: 100%; border: none; padding: 6px; border-radius: 7px; font-size: 13px; font-weight: 700; cursor: pointer; background: #f2f2f7; text-align: center;}
+        .lo-red {color:#e73636 !important; background:#ffe5e5!important;}
+        .btn-add { background:var(--main); width:32px; height:32px; border-radius:8px; border:none; color:#fff; cursor:pointer; font-size:19px; display:flex; align-items:center; justify-content:center;}
+        .btn-del { background:var(--red); width:29px; height:29px; border-radius:7px; border:none; color:#fff; font-size:15px; font-weight:bold; cursor:pointer;}
+        .popup { position: fixed; left: 50vw; top: 50vh; transform: translate(-50%,-50%); background: #fff; padding: 25px; border-radius: 20px; box-shadow: 0 10px 60px rgba(0,0,0,0.19); z-index: 10003; border: 2px solid var(--main); width: 610px;}
+        .filter-btn-mx {
+            background: #e2ecff;
+            color: #0553aa;
+            border: 1.2px solid #0553aa;
+            border-radius: 7px;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 10px 1px 10px;
+            margin-left:7px;
+            cursor:pointer;
+            vertical-align:middle;
+        }
+        .mx-sort-btn {
+            background: #e2ecff;
+            border:1.2px solid #0553aa;
+            color:#0553aa;
+            font-size:13px;
+            font-weight:bold;
+            padding:2px 10px 1px 10px;
+            border-radius:7px;
+            cursor:pointer;
+            margin-left:4px;
+            vertical-align:middle;
+        }
+        .mx-sort-btn.active { background: #cbe2ff; border-color:#1a7ad3;}
+        .mx-sort-btn .arrow {font-size:12px; margin-left:3px;}
+        .mx-filter-popup {
+            position:absolute;
+            background:#fff;
+            border:2px solid #2997ff;
+            border-radius:9px;
+            min-width:120px;
+            box-shadow:0 6px 30px rgba(60,90,160,0.13);
+            z-index:9003;
+            padding:6px 14px 9px 13px;
+            font-size:14px;
+            animation:popup-fade .25s;
+        }
+        .mx-filter-popup label {display:block;cursor:pointer;line-height:1.7;}
+        .mx-filter-popup .closebtn {margin-top:6px;}
+        @keyframes popup-fade {from{opacity:.2;transform:translateY(-10px);}to{opacity:1;}}
+        .lo-edit-btn {
+            background: #f5f7fa;
+            color: #004fa3;
+            border: 1.2px solid #2997ff;
+            border-radius: 7px;
+            font-size: 15px;
+            font-weight: 700;
+            padding: 2px 10px 1px 10px;
+            margin-left:7px;
+            cursor:pointer;
+            vertical-align:middle;
+        }
+        option.lo-add {color:#b3b3b3;}
+    </style>
+</head>
+<body>
+<div class="topline-sticky-bar">
+    <div class="topline-flex">
+        <div class="topline-left">
+            <div class="block-tabs" id="blockTabs">
+                <div class="block-tab" data-block="Б3">Б3</div>
+                <div class="block-tab" data-block="Б4">Б4</div>
+                <div class="block-tab" data-block="Б5">Б5</div>
+            </div>
+            <div class="summary-grid" id="floorSummary"></div>
+        </div>
+        <div class="topline-right">
+            <button class="btn-cmd" onclick="exportExcel()">📊 Excel отчёт</button>
+            <button id="hardResetBtn" class="btn-cmd btn-danger">СБРОС</button>
+            <button id="resetFilterBtn" class="btn-cmd btn-grey" style="display:none;" onclick="resetFilter()">ПОКАЗАТЬ ВСЕ</button>
+            <input type="text" id="tableSearch" class="search-box fast-search" placeholder="Быстрый поиск…" onkeyup="filterTable()">
+            <button id="openInsertBtn" class="btn-excel-mini showonly" onclick="showExcelInsert()" title="Открыть вставку Excel">+</button>
+        </div>
+    </div>
+    <div id="excelInsertBlock" class="excel-import-block">
+        <div class="excel-form-title">1. ЗАГРУЗКА УТРЕННЕЙ БАЗЫ</div>
+        <textarea id="excelInput" placeholder="4 столбца: ШК, Статус, Название, Цена. Просто вставь таблицу из Excel — и всё по местам!"></textarea>
+        <button class="excel-form-btn" onclick="importData()">Загрузить</button>
+        <button class="excel-hide-btn" onclick="hideExcelInsert()" title="Скрыть панель загрузки Excel">Скрыть</button>
+    </div>
+</div>
+<div style="padding: 6px 24px 0 36px;">
+    <div id="greeting" style="font-size: 24px; font-weight: 900;"></div>
+    <div id="slogan" style="font-size:13px; color: #eeb928; font-weight:900; margin-bottom:2px; letter-spacing:0.03em;">
+        Система Терминатор V8 GOLD • Сегодня в работе
+    </div>
+    <div id="version" style="font-size:12px; color:#19191f; font-weight:bold; display:inline-block; margin-bottom:0;">
+        V32 PIN UX • Как в Google/Excel — полный порядок!
+    </div>
+</div>
+<div class="table-wrap">
+<table id="mainTable">
+    <thead>
+        <tr>
+            <th></th>
+            <th>ШК (ID)</th>
+            <th>ВБ СТИКЕР</th>
+            <th>СТАТУС</th>
+            <th>НАЗВАНИЕ</th>
+            <th>СТОИМОСТЬ</th>
+            <th>
+                МХ
+                <button class="filter-btn-mx" onclick="showMXFilter(event)">Фильтр</button>
+                <button id="mxSortBtn" class="mx-sort-btn" onclick="toggleMXSort()" title="Сортировка по МХ">
+                    Сортировать <span class="arrow" id="mxSortArrow">▼</span>
+                </button>
+            </th>
+            <th>BOX</th>
+            <th>ЭТАЖ</th>
+            <th>РЯД</th>
+            <th>
+                СТАТУС ПОИСКА
+                <div style="font-weight:400; font-size:11px; color:#f3e062;margin-top:2px;">(после поиска на МХ)</div>
+            </th>
+            <th>СТАТУС</th>
+            <th>ОПРИХОД</th>
+            <th>
+                ЛО
+                <button class="lo-edit-btn" onclick="openLoEditPopup(event)">✏️</button>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+</table>
+</div>
+<div id="inlinePopup" class="popup" style="display: none;">
+    <h3 style="color:#000; margin-bottom:15px; font-size:14px;">ДАННЫЕ ИЗ ПРОГРАММЫ (ENTER)</h3>
+    <textarea id="popupText" style="width:98%; height:100px; margin-bottom:15px; border:1px solid #ddd;" onkeydown="handlePopupKey(event)"></textarea>
+    <button style="width:100%;" onclick="process()">ВНЕСТИ ДАННЫЕ</button>
+</div>
+<div id="mxFilterPopup" class="mx-filter-popup" style="display:none"></div>
+<script>
+const LO_BASE = [
+'СПБ Московское шоссе 177','Брест','Тюмень 1','Минск Хатежино 1','Минск Привольный','СЦ Ульяновск Инженерный','Краснодар Тахтамукай','Волгоград Городище','Набережные Челны 1','Челябинск Ленина','Нижний Тагил Восточное','Казань 3','Вологда Окружное Шоссе','Тюмень Харьковская','Новоколедино 1','Нижний Новгород Ларина','Рязань Новоселковская 1','Смоленск Лавочкина','Шушары Московское шоссе 143','Радумля 1','Щелково блок 1','Сынково 1','СЦ Оренбург Центральная','Энгельс Строителей','Адыгея 1','Томск 2','Артём 2','Чита','Хабаровск Зеленая','Пятигорск Георгиевское','Обухово','Кемерово','Невинномысск 1','Новокузнецк 1','Уфа Почта России','Магнитогорск','Орша','Гомель Могилевская','СЦ Пермь 3','Внуково 1','Кузнецк 1','Новосибирск Докукаева','Липецк 2','Ижевск','Курск 2','Челябинск Почта России','Екатеринбург Черняховского','Братск Промышленная','Ростов Гайдара','Сургут','Нижний-Новгород 3','СЦ Ярославль Громова','Киров','Старый Оскол','Симферополь 2','Красноярск Старцево','Иркутск 2','Астана 2','Архангельск Ленина','Омск 3','Тверь 1','Абакан','Петрозаводск Пряжинский','Брянск','Казань Столбище','СЦ Санкт-Петербург Почта России','Уфа','Вёшки 1','ДомодедовоM4 1','Новосёлки 1','Алексин 4','Барнаул Попова','СЦ Нижнекамск','Владимир Воршинское','Воронеж','Казань 4','Бела Дача 1','Внуково Почта России'
+];
+const LO_CUSTOM_KEY = "opp_table_lo_custom";
+function loadCustomLO(){ try{ return JSON.parse(localStorage.getItem(LO_CUSTOM_KEY)||"[]"); }catch(e){return[];} }
+function saveCustomLO(arr){localStorage.setItem(LO_CUSTOM_KEY,JSON.stringify(arr))}
+let LO_CUSTOM = loadCustomLO();
+function getAllLO(){
+    return [...LO_BASE,...LO_CUSTOM];
+}
+function addCustomLO(val){
+    LO_CUSTOM.push(val);
+    saveCustomLO(LO_CUSTOM);
+    updateAllLoDropdowns();
+}
+function updateAllLoDropdowns(){
+    document.querySelectorAll('select.lo-dropdown').forEach(s=>{
+        let sel=s.value;
+        s.innerHTML = getLoOptions(sel,true);
+        if(getAllLO().includes(sel)) s.value=sel;
+        else s.selectedIndex=0;
+    });
+}
+function getLoOptions(selected,withAddBtn){
+    let list = getAllLO();
+    let opt = `<option value="">-</option>`;
+    opt += list.map(lo=>{
+        let cls = lo==="Гомель Могилевская"?"lo-red":"";
+        return `<option value="${lo}" class="${cls}" ${selected===lo?"selected":""}>${lo}</option>`;
+    }).join("");
+    if(withAddBtn) opt += `<option value="__add__" class="lo-add">+ Добавить новый ЛО</option>`;
+    return opt;
+}
+const STATUS_SEARCH_LIST = ['-','Не найдено','Найдено'];
+const STATUS_LIST = ['-','Не найдено','Найдено','Релиз','Внутреннее перемещение','АС','Предсортировка в СЦ','Переупаковка','Сортировка в СЦ в контейнер','Пятигорск Георгиевское','Обработка вещей на столе старших'];
+const OPRIHOD_LIST = ['-','Движение на другом ЛО','Найдено в зоне поиска','Предсортировка в СЦ','Выход с сортировки','Сортировка в СЦ в контейнер','Буфер отправки','Отгрузка сторонним перевозчиком','Оклейка вещи ответственным','Сортировка автоматическим конвейером','Смена хар-ки на браке','Переоклейка вещи с несколькими наклейками (БРАК)','Обработка вещи на столе старшего для сортировки','Брак'];
+
+const h = new Date().getHours();
+const greet = h < 6 ? "Доброй ночи" : h < 12 ? "Доброе утро" : h < 18 ? "Добрый день" : "Добрый вечер";
+document.getElementById('greeting').innerText = `${greet}, отдел ОПП! 👋`;
+function createSelect(list, selClass, value){
+    return `<select class="${selClass}" onchange="saveTable()">
+        ${list.map(x=>`<option value="${x}"${x===value?" selected":""}>${x}</option>`).join("")}
+    </select>`;
+}
+function createLoDropdown(value){
+    return `<select class="lo-dropdown" onchange="loChooseHandler(this)">
+        ${getLoOptions(value,true)}
+    </select>`;
+}
+function loChooseHandler(sel){
+    if(sel.value==="__add__"){
+        let val = prompt("Введите новый ЛО:");
+        if(val && !getAllLO().includes(val)){
+            addCustomLO(val);
+            sel.innerHTML = getLoOptions(val,true);
+            sel.value = val;
+            saveTable();
+        } else {
+            sel.value = "";
+        }
+    }else{
+        saveTable();
+    }
+}
+
+let currentBlock=localStorage.getItem('opp_block')||"Б3";
+function saveTable(){
+    localStorage.setItem('opp_table_'+currentBlock,document.getElementById('tableBody').innerHTML);
+}
+
+function loadTable(){
+    document.querySelectorAll('.block-tab').forEach(tab=>{
+        tab.classList.remove('active');
+        if(tab.dataset.block == currentBlock) tab.classList.add('active');
+    });
+    document.getElementById('tableBody').innerHTML = localStorage.getItem('opp_table_' + currentBlock) || '';
+    updateSummary(); showExcelInsert(); applyMXFilter(); updateMXSortBtn(); updateAllLoDropdowns();
+}
+
+function importData() {
+    const val=document.getElementById('excelInput').value.trim();
+    if (!val) return;
+    const lines=val.split('\n');
+    const tbody=document.getElementById('tableBody');
+    const allShk=Array.from(tbody.querySelectorAll('.c-shk')).map(td=>td.innerText);
+    let someAdded=false;
+    lines.forEach(line=>{
+        let p=line.split('\t').map(x=>x.trim());
+        if (p.length<4) return;
+        if (!/^\d{7,}$/.test(p[0])) return;
+        let shk=p[0],status=p[1],name=p[2],cena=p[3];
+        if (allShk.includes(shk)) return;
+        const row=tbody.insertRow();
+        row.innerHTML=`
+            <td><button class="btn-add" onclick="openPopup(this)">+</button></td>
+            <td class="c-shk">${shk}</td>
+            <td class="c-vbs"></td>
+            <td>${status}</td>
+            <td>${name}</td>
+            <td class="c-price">${cena||''}</td>
+            <td class="c-mx">-</td>
+            <td class="c-bx">-</td>
+            <td class="c-floor">-</td>
+            <td class="c-row">-</td>
+            <td>${createSelect(STATUS_SEARCH_LIST,"status-search","-")}</td>
+            <td>${createSelect(STATUS_LIST,"status-main","-")}</td>
+            <td>${createSelect(OPRIHOD_LIST,"op-richod","-")}</td>
+            <td>${createLoDropdown("")}</td>
+            <td><button class="btn-del" onclick="deleteRow(this)">✕</button></td>
+        `;
+        someAdded=true;
+    });
+    if (someAdded) {
+        document.getElementById('excelInput').value = '';
+        hideExcelInsert();
+    }
+    saveTable(); updateSummary(); applyMXFilter(); if(mxSortDirection) sortByMX(mxSortDirection);
+    updateAllLoDropdowns();
+}
+
+function deleteRow(btn){btn.closest('tr').remove();saveTable();updateSummary();applyMXFilter();if(mxSortDirection)sortByMX(mxSortDirection);}
+
+document.getElementById('hardResetBtn').onclick=function(){
+    if(confirm("Точно удалить ВСЮ таблицу этого блока?")){
+        document.getElementById('tableBody').innerHTML=''; saveTable();updateSummary();applyMXFilter();
+    }
+};
+
+let activeRow=null;
+function openPopup(btn){
+    activeRow = btn.closest('tr');
+    document.getElementById('inlinePopup').style.display = 'block';
+    document.getElementById('popupText').focus();
+}
+function handlePopupKey(e) {
+    if (e.key === "Escape") { closePopup(); }
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); process(); }
+}
+function closePopup(){
+    document.getElementById('inlinePopup').style.display = 'none';
+    document.getElementById('popupText').value = '';
+    activeRow = null;
+}
+function process() {
+    const val = document.getElementById('popupText').value;
+    const vbsMatch = val.match(/\b\d{8,}\b/);
+    const mxMatch = val.match(/ВЛАД\d\.[\d.]+/);
+    const boxMatch = (val.match(/BOX\s*(\d{9})/) || val.match(/\b\d{9}\b/g));
+    let floor='-', rowNum='-';
+    if(mxMatch){
+        let m=mxMatch[0].split('.');
+        floor=(m[1]||'-');
+        rowNum=(m[2]||'-');
+    }
+    if(activeRow){
+        if(vbsMatch)activeRow.querySelector('.c-vbs').innerText=vbsMatch[0];
+        activeRow.querySelector('.c-mx').innerText=mxMatch?mxMatch[0]:"-";
+        activeRow.querySelector('.c-bx').innerText=boxMatch?boxMatch[boxMatch.length-1]:"-";
+        activeRow.querySelector('.c-floor').innerText=floor;
+        activeRow.querySelector('.c-row').innerText=rowNum;
+        activeRow.classList.add('done-row');
+        saveTable(); updateSummary(); applyMXFilter(); if(mxSortDirection) sortByMX(mxSortDirection); updateAllLoDropdowns();
+    }
+    closePopup();
+}
+
+let filteredFloor=null;
+function filterByFloor(f){
+    filteredFloor=f;
+    document.getElementById('resetFilterBtn').style.display='block';
+    let rows = document.querySelectorAll('#tableBody tr');
+    rows.forEach(r=>{
+        const tf = r.querySelector('.c-floor');
+        if (tf && tf.innerText == f)
+            r.classList.remove('hidden');
+        else
+            r.classList.add('hidden');
+    });
+    updateSummary();
+    applyMXFilter();
+}
+function resetFilter(){
+    filteredFloor = null;
+    mxFilterValue = null;
+    mxSortDirection = null;
+    document.getElementById('resetFilterBtn').style.display = 'none';
+    let rows = document.querySelectorAll('#tableBody tr');
+    rows.forEach(r=>r.classList.remove('hidden'));
+    updateSummary();
+    applyMXFilter();
+    updateMXSortBtn();
+}
+function filterTable(){
+    filteredFloor=null;
+    mxFilterValue=null;
+    mxSortDirection = null;
+    document.getElementById('resetFilterBtn').style.display='none';
+    const q=document.getElementById('tableSearch').value.toLowerCase();
+    document.querySelectorAll('#tableBody tr').forEach(r=>{
+        r.innerText.toLowerCase().includes(q)?r.classList.remove('hidden'):r.classList.add('hidden');
+    });
+    updateSummary();
+    applyMXFilter();
+    updateMXSortBtn();
+}
+function updateSummary() {
+    const rows=document.querySelectorAll('#tableBody tr.done-row');
+    const floors={};
+    rows.forEach(r=>{
+        const f=r.querySelector('.c-floor')?.innerText||"";
+        if(!f||f==='-')return;
+        if(!floors[f])floors[f]={count:0,sum:0};
+        floors[f].count++;
+        const price=parseFloat(r.querySelector('.c-price').innerText.replace(/\s/g,'').replace(',','.'))||0;
+        floors[f].sum+=price;
+    });
+    const container=document.getElementById('floorSummary');container.innerHTML='';
+    Object.keys(floors).sort((a,b)=>a-b).forEach(f=>{
+        const item=document.createElement('div');
+        item.className='summary-item';
+        item.innerHTML=`<div class="sum-label">Этаж ${f}</div><div class="sum-val">${floors[f].count} шт / ${floors[f].sum.toLocaleString()} ₽</div>`;
+        item.onclick=()=>filterByFloor(f);
+        if(filteredFloor==f)item.classList.add('active');
+        container.appendChild(item);
+    });
+}
+function exportExcel(){
+    const tbody=document.getElementById('tableBody');
+    let rows=Array.from(tbody.querySelectorAll('tr:not(.hidden)'));
+    let xls=`<table><tr>
+        <th>ШК</th><th>ВБ стикер</th><th>Статус товара</th><th>Наименование</th><th>Стоимость</th>
+        <th>МХ</th><th>BOX</th><th>Этаж</th><th>Ряд</th>
+        <th>Статус поиска</th><th>Статус</th><th>Оприход</th><th>ЛО</th></tr>`;
+    rows.forEach(row=>{
+        const tds=row.querySelectorAll('td');
+        xls+=`<tr>
+            <td>${tds[1]?.innerText||''}</td>
+            <td>${tds[2]?.innerText||''}</td>
+            <td>${tds[3]?.innerText||''}</td>
+            <td>${tds[4]?.innerText||''}</td>
+            <td>${tds[5]?.innerText||''}</td>
+            <td>${tds[6]?.innerText||''}</td>
+            <td>${tds[7]?.innerText||''}</td>
+            <td>${tds[8]?.innerText||''}</td>
+            <td>${tds[9]?.innerText||''}</td>
+            <td>${tds[10]?.querySelector('select')?.value||""}</td>
+            <td>${tds[11]?.querySelector('select')?.value||""}</td>
+            <td>${tds[12]?.querySelector('select')?.value||""}</td>
+            <td>${tds[13]?.querySelector('select')?.value||""}</td>
+        </tr>`;
+    });
+    xls+="</table>";
+    const blob = new Blob(['\ufeff'+xls],{type:'application/vnd.ms-excel'});
+    const a=document.createElement('a');
+    let etlabel=filteredFloor?`_Этаж${filteredFloor}`:'';
+    const now=new Date(), y=now.getFullYear().toString().slice(-2),
+          m=('0'+(now.getMonth()+1)).slice(-2), d=('0'+now.getDate()).slice(-2);
+    a.href=URL.createObjectURL(blob);
+    a.download=`OPP_V32_PINUX${etlabel}_${currentBlock}_${y}${m}${d}.xls`;
+    a.click();
+}
+
+// --- MX фильтр и сортировка как раньше (скопировано! working) ---
+let mxFilterValue = null;
+function showMXFilter(ev) {
+    const popup = document.getElementById('mxFilterPopup');
+    let mxList = Array.from(document.querySelectorAll('#tableBody .c-mx'))
+        .map(td=>td.innerText.trim())
+        .filter(val=>val && val !== '-');
+    mxList = Array.from(new Set(mxList)).sort();
+    let html = `<label><input type="radio" name="mxF" value="" ${!mxFilterValue ? "checked" : ""}>ВСЕ</label>`;
+    mxList.forEach(v=>{
+        html += `<label><input type="radio" name="mxF" value="${v}" ${mxFilterValue==v ? "checked":""}>${v}</label>`;
+    });
+    html += `<button class="closebtn" onclick="hideMXFilter()">Закрыть</button>`;
+    popup.innerHTML = html;
+    popup.style.display = '';
+    let rect = ev.target.getBoundingClientRect();
+    popup.style.top = (window.scrollY + rect.bottom + 3) + "px";
+    popup.style.left = (window.scrollX + rect.left) + "px";
+    popup.querySelectorAll('input[type=radio][name=mxF]').forEach(r=>{
+        r.onchange=function(){
+            mxFilterValue = r.value||null;
+            applyMXFilter();
+            updateResetBtnMX();
+            hideMXFilter();
+            if(mxSortDirection)sortByMX(mxSortDirection);
+        };
+    });
+}
+function hideMXFilter(){ document.getElementById('mxFilterPopup').style.display='none'; }
+function applyMXFilter() {
+    let trs = document.querySelectorAll('#tableBody tr');
+    trs.forEach(tr=>{
+        let tmx = tr.querySelector('.c-mx')?.innerText.trim() || '';
+        let show = !mxFilterValue || tmx == mxFilterValue;
+        if(!show && !tr.classList.contains('hidden')) tr.classList.add('hidden');
+        if(show && tr.classList.contains('hidden') && (!filteredFloor || (tr.querySelector('.c-floor')?.innerText == filteredFloor)))
+            tr.classList.remove('hidden');
+    });
+    updateResetBtnMX();
+}
+function updateResetBtnMX() {
+    let show = mxFilterValue || filteredFloor || mxSortDirection;
+    document.getElementById('resetFilterBtn').style.display = show ? '' : 'none';
+}
+let mxSortDirection = null;
+function toggleMXSort() {
+    if(mxSortDirection=='asc') mxSortDirection='desc';
+    else mxSortDirection='asc';
+    sortByMX(mxSortDirection);
+    updateMXSortBtn();
+    updateResetBtnMX();
+}
+function sortByMX(direction) {
+    let tbody = document.getElementById('tableBody');
+    let rows = Array.from(tbody.querySelectorAll('tr'));
+    rows.sort((a,b)=>{
+        let va = a.querySelector('.c-mx')?.innerText.trim() || '';
+        let vb = b.querySelector('.c-mx')?.innerText.trim() || '';
+        if(direction=='asc') return va.localeCompare(vb, 'ru', {numeric:true});
+        else return vb.localeCompare(va, 'ru', {numeric:true});
+    });
+    rows.forEach(tr=>tbody.appendChild(tr));
+}
+function updateMXSortBtn() {
+    let btn = document.getElementById('mxSortBtn');
+    let arrow = document.getElementById('mxSortArrow');
+    if(mxSortDirection=='asc') {
+        btn.classList.add('active');
+        arrow.innerHTML = "▲";
+    } else if(mxSortDirection=='desc') {
+        btn.classList.add('active');
+        arrow.innerHTML = "▼";
+    } else {
+        btn.classList.remove('active');
+        arrow.innerHTML = "▼";
+    }
+}
+
+// --- TABs logic ---
+document.querySelectorAll('.block-tab').forEach(tab=>{
+    tab.onclick = function() {
+        document.querySelectorAll('.block-tab').forEach(t=>t.classList.remove('active'));
+        tab.classList.add('active');
+        saveTable();
+        currentBlock = tab.dataset.block;
+        localStorage.setItem('opp_block', currentBlock);
+        loadTable();
+    };
+});
+// --- ЛО ШАПКА ---
+function openLoEditPopup(ev) {
+    let val = prompt("Введите новый ЛО:");
+    if(val && !getAllLO().includes(val)){
+        addCustomLO(val);
+        updateAllLoDropdowns();
+        saveTable();
+    }
+}
+window.onload = function(){
+    loadTable();
+};
+</script>
+</body>
+</html>
