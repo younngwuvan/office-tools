@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>DOMINATOR 3000 ELITE</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        :root {
+            --gold: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            --accent: #4facfe;
+        }
+
+        body {
+            background: radial-gradient(circle at center, #1a1c2c 0%, #0a0b10 100%);
+            color: #e0e0e0;
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Анимированная сетка */
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(184, 134, 11, 0.05) 1px, transparent 1px), 
+                              linear-gradient(90deg, rgba(184, 134, 11, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px; z-index: -1; opacity: 0.2;
+            animation: moveGrid 20s linear infinite;
+        }
+        @keyframes moveGrid { from { background-position: 0 0; } to { background-position: 40px 40px; } }
+
+        .header-group { text-align: center; margin-bottom: 50px; }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            background: var(--gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 3.5em; /* Увеличенный масштаб */
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin: 0;
+            filter: drop-shadow(0 0 20px rgba(184,134,11,0.5));
+        }
+
+        #datetime {
+            font-family: 'Orbitron', sans-serif;
+            color: #b38728;
+            font-size: 1.1em;
+            margin-top: 10px;
+            letter-spacing: 4px;
+            text-shadow: 0 0 10px rgba(179, 135, 40, 0.5);
+            opacity: 0.8;
+        }
+
+        .container { display: flex; gap: 40px; width: 100%; max-width: 1300px; z-index: 1; }
+
+        .box {
+            flex: 1; display: flex; flex-direction: column; gap: 20px;
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px);
+            padding: 25px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6); position: relative;
+        }
+
+        .box::after {
+            content: ""; position: absolute; top: -2px; right: -2px; width: 30px; height: 30px;
+            border-top: 2px solid #fcf6ba; border-right: 2px solid #fcf6ba; border-radius: 0 8px 0 0;
+        }
+
+        textarea {
+            width: 100%; height: 380px; background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px;
+            padding: 20px; color: #fff; font-size: 14px; resize: none; outline: none; box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn {
+            padding: 22px; border: none; border-radius: 15px; font-family: 'Orbitron', sans-serif;
+            font-weight: bold; font-size: 1.2em; cursor: pointer; transition: 0.3s;
+            text-transform: uppercase; letter-spacing: 2px; position: relative; overflow: hidden;
+        }
+
+        .btn-process { background: linear-gradient(90deg, #00c6ff 0%, #0072ff 100%); color: white; box-shadow: 0 0 20px rgba(0, 114, 255, 0.3); }
+        .btn-copy { background: linear-gradient(90deg, #00b09b 0%, #96c93d 100%); color: white; box-shadow: 0 0 20px rgba(0, 176, 155, 0.3); }
+        .btn:hover { transform: translateY(-3px) scale(1.01); filter: brightness(1.2); }
+
+        #sys-log {
+            width: 100%; max-width: 1250px; margin-top: 40px;
+            font-family: 'Courier New', monospace; font-size: 14px;
+            color: #39ff14; background: rgba(0, 0, 0, 0.8);
+            padding: 20px; border-radius: 15px; border-left: 5px solid #b38728;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .scan-line { height: 3px; width: 0; background: var(--gold); position: absolute; bottom: 0; left: 0; transition: width 0.4s ease; }
+    </style>
+</head>
+<body>
+
+    <div class="header-group">
+        <h1>DOMINATOR 3000 ELITE ⚡</h1>
+        <div id="datetime">СИНХРОНИЗАЦИЯ...</div>
+    </div>
+
+    <div class="container">
+        <div class="box">
+            <textarea id="input" placeholder="INSERT DATA FOR DOMINATION..."></textarea>
+            <button class="btn btn-process" onclick="processData()">
+                АНАЛИЗ ДАННЫХ
+                <div id="p-bar" class="scan-line"></div>
+            </button>
+        </div>
+
+        <div class="box">
+            <textarea id="output" readonly placeholder="TERMINAL STANDBY..."></textarea>
+            <button id="copyBtn" class="btn btn-copy" onclick="copyResult()">СКОПИРОВАТЬ СТРОКУ</button>
+        </div>
+    </div>
+
+    <div id="sys-log">> [STATUS]: СИСТЕМА ДОМИНИРОВАНИЯ АКТИВИРОВАНА...</div>
+
+<script>
+function updateTime() {
+    const now = new Date();
+    const date = now.toLocaleDateString('ru-RU');
+    const time = now.toLocaleTimeString('ru-RU');
+    document.getElementById('datetime').innerHTML = `${date} | ${time}`;
+}
+setInterval(updateTime, 1000);
+updateTime();
+
+function log(msg) { document.getElementById('sys-log').innerHTML = `> [SYSTEM]: ${msg}`; }
+
+function processData() {
+    const text = document.getElementById('input').value;
+    if(!text.trim()) return;
+
+    document.getElementById('p-bar').style.width = '100%';
+
+    setTimeout(() => {
+        const allNumbers = text.match(/\b\d{10,11}\b/g) || [];
+        const id = allNumbers[0] || "";
+        const sticker = allNumbers[1] || id;
+
+        const statusMatch = text.match(/\b[A-Z]{3,4}\b/);
+        const status = statusMatch ? statusMatch[0] : "";
+
+        const nameMatch = text.match(/Предмет\s*\n?\s*(.*?)(?=\n|\/|$)/i);
+        const name = nameMatch ? nameMatch[1].trim() : "";
+
+        const priceMatch = text.match(/(\d+)\s*₽/);
+        const price = priceMatch ? priceMatch[1] : "";
+
+        const mxMatch = text.match(/(ВЛАД\d+|ЦП\d+)[^\s]*/i);
+        const mx = mxMatch ? mxMatch[0] : "";
+
+        const boxMatch = text.match(/\b(BOX|CON)\b\s*(\d+)/i);
+        const boxNum = boxMatch ? boxMatch[2] : "";
+
+        // Порядок: ID - Стикер - Статус - Название - Цена - МХ - Бокс (через \t)
+        const result = `${id}\t${sticker}\t${status}\t${name}\t${price}\t${mx}\t${boxNum}`;
+        
+        document.getElementById('output').value = result;
+        log('АНАЛИЗ ЗАВЕРШЕН. СТРОКА СФОРМИРОВАНА.');
+        document.getElementById('p-bar').style.width = '0';
+    }, 400);
+}
+
+async function copyResult() {
+    const output = document.getElementById('output');
+    if(!output.value) return;
+    try {
+        await navigator.clipboard.writeText(output.value);
+        log('ДАННЫЕ СКОПИРОВАНЫ. READY TO PASTE.');
+        const btn = document.getElementById('copyBtn');
+        const oldText = btn.innerText;
+        btn.innerText = 'СКОПИРОВАНО! ✅';
+        setTimeout(() => { btn.innerText = oldText; }, 1500);
+    } catch (err) { log('ERR: ОШИБКА БУФЕРА'); }
+}
+</script>
+</body>
+</html>
