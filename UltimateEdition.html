@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>ULTIMATE 6 // VAN EDITION</title>
+    <style>
+        :root {
+            --term-bg: #1e1e1e;
+            --term-border: #333;
+            --text-gray: #b3b3b3;
+            --text-white: #ffffff;
+            --accent: #a1a1aa;
+            --gold: #b38728;
+        }
+
+        body {
+            background-color: #0f0f0f; color: var(--text-gray);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0; padding: 40px; display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; transition: background-color 0.4s ease;
+        }
+
+        body.flash-active { background-color: #252525; box-shadow: inset 0 0 150px rgba(255,255,255,0.1); }
+
+        .header {
+            width: 100%; max-width: 1100px; display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 40px; padding-bottom: 15px; border-bottom: 1px solid var(--term-border);
+        }
+
+        .branding { font-family: "SF Mono", monospace; font-size: 0.7rem; color: var(--gold); letter-spacing: 2px; font-weight: bold; }
+        h1 { margin: 0; font-size: 0.9rem; font-weight: 600; letter-spacing: 3px; color: var(--text-white); }
+        
+        .header-right { display: flex; gap: 20px; align-items: center; }
+        #datetime { font-family: "SF Mono", monospace; font-size: 0.7rem; color: #444; }
+        
+        .manual-btn {
+            background: transparent; border: 1px solid #444; color: #666;
+            font-family: "SF Mono", monospace; font-size: 0.6rem;
+            padding: 4px 10px; border-radius: 4px; cursor: pointer; transition: 0.3s;
+            text-transform: uppercase;
+        }
+        .manual-btn:hover { color: var(--text-white); border-color: var(--text-white); }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; width: 100%; max-width: 1100px; }
+
+        .window {
+            background: var(--term-bg); border: 1px solid var(--term-border);
+            border-radius: 10px; padding: 15px; display: flex; flex-direction: column; gap: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5); position: relative;
+        }
+
+        .dots { display: flex; gap: 6px; margin-bottom: 5px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+
+        .label { font-family: "SF Mono", monospace; font-size: 0.6rem; color: #444; text-transform: uppercase; margin-left: 5px; }
+
+        textarea {
+            width: 100%; height: 420px; background: #151515; border: 1px solid transparent;
+            border-radius: 6px; color: var(--text-white); padding: 15px;
+            font-family: "SF Mono", monospace; font-size: 13px; outline: none; resize: none; box-sizing: border-box;
+        }
+
+        #output { cursor: pointer; }
+        #output:hover { background: #1a1a1a; border-color: #444; }
+
+        .btn {
+            background: transparent; border: 1px solid var(--term-border); color: var(--accent);
+            padding: 10px 20px; font-family: "SF Mono", monospace; font-size: 0.7rem;
+            cursor: pointer; transition: 0.2s; border-radius: 6px;
+        }
+        .btn:hover { background: var(--text-white); color: #000; }
+
+        #console-panel {
+            width: 100%; max-width: 1100px; margin-top: 30px; background: var(--term-bg);
+            border: 1px solid var(--term-border); border-radius: 10px; padding: 20px;
+            font-family: "SF Mono", monospace; font-size: 12px; color: var(--text-white);
+            height: 150px; overflow-y: auto; display: flex; flex-direction: column-reverse;
+        }
+
+        .log-line { margin-bottom: 6px; }
+        .prompt { color: #50fa7b; margin-right: 8px; }
+        .path { color: #8be9fd; margin-right: 8px; }
+
+        /* ВОССТАНОВЛЕННЫЙ КРАСИВЫЙ МАНУАЛ */
+        #modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); z-index: 100;
+            justify-content: center; align-items: center;
+        }
+        .modal-content {
+            background: #1e1e1e; border: 1px solid #444; border-radius: 12px;
+            width: 100%; max-width: 650px; padding: 40px; position: relative;
+            box-shadow: 0 30px 80px rgba(0,0,0,1);
+        }
+        .modal-content h2 { font-family: "SF Mono", monospace; font-size: 1rem; color: var(--text-white); margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 15px; letter-spacing: 2px; text-transform: uppercase; }
+        .modal-content p, .modal-content li { font-size: 0.85rem; line-height: 1.7; color: #aaa; margin-bottom: 12px; }
+        .modal-content b { color: var(--text-white); }
+        .close-modal { position: absolute; top: 25px; right: 25px; cursor: pointer; color: #555; font-size: 0.7rem; font-family: "SF Mono", monospace; }
+        .close-modal:hover { color: #fff; }
+    </style>
+</head>
+<body>
+
+    <div id="modal" onclick="if(event.target.id === 'modal') toggleHelp()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="close-modal" onclick="toggleHelp()">[ ESC_CLOSE ]</div>
+            <h2>ULTIMATE 6 // MANUAL_GUIDE</h2>
+            <ol>
+                <li><b>КАРТОЧКА:</b> Скопируйте данные из <i>Карточки товара</i> и вставьте в левое окно. Каждая новая единица должна начинаться со слова <i>«Идентификатор»</i>.</li>
+                <li><b>ИСТОРИЯ:</b> Перейдите в раздел <i>«История»</i>, скопируйте строку с ВБ стикером, МХ и боксом, добавьте её следом в левое окно.</li>
+                <li><b>ЦЕНА:</b> Скопируйте стоимость напрямую с <i>Wildberries</i> и вставьте финальной строкой.</li>
+                <li><b>СБОРКА:</b> Нажмите <b>./run_analysis</b>. Система сама найдет нужные паттерны в этом массиве текста.</li>
+                <li><b>ВЫВОД:</b> Кликните по правому окну для мгновенного копирования готовой строки в буфер.</li>
+            </ol>
+            <p style="margin-top: 25px; font-size: 0.75rem; color: #444;"><i>* Левое окно автоматически очистится через 3 сек. после копирования. Клик в пустоту закроет мануал.</i></p>
+        </div>
+    </div>
+
+    <div class="header">
+        <div class="branding">[ ENGINE BY VAN ]</div>
+        <h1>ULTIMATE 6</h1>
+        <div class="header-right">
+            <button class="manual-btn" onclick="toggleHelp()">[ MANUAL ]</button>
+            <div id="datetime">00:00:00</div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="window">
+            <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+            <div class="label">source_input</div>
+            <textarea id="input" spellcheck="false" placeholder="Вставьте данные (Карточка + История + Цена)..."></textarea>
+            <div style="display:flex; gap:10px;">
+                <button class="btn" onclick="processData()">./run_analysis</button>
+                <button class="btn" onclick="clearAll()">clear</button>
+            </div>
+        </div>
+
+        <div class="window">
+            <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+            <div class="label">refined_output</div>
+            <textarea id="output" readonly spellcheck="false" placeholder="Awaiting command..." onclick="copyResult()"></textarea>
+            <button id="copyBtn" class="btn" onclick="copyResult()">cp to_buffer</button>
+        </div>
+    </div>
+
+    <div id="console-panel"><div id="log-container"></div></div>
+
+<script>
+    function updateClock() { document.getElementById('datetime').innerHTML = new Date().toLocaleString('ru-RU').replace(',', ' //'); }
+    setInterval(updateClock, 1000); updateClock();
+
+    function log(msg) {
+        const container = document.getElementById('log-container');
+        const newLine = document.createElement('div');
+        newLine.className = `log-line`;
+        newLine.innerHTML = `<span class="prompt">wuv@dominator</span><span class="path">~ %</span> ${msg}`;
+        container.prepend(newLine);
+    }
+
+    function toggleHelp() {
+        const m = document.getElementById('modal');
+        m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    function clearAll() { document.getElementById('input').value = ""; document.getElementById('output').value = ""; log('cache: cleared'); }
+
+    function typeEffect(element, text) {
+        element.value = "";
+        let i = 0;
+        function type() {
+            if (i < text.length) {
+                element.value += text.charAt(i);
+                i++;
+                setTimeout(type, 1);
+            }
+        }
+        type();
+    }
+
+    function processData() {
+        const text = document.getElementById('input').value;
+        if(!text.trim()) return;
+
+        log('process: executing pattern_match_v6...');
+
+        const allNumbers = text.match(/\b\d{10,11}\b/g) || [];
+        const id = (allNumbers.length > 0) ? allNumbers[0] : "";
+        const sticker = (allNumbers.length > 1) ? allNumbers[1] : id;
+
+        const statusMatch = text.match(/\b[A-Z]{3,4}\b/g) || [];
+        const status = statusMatch.find(s => s !== "BOX" && s !== "CON") || "";
+
+        const nameMatch = text.match(/Предмет\s*\n?\s*(.*?)(?=\n|\/|$)/i);
+        const name = nameMatch ? nameMatch[1].trim() : "";
+
+        const priceMatch = text.match(/(\d+)\s*₽/);
+        const price = priceMatch ? priceMatch[1] : "";
+
+        const mxMatch = text.match(/(ВЛАД\d*|ЦП\d*)[^\s]*/i);
+        const mx = mxMatch ? mxMatch[0] : "";
+
+        const boxMatch = text.match(/(?:BOX|CON)\s*(\d+)/i);
+        const boxNum = boxMatch ? boxMatch[1] : "";
+
+        const result = `${id}\t${sticker}\t${status}\t${name}\t${price}\t${mx}\t${boxNum}`;
+        
+        typeEffect(document.getElementById('output'), result);
+        log('success: compilation_complete');
+    }
+
+    async function copyResult() {
+        const output = document.getElementById('output');
+        if(!output.value) return;
+        try {
+            await navigator.clipboard.writeText(output.value);
+            log('buffer: transfer success');
+            document.body.classList.add('flash-active');
+            setTimeout(() => document.body.classList.remove('flash-active'), 400);
+            setTimeout(() => { document.getElementById('input').value = ""; log('auto_reset: active'); }, 3000);
+        } catch (err) { log('err: clipboard fail'); }
+    }
+
+    window.addEventListener('keydown', (e) => { if(e.key === 'Escape') { const m = document.getElementById('modal'); if(m.style.display === 'flex') toggleHelp(); } });
+</script>
+</body>
+</html>
