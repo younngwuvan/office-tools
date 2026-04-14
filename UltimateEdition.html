@@ -2,84 +2,94 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>ULTIMATE 6</title>
+    <title>ULTIMATE 6 // DOMINATOR</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root {
-            --bg: #b7b7b7; /* Тот самый серый из скриншота */
-            --win: #0d0d0d;
+            --bg: #bcbcbc; /* Тот самый серый фон из оригинала */
+            --panel: #0d0d0d;
             --gold: #d4af37;
+            --green: #22c55e;
         }
+
+        /* Кастомная "палка" скролла */
+        textarea::-webkit-scrollbar { width: 5px; }
+        textarea::-webkit-scrollbar-track { background: transparent; }
+        textarea::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+        textarea:hover::-webkit-scrollbar-thumb { background: #333; }
 
         body {
-            background: var(--bg);
-            margin: 0; padding: 60px 0;
+            background-color: var(--bg);
+            color: #1a1a1a;
             font-family: 'Inter', sans-serif;
+            margin: 0; padding: 60px 20px;
             display: flex; flex-direction: column; align-items: center;
         }
-
-        /* Кастомный скроллбар («палка») */
-        textarea::-webkit-scrollbar { width: 4px; }
-        textarea::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
-        textarea:hover::-webkit-scrollbar-thumb { background: #444; }
 
         #flash {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: white; opacity: 0; pointer-events: none; z-index: 1000;
+            transition: opacity 0.2s ease-out;
         }
 
         .header {
-            width: 1000px; display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 50px; font-size: 10px; letter-spacing: 2px; color: #888;
+            width: 1100px; display: grid; grid-template-columns: 1fr auto 1fr;
+            align-items: center; margin-bottom: 50px;
         }
 
-        .title { color: var(--gold); font-size: 16px; letter-spacing: 12px; font-weight: 600; text-transform: uppercase; }
+        .brand { color: var(--gold); font-size: 10px; letter-spacing: 3px; font-weight: 600; text-transform: uppercase; }
+        .main-title { color: var(--gold); font-size: 20px; font-weight: 600; letter-spacing: 12px; text-transform: uppercase; text-align: center; }
+        .manual-btn { text-align: right; font-size: 10px; color: #666; cursor: pointer; border-bottom: 1px solid transparent; }
+        .manual-btn:hover { color: var(--gold); border-bottom-color: var(--gold); }
 
-        .grid { display: flex; gap: 30px; width: 1000px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 35px; width: 1100px; }
 
-        .window {
-            flex: 1; background: var(--win); height: 520px; border-radius: 8px;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.3); display: flex; flex-direction: column;
+        .panel {
+            background: var(--panel);
+            border-radius: 10px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.3);
+            display: flex; flex-direction: column;
             border: 1px solid rgba(255,255,255,0.02);
+            height: 550px;
         }
 
-        .win-head {
-            padding: 12px 18px; display: flex; align-items: center;
+        .panel-header {
+            padding: 15px 20px; display: flex; align-items: center;
             border-bottom: 1px solid rgba(255,255,255,0.03);
         }
 
-        .dots { display: flex; gap: 6px; }
-        .dot { width: 10px; height: 10px; border-radius: 50%; background: #222; }
+        .dots { display: flex; gap: 8px; }
+        .dot { width: 11px; height: 11px; border-radius: 50%; background: #1a1a1a; }
         .dot.r { background: #ff5f56; }
         .dot.y { background: #ffbd2e; }
         .dot.g { background: #27c93f; }
 
-        .label { margin-left: 15px; font-size: 8px; color: #333; text-transform: uppercase; letter-spacing: 1px; }
+        .label { margin-left: 20px; font-size: 9px; color: #2a2a2a; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; }
 
         textarea {
-            flex: 1; background: transparent; border: none; padding: 25px;
+            flex: 1; background: transparent; border: none; padding: 30px;
             color: #d1d1d1; font-family: 'JetBrains Mono', monospace;
-            font-size: 12px; line-height: 1.8; resize: none; outline: none;
+            font-size: 13px; line-height: 1.8; resize: none; outline: none;
         }
 
-        .footer { padding: 15px 25px; }
+        .footer { padding: 20px 30px; border-top: 1px solid rgba(255,255,255,0.02); }
 
         .btn {
-            background: transparent; border: 1px solid #222; color: #444;
-            padding: 6px 14px; font-size: 9px; cursor: pointer; transition: 0.2s;
-            font-family: 'JetBrains Mono', monospace;
+            background: transparent; border: 1px solid #1a1a1a; color: #444;
+            padding: 8px 18px; font-size: 10px; font-family: 'JetBrains Mono', monospace;
+            cursor: pointer; transition: 0.2s;
         }
-        .btn:hover { border-color: #444; color: #888; }
-        .btn:focus { border-color: #1e3a8a; color: #1e3a8a; } /* Синяя обводка как на скрине */
+        .btn:hover { border-color: var(--gold); color: var(--gold); }
+        .btn:focus { border-color: #1e3a8a; color: #1e3a8a; }
 
-        .logs { width: 1000px; margin-top: 40px; font-family: 'JetBrains Mono', monospace; font-size: 9px; line-height: 1.6; }
-        .log-line { color: #1a1a1a; opacity: 0.4; }
-        .log-line.active { color: #22c55e; opacity: 1; }
+        /* Тот самый терминал снизу */
+        .terminal { width: 1100px; margin-top: 40px; font-family: 'JetBrains Mono', monospace; }
+        .log-line { font-size: 10px; color: #1a1a1a; margin-bottom: 5px; opacity: 0.3; }
+        .log-line.active { color: var(--green); opacity: 1; text-shadow: 0 0 5px rgba(34, 197, 94, 0.3); }
 
-        #modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 100; align-items: center; justify-content: center;
-        }
+        /* Модалка Manual */
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-content { background: #0a0a0a; padding: 60px; border-left: 3px solid var(--gold); max-width: 450px; }
     </style>
 </head>
 <body>
@@ -87,67 +97,79 @@
 <div id="flash"></div>
 
 <div class="header">
-    <div>[ ENGINE BY VAN ]</div>
-    <div class="title">ULTIMATE 6</div>
-    <div onclick="toggleM()" style="cursor:pointer">manual guide</div>
+    <div class="brand">[ ENGINE BY VAN ]</div>
+    <div class="main-title">ULTIMATE 6</div>
+    <div class="manual-btn" onclick="toggleM()">manual guide</div>
 </div>
 
 <div class="grid">
-    <div class="window">
-        <div class="win-head">
+    <div class="panel">
+        <div class="panel-header">
             <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
             <div class="label">source_data_telemetry</div>
         </div>
-        <textarea id="in" placeholder="READY..."></textarea>
+        <textarea id="in" placeholder="READY FOR INPUT..."></textarea>
         <div class="footer"><button class="btn" onclick="run()">./run_analysis</button></div>
     </div>
 
-    <div class="window" onclick="copy()">
-        <div class="win-head">
+    <!-- Клик в любое место вызывает копирование -->
+    <div class="panel" onclick="copy()">
+        <div class="panel-header">
             <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
             <div class="label">refined_output_buffer</div>
         </div>
-        <textarea id="out" readonly placeholder="AWAITING..."></textarea>
+        <textarea id="out" readonly placeholder="AWAITING COMPILATION..."></textarea>
         <div class="footer"><button class="btn">cp_to_buffer</button></div>
     </div>
 </div>
 
-<div class="logs" id="l">
-    <div class="log-line active">> SYSTEM_READY</div>
+<div class="terminal" id="logs">
+    <div class="log-line active">> SYSTEM_READY: STANDBY_MODE</div>
 </div>
 
 <div id="modal" onclick="toggleM()">
-    <div style="background:#111; padding:40px; border-left:3px solid var(--gold); color:#888; font-size:11px; max-width:400px; line-height:2;">
-        <h3 style="color:var(--gold); margin-top:0">MANUAL</h3>
-        1. Вставь данные влево.<br>2. Жми ./run_analysis.<br>3. Кликай в любое место правого окна для копирования.
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <h3 style="color:var(--gold); font-size:12px; letter-spacing:4px; margin-bottom:30px;">MANUAL</h3>
+        <p style="color:#666; font-size:11px; line-height:2.4; margin:0;">
+            1. ВСТАВЬТЕ СЫРЫЕ ДАННЫЕ В ЛЕВОЕ ОКНО.<br>
+            2. НАЖМИТЕ ./RUN_ANALYSIS ДЛЯ СБОРКИ.<br>
+            3. КЛИКНИТЕ В ЛЮБУЮ ТОЧКУ ПРАВОГО ОКНА ДЛЯ КОПИРОВАНИЯ.<br>
+            4. ВСПЫШКА ПОДТВЕРДИТ УСПЕХ.
+        </p>
     </div>
 </div>
 
 <script>
-    function toggleM() { const m = document.getElementById('modal'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }
-    
-    function log(t) {
-        const l = document.getElementById('l');
+    function toggleM() { const m = document.getElementById('modal'); m.style.display = (m.style.display === 'flex') ? 'none' : 'flex'; }
+
+    function log(msg) {
+        const l = document.getElementById('logs');
         const d = document.createElement('div');
         d.className = 'log-line active';
-        d.innerHTML = '> ' + t.toUpperCase();
+        d.innerHTML = '> ' + msg.toUpperCase();
         l.prepend(d);
         if(l.children.length > 5) l.lastChild.remove();
         Array.from(l.children).slice(1).forEach(i => i.classList.remove('active'));
     }
 
     function run() {
-        const txt = document.getElementById('in').value;
-        if(!txt) return;
-        log('analyzing...');
+        const text = document.getElementById('in').value;
+        if(!text.trim()) return;
+        log('analyzing_patterns...');
         setTimeout(() => {
-            const nums = txt.match(/\d{10,11}/g) || [];
-            const id = nums[0] || "";
-            const price = (txt.match(/(\d+)\s*₽/) || ["",""])[1];
-            const mx = (txt.match(/(ВЛАД\d+|ЦП\d+)/i) || [""])[0];
-            document.getElementById('out').value = `${id}\t${id}\t\t\t${price}\t${mx}`;
-            log('success');
-        }, 300);
+            const allNumbers = text.match(/\b\d{10,11}\b/g) || [];
+            const id = allNumbers[0] || "";
+            const sticker = allNumbers[1] || id;
+            const status = (text.match(/\b[A-Z]{3,4}\b/) || [""])[0];
+            const nameMatch = text.match(/Предмет\s*\n?\s*(.*?)(?=\n|\/|$)/i);
+            const name = nameMatch ? nameMatch[1].trim() : "";
+            const price = (text.match(/(\d+)\s*₽/) || ["",""])[1];
+            const mx = (text.match(/(ВЛАД\d+|ЦП\d+)[^\s]*/i) || [""])[0];
+            const box = (text.match(/\b(BOX|CON)\b\s*(\d+)/i) || ["","",""])[2];
+
+            document.getElementById('out').value = `${id}\t${sticker}\t${status}\t${name}\t${price}\t${mx}\t${box}`;
+            log('compilation_success');
+        }, 400);
     }
 
     async function copy() {
@@ -157,7 +179,7 @@
         const f = document.getElementById('flash');
         f.style.opacity = '1';
         setTimeout(() => f.style.opacity = '0', 200);
-        log('copied');
+        log('clipboard_transfer_complete');
     }
 </script>
 </body>
