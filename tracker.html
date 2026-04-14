@@ -26,43 +26,42 @@
             filter: drop-shadow(0 0 20px rgba(255, 77, 0, 0.4)); text-align: center;
         }
 
+        .date-widget { color: var(--accent); letter-spacing: 5px; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; margin-top: 10px; }
+
         .rings-container { display: flex; gap: clamp(20px, 4vw, 50px); margin: 30px 0; justify-content: center; }
         .ring-box { text-align: center; position: relative; }
         .ring-label { font-size: 0.65rem; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; }
         .ring-value { position: absolute; top: 35px; left: 50%; transform: translate(-50%, -50%); font-size: 0.9rem; font-weight: 900; color: #fff; }
         .progress-ring { width: 70px; height: 70px; transform: rotate(-90deg); }
-        .progress-ring circle { fill: none; stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1); }
+        .progress-ring circle { fill: none; stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
 
         .input-panel {
             background: var(--panel); backdrop-filter: blur(30px); border: 1px solid var(--border);
             padding: 15px 25px; border-radius: 20px; display: flex; flex-wrap: wrap; gap: 12px; width: 100%; max-width: 1100px; margin-bottom: 40px;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.5);
         }
         input, select { background: #000; border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 10px; outline: none; flex: 1; min-width: 150px; font-size: 0.9rem; }
         .add-btn { background: var(--accent); color: #fff; border: none; padding: 0 40px; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; min-height: 45px; }
-        .add-btn:hover { box-shadow: 0 0 30px var(--accent); transform: translateY(-2px); }
 
         .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px; width: 100%; max-width: 1600px; }
         @media (max-width: 1100px) { .week-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 600px) { .week-grid { grid-template-columns: 1fr; } .input-panel { flex-direction: column; } }
+        @media (max-width: 600px) { .week-grid { grid-template-columns: 1fr; } }
 
-        .day-card { background: var(--panel); border: 1px solid var(--border); border-radius: 20px; padding: 15px; min-height: 450px; cursor: pointer; transition: 0.4s; }
+        .day-card { background: var(--panel); border: 1px solid var(--border); border-radius: 20px; padding: 15px; min-height: 450px; cursor: pointer; transition: 0.4s; position: relative; }
         .day-card.selected { border-color: #fff; background: rgba(50,50,50,0.5); }
-        .day-card.anim-drift { animation: driftIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
-        .day-title { color: var(--accent); font-weight: 900; font-size: 0.85rem; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 8px; text-transform: uppercase; pointer-events: none; }
+        .day-card.today { border-color: var(--accent); box-shadow: 0 0 20px rgba(255, 77, 0, 0.2); }
+        .day-card.today::after { content: 'TODAY'; position: absolute; top: 15px; right: 15px; font-size: 0.6rem; color: var(--accent); font-weight: 900; letter-spacing: 1px; }
+        
+        .day-title { color: var(--accent); font-weight: 900; font-size: 0.85rem; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 8px; text-transform: uppercase; }
 
         .task { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; border-left: 3px solid var(--accent); font-size: 0.85rem; transition: 0.2s; }
         .task:hover { background: rgba(255,255,255,0.07); transform: translateX(5px); }
         .task span { flex: 1; cursor: pointer; }
-        .task.urgent { border-left-color: #ff0000; font-weight: bold; background: rgba(255,0,0,0.05); }
         .task.cat-Дом { border-left-color: var(--home); }
         .task.cat-Работа { border-left-color: var(--work); }
         .task.cat-Личное { border-left-color: var(--personal); }
-        .del-x { color: #555; cursor: pointer; font-weight: bold; margin-left: 10px; transition: 0.2s; }
-        .del-x:hover { color: #ff0000; }
+        .task.urgent { border-left-color: #ff0000; font-weight: bold; background: rgba(255,0,0,0.05); }
+        .del-x { color: #555; cursor: pointer; font-weight: bold; margin-left: 10px; }
 
-        @keyframes driftIn { 0% { opacity: 0; transform: translateY(50px); filter: blur(10px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
-        
         summary { color: #333; font-weight: 800; font-size: 0.7rem; letter-spacing: 3px; cursor: pointer; text-align: center; margin: 50px 0; }
         #archive { display: flex; flex-direction: column; gap: 5px; opacity: 0.4; padding-bottom: 100px; }
     </style>
@@ -73,7 +72,7 @@
 
     <div class="header-container">
         <h1 class="main-title">VAN TRU FREE</h1>
-        <div style="color: var(--accent); letter-spacing: 12px; font-weight: 900; font-size: 0.9rem; text-align: center; margin-top: 5px;">FAMILY TRACKER</div>
+        <div id="currentDate" class="date-widget"></div>
     </div>
 
     <div class="rings-container">
@@ -108,13 +107,23 @@
 
     <div class="week-grid" id="grid"></div>
 
-    <details style="width: 100%; max-width: 1100px;">
-        <summary>АРХИВ ВЫПОЛНЕННЫХ</summary>
-        <div id="archive"></div>
-    </details>
+    <details style="width: 100%; max-width: 1100px;"><summary>АРХИВ ВЫПОЛНЕННЫХ</summary><div id="archive"></div></details>
 
     <script>
-        // --- МНОГО ПЫЛИ ---
+        // --- ДАТА И ЧАСТИЦЫ ---
+        function updateDate() {
+            const now = new Date();
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            document.getElementById('currentDate').innerText = now.toLocaleDateString('ru-RU', options);
+            
+            // Авто-выбор текущего дня в селекторе
+            const daysMap = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+            const todayId = daysMap[now.getDay()];
+            document.getElementById('taskDay').value = todayId;
+            return todayId;
+        }
+        const currentDayId = updateDate();
+
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -138,7 +147,7 @@
         animate();
 
         // --- ЛОГИКА ---
-        let tasks = JSON.parse(localStorage.getItem('vt_ultra_vFinal')) || [];
+        let tasks = JSON.parse(localStorage.getItem('vt_ultra_vFinal_Date')) || [];
         const daysShort = ['mon','tue','wed','thu','fri','sat','sun'];
 
         function addTask() {
@@ -146,21 +155,18 @@
             if(!title) return;
             tasks.push({ id: Date.now(), title, day: document.getElementById('taskDay').value, cat: document.getElementById('taskCat').value, pri: document.getElementById('taskPri').value, done: false });
             document.getElementById('taskName').value = '';
-            render(true);
+            render();
         }
 
         function toggleTask(e, id) {
-            e.stopPropagation(); // ВАЖНО: Останавливает клик на уровне задачи, не давая ему уйти к карточке дня
+            e.stopPropagation();
             tasks = tasks.map(t => t.id === id ? {...t, done: !t.done} : t);
             render();
         }
 
         function deleteTask(e, id) {
             e.stopPropagation();
-            if(confirm('Удалить эту задачу?')) {
-                tasks = tasks.filter(t => t.id !== id);
-                render();
-            }
+            if(confirm('Удалить эту задачу?')) { tasks = tasks.filter(t => t.id !== id); render(); }
         }
 
         function selectDay(dayId) {
@@ -168,31 +174,30 @@
             render();
         }
 
-        function render(isNew = false) {
-            localStorage.setItem('vt_ultra_vFinal', JSON.stringify(tasks));
+        function render() {
+            localStorage.setItem('vt_ultra_vFinal_Date', JSON.stringify(tasks));
             const names = ['ПОНЕДЕЛЬНИК','ВТОРНИК','СРЕДА','ЧЕТВЕРГ','ПЯТНИЦА','СУББОТА','ВОСКРЕСЕНЬЕ'];
             const currentSelectedDay = document.getElementById('taskDay').value;
             const grid = document.getElementById('grid');
             grid.innerHTML = '';
             
             daysShort.forEach((day, i) => {
+                const isToday = day === currentDayId;
                 const card = document.createElement('div');
-                card.className = `day-card ${day === currentSelectedDay ? 'selected' : ''} ${!isNew ? 'anim-drift' : ''}`;
+                card.className = `day-card ${day === currentSelectedDay ? 'selected' : ''} ${isToday ? 'today' : ''}`;
                 card.onclick = () => selectDay(day);
-                if(!isNew) card.style.animationDelay = (i * 0.08) + 's';
                 card.innerHTML = `<div class="day-title">${names[i]}</div>`;
                 
                 tasks.filter(t => t.day === day && !t.done).forEach(t => {
                     const d = document.createElement('div');
                     d.className = `task ${t.pri} cat-${t.cat}`;
-                    d.onclick = (e) => toggleTask(e, t.id); // Клик по всей задаче выполняет её
+                    d.onclick = (e) => toggleTask(e, t.id);
                     d.innerHTML = `<span>${t.title}</span><div class="del-x" onclick="deleteTask(event, ${t.id})">×</div>`;
                     card.appendChild(d);
                 });
                 grid.appendChild(card);
             });
 
-            // Рендерим архив
             document.getElementById('archive').innerHTML = tasks.filter(t => t.done).map(t => 
                 `<div class="task cat-${t.cat}" style="opacity:0.6" onclick="toggleTask(event, ${t.id})"><span>${t.title}</span><div class="del-x" onclick="deleteTask(event, ${t.id})">×</div></div>`
             ).join('');
