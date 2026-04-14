@@ -15,54 +15,76 @@
             --home: #0084ff; --work: #ff4d00; --personal: #00ff62;
         }
 
-        body { background-color: var(--bg); color: #e0e0e0; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+        body { background-color: var(--bg); color: #e0e0e0; font-family: 'Inter', sans-serif; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
 
         #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; width: 100%; height: 100%; background: radial-gradient(circle at top, #1a0f0a 0%, #050505 100%); }
 
+        /* ИСПРАВЛЕННЫЙ ЗАГОЛОВОК */
+        .header-container { text-align: center; width: 100%; max-width: 100vw; overflow: hidden; padding: 0 10px; box-sizing: border-box; }
         .main-title {
-            font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; letter-spacing: clamp(10px, 2vw, 20px); text-transform: uppercase; margin: 0;
+            font-size: clamp(1.8rem, 8vw, 4.5rem); font-weight: 900; letter-spacing: clamp(5px, 2vw, 20px); text-transform: uppercase; margin: 0;
             background: linear-gradient(180deg, #fff 0%, #777 50%, #333 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 20px rgba(255, 77, 0, 0.4)); text-align: center;
+            filter: drop-shadow(0 0 20px rgba(255, 77, 0, 0.4)); white-space: nowrap;
         }
 
-        .date-widget { color: var(--accent); letter-spacing: 5px; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; margin-top: 10px; }
+        .date-widget { color: var(--accent); letter-spacing: 3px; font-weight: 700; font-size: clamp(0.6rem, 3vw, 0.9rem); text-transform: uppercase; margin-top: 5px; }
 
-        .rings-container { display: flex; gap: clamp(20px, 4vw, 50px); margin: 30px 0; justify-content: center; }
+        /* КОЛЬЦА */
+        .rings-container { display: flex; gap: clamp(10px, 4vw, 50px); margin: 20px 0; justify-content: center; width: 100%; }
         .ring-box { text-align: center; position: relative; }
-        .ring-label { font-size: 0.65rem; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; }
-        .ring-value { position: absolute; top: 35px; left: 50%; transform: translate(-50%, -50%); font-size: 0.9rem; font-weight: 900; color: #fff; }
-        .progress-ring { width: 70px; height: 70px; transform: rotate(-90deg); }
-        .progress-ring circle { fill: none; stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+        .ring-label { font-size: 0.55rem; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
+        .ring-value { position: absolute; top: 25px; left: 50%; transform: translate(-50%, -50%); font-size: 0.75rem; font-weight: 900; color: #fff; }
+        .progress-ring { width: 50px; height: 50px; transform: rotate(-90deg); }
+        .progress-ring circle { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
 
+        /* ПАНЕЛЬ ВВОДА */
         .input-panel {
             background: var(--panel); backdrop-filter: blur(30px); border: 1px solid var(--border);
-            padding: 15px 25px; border-radius: 20px; display: flex; flex-wrap: wrap; gap: 12px; width: 100%; max-width: 1100px; margin-bottom: 40px;
+            padding: 15px; border-radius: 15px; display: flex; flex-direction: column; gap: 10px; width: 95%; max-width: 1100px; margin-bottom: 30px;
         }
-        input, select { background: #000; border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 10px; outline: none; flex: 1; min-width: 150px; font-size: 0.9rem; }
-        .add-btn { background: var(--accent); color: #fff; border: none; padding: 0 40px; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; min-height: 45px; }
-
-        .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px; width: 100%; max-width: 1600px; }
-        @media (max-width: 1100px) { .week-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 600px) { .week-grid { grid-template-columns: 1fr; } }
-
-        .day-card { background: var(--panel); border: 1px solid var(--border); border-radius: 20px; padding: 15px; min-height: 450px; cursor: pointer; transition: 0.4s; position: relative; }
-        .day-card.selected { border-color: #fff; background: rgba(50,50,50,0.5); }
-        .day-card.today { border-color: var(--accent); box-shadow: 0 0 20px rgba(255, 77, 0, 0.2); }
-        .day-card.today::after { content: 'TODAY'; position: absolute; top: 15px; right: 15px; font-size: 0.6rem; color: var(--accent); font-weight: 900; letter-spacing: 1px; }
         
-        .day-title { color: var(--accent); font-weight: 900; font-size: 0.85rem; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 8px; text-transform: uppercase; }
+        @media (min-width: 1100px) {
+            .input-panel { flex-direction: row; padding: 15px 25px; border-radius: 20px; }
+            input, select { min-width: 150px; }
+            .ring-value { top: 35px; font-size: 0.9rem; }
+            .progress-ring { width: 70px; height: 70px; }
+        }
 
-        .task { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; border-left: 3px solid var(--accent); font-size: 0.85rem; transition: 0.2s; }
-        .task:hover { background: rgba(255,255,255,0.07); transform: translateX(5px); }
+        input, select { background: #000; border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 10px; outline: none; flex: 1; font-size: 0.9rem; }
+        .add-btn { background: var(--accent); color: #fff; border: none; padding: 12px 30px; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; }
+
+        /* СЕТКА С АДАПТИВНЫМИ ОКНАМИ */
+        .week-grid { display: grid; grid-template-columns: 1fr; gap: 10px; width: 100%; max-width: 1600px; }
+        
+        @media (min-width: 1100px) {
+            .week-grid { grid-template-columns: repeat(7, 1fr); gap: 15px; }
+            .day-card { min-height: 450px !important; }
+            body { padding: 20px; }
+        }
+
+        .day-card { 
+            background: var(--panel); border: 1px solid var(--border); border-radius: 15px; 
+            padding: 12px; min-height: 80px; cursor: pointer; transition: 0.4s; position: relative;
+            animation: driftIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+        }
+        .day-card.selected { border-color: #fff; background: rgba(50,50,50,0.5); }
+        .day-card.today { border-color: var(--accent); box-shadow: 0 0 15px rgba(255, 77, 0, 0.1); }
+        
+        .day-title { color: var(--accent); font-weight: 900; font-size: 0.8rem; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; text-transform: uppercase; }
+
+        /* ЗАДАЧА */
+        .task { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; border-left: 4px solid var(--accent); font-size: 0.9rem; }
         .task span { flex: 1; cursor: pointer; }
         .task.cat-Дом { border-left-color: var(--home); }
         .task.cat-Работа { border-left-color: var(--work); }
         .task.cat-Личное { border-left-color: var(--personal); }
         .task.urgent { border-left-color: #ff0000; font-weight: bold; background: rgba(255,0,0,0.05); }
-        .del-x { color: #555; cursor: pointer; font-weight: bold; margin-left: 10px; }
+        .del-x { color: #555; cursor: pointer; font-weight: bold; margin-left: 15px; font-size: 1.1rem; }
 
-        summary { color: #333; font-weight: 800; font-size: 0.7rem; letter-spacing: 3px; cursor: pointer; text-align: center; margin: 50px 0; }
+        @keyframes driftIn { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+        
+        summary { color: #333; font-weight: 800; font-size: 0.7rem; letter-spacing: 2px; cursor: pointer; text-align: center; margin: 40px 0; }
         #archive { display: flex; flex-direction: column; gap: 5px; opacity: 0.4; padding-bottom: 100px; }
     </style>
 </head>
@@ -77,15 +99,15 @@
 
     <div class="rings-container">
         <div class="ring-box">
-            <svg class="progress-ring" id="ring-home"><circle stroke="rgba(255,255,255,0.03)" cx="35" cy="35" r="30" fill="none" stroke-width="5""")/>><circle class="ring-active" cx="35" cy="35" r="30" stroke="var(--home)" stroke-dasharray="188.5" stroke-dashoffset="188.5" fill="none" stroke-width="5""")/>></svg>
+            <svg class="progress-ring" id="ring-home"><circle stroke="rgba(255,255,255,0.03)" cx="25" cy="25" r="21" fill="none" stroke-width="4""")/>><circle class="ring-active" cx="25" cy="25" r="21" stroke="var(--home)" stroke-dasharray="132" stroke-dashoffset="132" fill="none" stroke-width="4""")/>></svg>
             <div class="ring-value" id="val-home">0/0</div><div class="ring-label">Дом</div>
         </div>
         <div class="ring-box">
-            <svg class="progress-ring" id="ring-work"><circle stroke="rgba(255,255,255,0.03)" cx="35" cy="35" r="30" fill="none" stroke-width="5""")/>><circle class="ring-active" cx="35" cy="35" r="30" stroke="var(--work)" stroke-dasharray="188.5" stroke-dashoffset="188.5" fill="none" stroke-width="5""")/>></svg>
+            <svg class="progress-ring" id="ring-work"><circle stroke="rgba(255,255,255,0.03)" cx="25" cy="25" r="21" fill="none" stroke-width="4""")/>><circle class="ring-active" cx="25" cy="25" r="21" stroke="var(--work)" stroke-dasharray="132" stroke-dashoffset="132" fill="none" stroke-width="4""")/>></svg>
             <div class="ring-value" id="val-work">0/0</div><div class="ring-label">Работа</div>
         </div>
         <div class="ring-box">
-            <svg class="progress-ring" id="ring-personal"><circle stroke="rgba(255,255,255,0.03)" cx="35" cy="35" r="30" fill="none" stroke-width="5""")/>><circle class="ring-active" cx="35" cy="35" r="30" stroke="var(--personal)" stroke-dasharray="188.5" stroke-dashoffset="188.5" fill="none" stroke-width="5""")/>></svg>
+            <svg class="progress-ring" id="ring-personal"><circle stroke="rgba(255,255,255,0.03)" cx="25" cy="25" r="21" fill="none" stroke-width="4""")/>><circle class="ring-active" cx="25" cy="25" r="21" stroke="var(--personal)" stroke-dasharray="132" stroke-dashoffset="132" fill="none" stroke-width="4""")/>></svg>
             <div class="ring-value" id="val-personal">0/0</div><div class="ring-label">Личное</div>
         </div>
     </div>
@@ -102,7 +124,7 @@
         <select id="taskPri">
             <option value="normal">Обычный</option><option value="urgent">🔥 СРОЧНО</option>
         </select>
-        <button class="add-btn" onclick="addTask()">ADD MISSION</button>
+        <button class="add-btn" onclick="addTask()">ADD</button>
     </div>
 
     <div class="week-grid" id="grid"></div>
@@ -110,19 +132,15 @@
     <details style="width: 100%; max-width: 1100px;"><summary>АРХИВ ВЫПОЛНЕННЫХ</summary><div id="archive"></div></details>
 
     <script>
-        // --- ДАТА И ЧАСТИЦЫ ---
         function updateDate() {
             const now = new Date();
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
             document.getElementById('currentDate').innerText = now.toLocaleDateString('ru-RU', options);
-            
-            // Авто-выбор текущего дня в селекторе
             const daysMap = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-            const todayId = daysMap[now.getDay()];
-            document.getElementById('taskDay').value = todayId;
-            return todayId;
+            return daysMap[now.getDay()];
         }
         const currentDayId = updateDate();
+        document.getElementById('taskDay').value = currentDayId;
 
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
@@ -133,8 +151,8 @@
             constructor() { this.init(); }
             init() {
                 this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 4 + 0.5; this.speedX = Math.random() * 0.5 - 0.25; this.speedY = Math.random() * 0.5 - 0.25;
-                this.alpha = Math.random() * 0.6;
+                this.size = Math.random() * 5 + 0.5; this.speedX = Math.random() * 0.6 - 0.3; this.speedY = Math.random() * 0.6 - 0.3;
+                this.alpha = Math.random() * 0.7;
             }
             update() {
                 this.x += this.speedX; this.y += this.speedY;
@@ -142,12 +160,11 @@
             }
             draw() { ctx.fillStyle = `rgba(255, 77, 0, ${this.alpha})`; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
         }
-        for (let i = 0; i < 500; i++) particles.push(new Particle());
+        for (let i = 0; i < 400; i++) particles.push(new Particle());
         function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
         animate();
 
-        // --- ЛОГИКА ---
-        let tasks = JSON.parse(localStorage.getItem('vt_ultra_vFinal_Date')) || [];
+        let tasks = JSON.parse(localStorage.getItem('vt_v_final_mobile')) || [];
         const daysShort = ['mon','tue','wed','thu','fri','sat','sun'];
 
         function addTask() {
@@ -155,7 +172,7 @@
             if(!title) return;
             tasks.push({ id: Date.now(), title, day: document.getElementById('taskDay').value, cat: document.getElementById('taskCat').value, pri: document.getElementById('taskPri').value, done: false });
             document.getElementById('taskName').value = '';
-            render();
+            render(true);
         }
 
         function toggleTask(e, id) {
@@ -166,7 +183,7 @@
 
         function deleteTask(e, id) {
             e.stopPropagation();
-            if(confirm('Удалить эту задачу?')) { tasks = tasks.filter(t => t.id !== id); render(); }
+            if(confirm('Удалить?')) { tasks = tasks.filter(t => t.id !== id); render(); }
         }
 
         function selectDay(dayId) {
@@ -174,8 +191,8 @@
             render();
         }
 
-        function render() {
-            localStorage.setItem('vt_ultra_vFinal_Date', JSON.stringify(tasks));
+        function render(isNew = false) {
+            localStorage.setItem('vt_v_final_mobile', JSON.stringify(tasks));
             const names = ['ПОНЕДЕЛЬНИК','ВТОРНИК','СРЕДА','ЧЕТВЕРГ','ПЯТНИЦА','СУББОТА','ВОСКРЕСЕНЬЕ'];
             const currentSelectedDay = document.getElementById('taskDay').value;
             const grid = document.getElementById('grid');
@@ -199,7 +216,7 @@
             });
 
             document.getElementById('archive').innerHTML = tasks.filter(t => t.done).map(t => 
-                `<div class="task cat-${t.cat}" style="opacity:0.6" onclick="toggleTask(event, ${t.id})"><span>${t.title}</span><div class="del-x" onclick="deleteTask(event, ${t.id})">×</div></div>`
+                `<div class="task cat-${t.cat}" style="opacity:0.5" onclick="toggleTask(event, ${t.id})"><span>${t.title}</span><div class="del-x" onclick="deleteTask(event, ${t.id})">×</div></div>`
             ).join('');
             
             ['Дом', 'Работа', 'Личное'].forEach(cat => {
@@ -207,7 +224,9 @@
                 const doneCount = cTasks.filter(t => t.done).length;
                 const total = cTasks.length;
                 const ring = document.querySelector(`#ring-${cat === 'Дом' ? 'home' : cat === 'Работа' ? 'work' : 'personal'} .ring-active`);
-                ring.style.strokeDashoffset = 188.5 * (1 - (total ? doneCount/total : 0));
+                const radius = 21;
+                const circ = 2 * Math.PI * radius;
+                ring.style.strokeDashoffset = circ * (1 - (total ? doneCount/total : 0));
                 document.getElementById(`val-${cat === 'Дом' ? 'home' : cat === 'Работа' ? 'work' : 'personal'}`).innerText = `${doneCount}/${total}`;
             });
         }
