@@ -19,7 +19,7 @@
 
         #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; width: 100%; height: 100%; background: radial-gradient(circle at top, #1a0f0a 0%, #050505 100%); }
 
-        .header-container { text-align: center; width: 100%; padding-top: env(safe-area-inset-top, 40px); margin-bottom: 15px; }
+        .header-container { text-align: center; width: 100%; padding-top: env(safe-area-inset-top, 40px); margin-bottom: 10px; }
         
         .main-title {
             font-size: clamp(2rem, 10vw, 4.5rem); font-weight: 900; letter-spacing: clamp(6px, 3vw, 15px); text-transform: uppercase; margin: 0;
@@ -30,16 +30,28 @@
         .sub-title { color: var(--accent); letter-spacing: 6px; font-weight: 900; font-size: 0.75rem; text-transform: uppercase; margin-top: 5px; display: block; }
         .date-widget { color: #555; letter-spacing: 2px; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; margin-top: 8px; }
 
-        /* ИСПРАВЛЕННЫЕ КОЛЬЦА */
-        .rings-container { display: flex; gap: clamp(10px, 4vw, 50px); margin: 20px 0; justify-content: center; width: 100%; }
-        .ring-box { text-align: center; position: relative; width: 70px; }
-        .ring-label { font-size: 0.6rem; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; font-weight: 700; }
-        .ring-value { 
-            position: absolute; top: 35px; left: 50%; transform: translate(-50%, -50%); 
-            font-size: clamp(0.7rem, 2vw, 0.9rem); font-weight: 900; color: #fff; width: 100%; text-align: center;
+        /* СТАТИСТИКА - ФИКС ЦЕНТРОВКИ */
+        .rings-container { display: flex; gap: clamp(15px, 5vw, 50px); margin: 25px 0; justify-content: center; width: 100%; }
+        .ring-box { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: relative; width: 80px; 
         }
-        .progress-ring { width: 70px; height: 70px; transform: rotate(-90deg); }
-        .progress-ring circle { fill: none; stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+        .ring-label { font-size: 0.6rem; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; font-weight: 700; }
+        .ring-inner {
+            position: relative; width: 80px; height: 80px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .ring-value { 
+            position: absolute; font-size: 1rem; font-weight: 900; color: #fff; 
+            width: 100%; text-align: center; pointer-events: none;
+        }
+        .progress-ring { width: 80px; height: 80px; transform: rotate(-90deg); }
+        .progress-ring circle { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+
+        @media (max-width: 600px) {
+            .ring-box, .ring-inner, .progress-ring { width: 65px; height: 65px; }
+            .ring-value { font-size: 0.8rem; }
+        }
 
         /* ВВОД */
         .input-panel {
@@ -51,7 +63,6 @@
             .input-panel { flex-direction: row; padding: 15px 25px; border-radius: 20px; }
             input, select { min-width: 150px; }
             body { padding: 0 30px; }
-            .ring-box { width: 80px; } .progress-ring { width: 80px; height: 80px; } .ring-value { top: 40px; }
         }
 
         input, select { background: #000; border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 10px; outline: none; flex: 1; font-size: 1rem; }
@@ -61,7 +72,7 @@
         .week-grid { display: grid; grid-template-columns: 1fr; gap: 12px; width: 95%; max-width: 1600px; }
         @media (min-width: 1100px) { .week-grid { grid-template-columns: repeat(7, 1fr); gap: 15px; } .day-card { min-height: 450px !important; } }
 
-        .day-card { background: var(--panel); border: 1px solid var(--border); border-radius: 15px; padding: 15px; min-height: 80px; cursor: pointer; transition: 0.4s; position: relative; animation: driftIn 0.8s ease both; }
+        .day-card { background: var(--panel); border: 1px solid var(--border); border-radius: 15px; padding: 15px; min-height: 100px; cursor: pointer; transition: 0.4s; position: relative; animation: driftIn 0.8s ease both; }
         .day-card.selected { border-color: #fff; background: rgba(50,50,50,0.5); }
         .day-card.today { border-color: var(--accent); box-shadow: 0 0 15px rgba(255, 77, 0, 0.2); }
         .day-card.today::after { content: 'TODAY'; position: absolute; top: 12px; right: 12px; font-size: 0.6rem; color: var(--accent); font-weight: 900; }
@@ -94,16 +105,25 @@
 
     <div class="rings-container">
         <div class="ring-box">
-            <svg class="progress-ring" id="ring-home"><circle stroke="rgba(255,255,255,0.03)" cx="35" cy="35" r="30" fill="none" stroke-width="5""")/>><circle class="ring-active" cx="35" cy="35" r="30" stroke="var(--home)" stroke-dasharray="188.5" stroke-dashoffset="188.5" fill="none" stroke-width="5""")/>></svg>
-            <div class="ring-value" id="val-home">0/0</div><div class="ring-label">Дом</div>
+            <div class="ring-inner">
+                <svg class="progress-ring" id="ring-home"><circle stroke="rgba(255,255,255,0.03)" cx="40" cy="40" r="34" fill="none" stroke-width="6""")/>><circle class="ring-active" cx="40" cy="40" r="34" stroke="var(--home)" stroke-dasharray="213.6" stroke-dashoffset="213.6" fill="none" stroke-width="6""")/>></svg>
+                <div class="ring-value" id="val-home">0/0</div>
+            </div>
+            <div class="ring-label">Дом</div>
         </div>
         <div class="ring-box">
-            <svg class="progress-ring" id="ring-work"><circle stroke="rgba(255,255,255,0.03)" cx="35" cy="35" r="30" fill="none" stroke-width="5""")/>><circle class="ring-active" cx="35" cy="35" r="30" stroke="var(--work)" stroke-dasharray="188.5" stroke-dashoffset="188.5" fill="none" stroke-width="5""")/>></svg>
-            <div class="ring-value" id="val-work">0/0</div><div class="ring-label">Работа</div>
+            <div class="ring-inner">
+                <svg class="progress-ring" id="ring-work"><circle stroke="rgba(255,255,255,0.03)" cx="40" cy="40" r="34" fill="none" stroke-width="6""")/>><circle class="ring-active" cx="40" cy="40" r="34" stroke="var(--work)" stroke-dasharray="213.6" stroke-dashoffset="213.6" fill="none" stroke-width="6""")/>></svg>
+                <div class="ring-value" id="val-work">0/0</div>
+            </div>
+            <div class="ring-label">Работа</div>
         </div>
         <div class="ring-box">
-            <svg class="progress-ring" id="ring-personal"><circle stroke="rgba(255,255,255,0.03)" cx="35" cy="35" r="30" fill="none" stroke-width="5""")/>><circle class="ring-active" cx="35" cy="35" r="30" stroke="var(--personal)" stroke-dasharray="188.5" stroke-dashoffset="188.5" fill="none" stroke-width="5""")/>></svg>
-            <div class="ring-value" id="val-personal">0/0</div><div class="ring-label">Личное</div>
+            <div class="ring-inner">
+                <svg class="progress-ring" id="ring-personal"><circle stroke="rgba(255,255,255,0.03)" cx="40" cy="40" r="34" fill="none" stroke-width="6""")/>><circle class="ring-active" cx="40" cy="40" r="34" stroke="var(--personal)" stroke-dasharray="213.6" stroke-dashoffset="213.6" fill="none" stroke-width="6""")/>></svg>
+                <div class="ring-value" id="val-personal">0/0</div>
+            </div>
+            <div class="ring-label">Личное</div>
         </div>
     </div>
 
@@ -160,7 +180,7 @@
         function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
         animate();
 
-        let tasks = JSON.parse(localStorage.getItem('vt_v_mega_fix')) || [];
+        let tasks = JSON.parse(localStorage.getItem('vt_v_final_v10')) || [];
         const daysShort = ['mon','tue','wed','thu','fri','sat','sun'];
 
         function addTask() {
@@ -188,7 +208,7 @@
         }
 
         function render() {
-            localStorage.setItem('vt_v_mega_fix', JSON.stringify(tasks));
+            localStorage.setItem('vt_v_final_v10', JSON.stringify(tasks));
             const names = ['ПОНЕДЕЛЬНИК','ВТОРНИК','СРЕДА','ЧЕТВЕРГ','ПЯТНИЦА','СУББОТА','ВОСКРЕСЕНЬЕ'];
             const currentSelectedDay = document.getElementById('taskDay').value;
             const grid = document.getElementById('grid');
@@ -220,7 +240,7 @@
                 const doneCount = cTasks.filter(t => t.done).length;
                 const total = cTasks.length;
                 const ring = document.querySelector(`#ring-${cat === 'Дом' ? 'home' : cat === 'Работа' ? 'work' : 'personal'} .ring-active`);
-                const radius = 30;
+                const radius = 34;
                 const circ = 2 * Math.PI * radius;
                 ring.style.strokeDashoffset = circ * (1 - (total ? doneCount/total : 0));
                 document.getElementById(`val-${cat === 'Дом' ? 'home' : cat === 'Работа' ? 'work' : 'personal'}`).innerText = `${doneCount}/${total}`;
