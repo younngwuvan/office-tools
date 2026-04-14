@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>VAN TRU FREE | FAMILY TRACKER</title>
     <style>
         @import url('https://googleapis.com');
@@ -27,6 +27,7 @@
             --home: #0084ff;
             --work: #ff4d00;
             --personal: #00ff62;
+            --danger: #ff3b30;
         }
 
         body[data-theme="light"] {
@@ -48,9 +49,7 @@
             --bg-grad: radial-gradient(circle at top, #ffe8dc 0%, #f6f7f9 100%);
         }
 
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             background-color: var(--bg);
@@ -77,36 +76,36 @@
             transition: background 0.35s ease;
         }
 
-        .header-container { 
-            text-align: center; 
-            width: 100%; 
+        .header-container {
+            text-align: center;
+            width: 100%;
             padding-top: clamp(60px, 10vh, 120px);
-            margin-bottom: 20px; 
+            margin-bottom: 20px;
             animation: fadeInDown 1.2s ease;
             position: relative;
         }
-        
+
         .main-title {
             font-size: clamp(3rem, 12vw, 6rem);
-            font-weight: 900; 
-            letter-spacing: clamp(10px, 4vw, 25px); 
-            text-transform: uppercase; 
+            font-weight: 900;
+            letter-spacing: clamp(10px, 4vw, 25px);
+            text-transform: uppercase;
             margin: 0;
             background: var(--title-grad);
-            -webkit-background-clip: text; 
+            -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: var(--title-shadow);
             transition: filter 0.35s ease;
         }
 
-        .sub-title { 
-            color: var(--accent); 
-            letter-spacing: clamp(8px, 2vw, 15px); 
-            font-weight: 900; 
+        .sub-title {
+            color: var(--accent);
+            letter-spacing: clamp(8px, 2vw, 15px);
+            font-weight: 900;
             font-size: clamp(0.9rem, 3vw, 1.3rem);
-            text-transform: uppercase; 
-            margin-top: 10px; 
-            display: block; 
+            text-transform: uppercase;
+            margin-top: 10px;
+            display: block;
             opacity: 0.9;
         }
 
@@ -119,13 +118,16 @@
             margin-top: 15px;
         }
 
-        /* THEME SWITCH */
-        .theme-bar {
+        .theme-bar,
+        .utility-bar {
             width: 90%;
             max-width: 1100px;
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
             margin-bottom: 18px;
+            flex-wrap: wrap;
         }
 
         .theme-switch {
@@ -151,9 +153,7 @@
             text-align: right;
         }
 
-        .theme-switch input {
-            display: none;
-        }
+        .theme-switch input { display: none; }
 
         .theme-slider {
             width: 64px;
@@ -195,6 +195,63 @@
             background: #fff;
             color: #ff6a00;
             box-shadow: 0 3px 10px rgba(255,90,31,0.22);
+        }
+
+        .filter-group,
+        .week-progress {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--panel-solid);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 8px 12px;
+            backdrop-filter: blur(18px);
+            box-shadow: var(--shadow);
+            flex-wrap: wrap;
+        }
+
+        .filter-label,
+        .week-progress-label {
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .filter-btn,
+        .archive-clear-btn {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+
+        .filter-btn:hover,
+        .archive-clear-btn:hover {
+            transform: translateY(-1px);
+            background: var(--task-hover);
+        }
+
+        .filter-btn.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: transparent;
+        }
+
+        .week-progress-value {
+            font-weight: 900;
+            color: var(--accent);
+            font-size: 0.82rem;
+            letter-spacing: 1px;
         }
 
         .rings-container {
@@ -255,24 +312,24 @@
             transition: stroke-dashoffset 1s ease;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 700px) {
             .ring-box, .ring-inner, .progress-ring {
                 width: 65px;
                 height: 65px;
             }
 
-            .ring-value {
-                font-size: 0.8rem;
-            }
+            .ring-value { font-size: 0.8rem; }
 
-            .theme-bar {
+            .theme-bar,
+            .utility-bar {
                 justify-content: center;
             }
 
-            .theme-switch-label {
-                min-width: auto;
-                font-size: 0.68rem;
-                letter-spacing: 1.5px;
+            .theme-switch-label { min-width: auto; }
+
+            .filter-group,
+            .week-progress {
+                justify-content: center;
             }
         }
 
@@ -299,13 +356,8 @@
                 border-radius: 20px;
             }
 
-            input, select {
-                min-width: 150px;
-            }
-
-            body {
-                padding-bottom: 50px;
-            }
+            input, select { min-width: 150px; }
+            body { padding-bottom: 50px; }
         }
 
         input, select {
@@ -320,9 +372,7 @@
             transition: 0.3s ease;
         }
 
-        input::placeholder {
-            color: var(--muted);
-        }
+        input::placeholder { color: var(--muted); }
 
         .add-btn {
             background: var(--accent);
@@ -354,9 +404,7 @@
                 gap: 15px;
             }
 
-            .day-card {
-                min-height: 450px !important;
-            }
+            .day-card { min-height: 450px !important; }
         }
 
         .day-card {
@@ -392,14 +440,29 @@
             font-weight: 900;
         }
 
+        .day-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 5px;
+        }
+
         .day-title {
             color: var(--accent);
             font-weight: 900;
             font-size: 0.85rem;
-            margin-bottom: 12px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 5px;
             text-transform: uppercase;
+        }
+
+        .day-count {
+            color: var(--muted);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            white-space: nowrap;
         }
 
         .task {
@@ -409,15 +472,28 @@
             margin-bottom: 8px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
             border-left: 4px solid var(--accent);
             font-size: 0.95rem;
             color: var(--text);
-            transition: 0.25s ease;
+            transition: 0.25s ease, opacity 0.25s ease, transform 0.25s ease;
+            gap: 10px;
         }
 
         .task:hover {
             background: var(--task-hover);
             transform: translateX(5px);
+        }
+
+        .task.closing {
+            opacity: 0;
+            transform: translateX(18px) scale(0.98);
+        }
+
+        .task-title {
+            flex: 1;
+            min-width: 0;
+            word-break: break-word;
         }
 
         .task.cat-Дом { border-left-color: var(--home); }
@@ -434,22 +510,60 @@
             background: rgba(255, 0, 0, 0.08);
         }
 
+        .task-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .edit-btn {
+            color: var(--muted);
+            cursor: pointer;
+            font-weight: 900;
+            font-size: 0.95rem;
+            line-height: 1;
+            border: 1px solid var(--border);
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.25s ease;
+            background: transparent;
+            user-select: none;
+        }
+
+        .edit-btn:hover {
+            color: var(--text);
+            background: var(--task-hover);
+            transform: scale(1.05);
+        }
+
         .del-x {
             color: var(--muted);
             cursor: pointer;
             font-weight: bold;
-            margin-left: 10px;
             font-size: 1.2rem;
+            line-height: 1;
+            user-select: none;
         }
 
-        @keyframes driftIn {
-            0% { opacity: 0; transform: translateY(30px); }
-            100% { opacity: 1; transform: translateY(0); }
+        @media (hover: hover) {
+            .edit-btn { opacity: 0.72; }
+            .del-x { opacity: 0.72; }
+
+            .task:hover .edit-btn,
+            .task:hover .del-x {
+                opacity: 1;
+            }
         }
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
+        .archive-header {
+            display: flex;
+            justify-content: flex-end;
+            margin: 12px 0;
         }
 
         summary {
@@ -466,14 +580,23 @@
             display: flex;
             flex-direction: column;
             gap: 5px;
-            opacity: 0.5;
+            opacity: 0.65;
             padding-bottom: 100px;
             width: 95%;
+        }
+
+        @keyframes driftIn {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-
     <canvas id="bg-canvas"></canvas>
 
     <div class="header-container">
@@ -483,17 +606,32 @@
     </div>
 
     <div class="theme-bar">
+        <div class="week-progress">
+            <span class="week-progress-label">Week Progress</span>
+            <span class="week-progress-value" id="weekProgressValue">0%</span>
+        </div>
+
         <label class="theme-switch">
             <span class="theme-switch-label" id="themeLabel">DARK MODE</span>
-            <input type="checkbox" id="themeToggle">
+            <input type="checkbox" id="themeToggle" />
             <span class="theme-slider"></span>
         </label>
+    </div>
+
+    <div class="utility-bar">
+        <div class="filter-group" id="filterGroup">
+            <span class="filter-label">Filter</span>
+            <button class="filter-btn active" data-filter="all" type="button">Все</button>
+            <button class="filter-btn" data-filter="Дом" type="button">Дом</button>
+            <button class="filter-btn" data-filter="Работа" type="button">Работа</button>
+            <button class="filter-btn" data-filter="Личное" type="button">Личное</button>
+        </div>
     </div>
 
     <div class="rings-container">
         <div class="ring-box">
             <div class="ring-inner">
-                <svg class="progress-ring" id="ring-home">
+                <svg class="progress-ring" id="ring-home" viewBox="0 0 80 80">
                     <circle stroke="rgba(255,255,255,0.03)" cx="40" cy="40" r="34"></circle>
                     <circle class="ring-active" cx="40" cy="40" r="34" stroke="var(--home)" stroke-dasharray="213.6" stroke-dashoffset="213.6"></circle>
                 </svg>
@@ -504,7 +642,7 @@
 
         <div class="ring-box">
             <div class="ring-inner">
-                <svg class="progress-ring" id="ring-work">
+                <svg class="progress-ring" id="ring-work" viewBox="0 0 80 80">
                     <circle stroke="rgba(255,255,255,0.03)" cx="40" cy="40" r="34"></circle>
                     <circle class="ring-active" cx="40" cy="40" r="34" stroke="var(--work)" stroke-dasharray="213.6" stroke-dashoffset="213.6"></circle>
                 </svg>
@@ -515,7 +653,7 @@
 
         <div class="ring-box">
             <div class="ring-inner">
-                <svg class="progress-ring" id="ring-personal">
+                <svg class="progress-ring" id="ring-personal" viewBox="0 0 80 80">
                     <circle stroke="rgba(255,255,255,0.03)" cx="40" cy="40" r="34"></circle>
                     <circle class="ring-active" cx="40" cy="40" r="34" stroke="var(--personal)" stroke-dasharray="213.6" stroke-dashoffset="213.6"></circle>
                 </svg>
@@ -526,7 +664,7 @@
     </div>
 
     <div class="input-panel">
-        <input type="text" id="taskName" placeholder="Какая миссия на сегодня?" onkeydown="if(event.key==='Enter') addTask()">
+        <input type="text" id="taskName" placeholder="Какая миссия на сегодня?" onkeydown="if(event.key==='Enter') addTask()" />
         <select id="taskDay">
             <option value="mon">Понедельник</option>
             <option value="tue">Вторник</option>
@@ -552,11 +690,25 @@
 
     <details style="width: 95%;">
         <summary>АРХИВ ВЫПОЛНЕННЫХ</summary>
+        <div class="archive-header">
+            <button class="archive-clear-btn" type="button" onclick="clearArchive()">Очистить архив</button>
+        </div>
         <div id="archive"></div>
     </details>
 
     <script>
         let currentDayId = '';
+        let activeFilter = 'all';
+        let tasks = JSON.parse(localStorage.getItem('vt_v_final_ultra_v3_safe')) || [];
+
+        const daysShort = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+        const dayNames = ['ПОНЕДЕЛЬНИК', 'ВТОРНИК', 'СРЕДА', 'ЧЕТВЕРГ', 'ПЯТНИЦА', 'СУББОТА', 'ВОСКРЕСЕНЬЕ'];
+
+        const taskInput = document.getElementById('taskName');
+        const taskDaySelect = document.getElementById('taskDay');
+
+        let longPressTimer = null;
+        let longPressTriggered = false;
 
         function updateDate() {
             const now = new Date();
@@ -564,7 +716,7 @@
             document.getElementById('currentDate').innerText = now.toLocaleDateString('ru-RU', options);
             const daysMap = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
             currentDayId = daysMap[now.getDay()];
-            document.getElementById('taskDay').value = currentDayId;
+            taskDaySelect.value = currentDayId;
         }
         updateDate();
 
@@ -612,7 +764,7 @@
             canvas.height = window.innerHeight;
         }
 
-        window.onresize = resize;
+        window.addEventListener('resize', resize);
         resize();
 
         class Particle {
@@ -653,7 +805,7 @@
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
+            particles.forEach((p) => {
                 p.update();
                 p.draw();
             });
@@ -661,11 +813,20 @@
         }
         animate();
 
-        let tasks = JSON.parse(localStorage.getItem('vt_v_final_ultra_v2')) || [];
-        const daysShort = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+        function saveTasks() {
+            localStorage.setItem('vt_v_final_ultra_v3_safe', JSON.stringify(tasks));
+        }
+
+        function passesFilter(task) {
+            return activeFilter === 'all' || task.cat === activeFilter;
+        }
+
+        function focusTaskInput() {
+            taskInput.focus();
+        }
 
         function addTask() {
-            const title = document.getElementById('taskName').value.trim();
+            const title = taskInput.value.trim();
             if (!title) return;
 
             tasks.push({
@@ -677,82 +838,207 @@
                 done: false
             });
 
-            document.getElementById('taskName').value = '';
+            taskInput.value = '';
             render();
+            focusTaskInput();
         }
 
         function toggleTask(e, id) {
             e.stopPropagation();
-            tasks = tasks.map(t => t.id === id ? { ...t, done: !t.done } : t);
-            render();
+
+            const taskEl = e.currentTarget;
+            if (taskEl && taskEl.classList) {
+                taskEl.classList.add('closing');
+            }
+
+            setTimeout(() => {
+                tasks = tasks.map((t) => t.id === id ? { ...t, done: !t.done } : t);
+                render();
+            }, 180);
+        }
+
+        function handleTaskClick(e, id) {
+            if (longPressTriggered) {
+                longPressTriggered = false;
+                return;
+            }
+            toggleTask(e, id);
         }
 
         function deleteTask(e, id) {
             e.stopPropagation();
             if (confirm('Удалить?')) {
-                tasks = tasks.filter(t => t.id !== id);
+                tasks = tasks.filter((t) => t.id !== id);
                 render();
             }
         }
 
-        function selectDay(dayId) {
-            document.getElementById('taskDay').value = dayId;
+        function editTask(e, id) {
+            e.stopPropagation();
+            cancelLongPress();
+
+            const task = tasks.find((t) => t.id === id);
+            if (!task) return;
+
+            const updated = prompt('Редактировать задачу:', task.title);
+            if (updated === null) return;
+
+            const clean = updated.trim();
+            if (!clean) return;
+
+            tasks = tasks.map((t) => t.id === id ? { ...t, title: clean } : t);
             render();
         }
 
-        function render() {
-            localStorage.setItem('vt_v_final_ultra_v2', JSON.stringify(tasks));
+        function startLongPress(e, id) {
+            cancelLongPress();
+            longPressTriggered = false;
 
-            const names = ['ПОНЕДЕЛЬНИК', 'ВТОРНИК', 'СРЕДА', 'ЧЕТВЕРГ', 'ПЯТНИЦА', 'СУББОТА', 'ВОСКРЕСЕНЬЕ'];
-            const currentSelectedDay = document.getElementById('taskDay').value;
+            longPressTimer = setTimeout(() => {
+                longPressTriggered = true;
+                editTask(e, id);
+            }, 550);
+        }
+
+        function cancelLongPress() {
+            clearTimeout(longPressTimer);
+        }
+
+        function selectDay(dayId) {
+            taskDaySelect.value = dayId;
+            render();
+        }
+
+        function clearArchive() {
+            const doneCount = tasks.filter((t) => t.done).length;
+            if (!doneCount) {
+                alert('Архив уже пуст.');
+                return;
+            }
+
+            if (!confirm(`Удалить все выполненные задачи (${doneCount})?`)) return;
+            tasks = tasks.filter((t) => !t.done);
+            render();
+        }
+
+        function setFilter(filterValue) {
+            activeFilter = filterValue;
+            document.querySelectorAll('.filter-btn').forEach((btn) => {
+                btn.classList.toggle('active', btn.dataset.filter === filterValue);
+            });
+            render();
+        }
+
+        document.querySelectorAll('.filter-btn').forEach((btn) => {
+            btn.addEventListener('click', () => setFilter(btn.dataset.filter));
+        });
+
+        function updateWeekProgress() {
+            const total = tasks.length;
+            const done = tasks.filter((t) => t.done).length;
+            const percent = total ? Math.round((done / total) * 100) : 0;
+            document.getElementById('weekProgressValue').innerText = `${percent}%`;
+        }
+
+        function updateRings() {
+            ['Дом', 'Работа', 'Личное'].forEach((cat) => {
+                const cTasks = tasks.filter((t) => t.cat === cat);
+                const doneCount = cTasks.filter((t) => t.done).length;
+                const total = cTasks.length;
+
+                const key = cat === 'Дом' ? 'home' : cat === 'Работа' ? 'work' : 'personal';
+                const ring = document.querySelector(`#ring-${key} .ring-active`);
+                const radius = 34;
+                const circ = 2 * Math.PI * radius;
+                ring.style.strokeDashoffset = circ * (1 - (total ? doneCount / total : 0));
+
+                document.getElementById(`val-${key}`).innerText = `${doneCount}/${total}`;
+            });
+        }
+
+        function bindTaskInteractions(el, id) {
+            el.onclick = (e) => handleTaskClick(e, id);
+            el.ondblclick = (e) => editTask(e, id);
+
+            el.onmousedown = (e) => startLongPress(e, id);
+            el.ontouchstart = (e) => startLongPress(e, id);
+
+            el.onmouseup = cancelLongPress;
+            el.onmouseleave = cancelLongPress;
+            el.ontouchend = cancelLongPress;
+            el.ontouchcancel = cancelLongPress;
+        }
+
+        function createTaskElement(t, isArchive = false) {
+            const d = document.createElement('div');
+            d.className = `task ${t.pri || ''} cat-${t.cat}`;
+            if (isArchive) d.style.opacity = '0.55';
+
+            bindTaskInteractions(d, t.id);
+
+            d.innerHTML = `
+                <span class="task-title">${t.title}</span>
+                <div class="task-actions">
+                    <div class="edit-btn" onclick="editTask(event, ${t.id})">✎</div>
+                    <div class="del-x" onclick="deleteTask(event, ${t.id})">×</div>
+                </div>
+            `;
+
+            return d;
+        }
+
+        function renderWeekGrid() {
+            const currentSelectedDay = taskDaySelect.value;
             const grid = document.getElementById('grid');
             grid.innerHTML = '';
 
             daysShort.forEach((day, i) => {
                 const isToday = day === currentDayId;
+                const visibleTasks = tasks.filter((t) => t.day === day && !t.done && passesFilter(t));
+                const allActiveInDay = tasks.filter((t) => t.day === day && !t.done);
+
                 const card = document.createElement('div');
                 card.className = `day-card ${day === currentSelectedDay ? 'selected' : ''} ${isToday ? 'today' : ''}`;
                 card.onclick = () => selectDay(day);
-                card.innerHTML = `<div class="day-title">${names[i]}</div>`;
 
-                tasks.filter(t => t.day === day && !t.done).forEach(t => {
-                    const d = document.createElement('div');
-                    d.className = `task ${t.pri} cat-${t.cat}`;
-                    d.onclick = (e) => toggleTask(e, t.id);
-                    d.innerHTML = `<span>${t.title}</span><div class="del-x" onclick="deleteTask(event, ${t.id})">×</div>`;
-                    card.appendChild(d);
+                const header = document.createElement('div');
+                header.className = 'day-title-row';
+                header.innerHTML = `
+                    <div class="day-title">${dayNames[i]}</div>
+                    <div class="day-count">${visibleTasks.length}/${allActiveInDay.length} задач</div>
+                `;
+                card.appendChild(header);
+
+                visibleTasks.forEach((t) => {
+                    const taskEl = createTaskElement(t, false);
+                    card.appendChild(taskEl);
                 });
 
                 grid.appendChild(card);
             });
+        }
 
-            document.getElementById('archive').innerHTML = tasks
-                .filter(t => t.done)
-                .map(t =>
-                    `<div class="task cat-${t.cat}" style="opacity:0.5" onclick="toggleTask(event, ${t.id})"><span>${t.title}</span><div class="del-x" onclick="deleteTask(event, ${t.id})">×</div></div>`
-                )
-                .join('');
+        function renderArchive() {
+            const archive = document.getElementById('archive');
+            const doneTasks = tasks.filter((t) => t.done && passesFilter(t));
+            archive.innerHTML = '';
 
-            ['Дом', 'Работа', 'Личное'].forEach(cat => {
-                const cTasks = tasks.filter(t => t.cat === cat);
-                const doneCount = cTasks.filter(t => t.done).length;
-                const total = cTasks.length;
-
-                const ring = document.querySelector(
-                    `#ring-${cat === 'Дом' ? 'home' : cat === 'Работа' ? 'work' : 'personal'} .ring-active`
-                );
-
-                const radius = 34;
-                const circ = 2 * Math.PI * radius;
-                ring.style.strokeDashoffset = circ * (1 - (total ? doneCount / total : 0));
-
-                document.getElementById(
-                    `val-${cat === 'Дом' ? 'home' : cat === 'Работа' ? 'work' : 'personal'}`
-                ).innerText = `${doneCount}/${total}`;
+            doneTasks.forEach((t) => {
+                const taskEl = createTaskElement(t, true);
+                archive.appendChild(taskEl);
             });
         }
 
+        function render() {
+            saveTasks();
+            updateWeekProgress();
+            updateRings();
+            renderWeekGrid();
+            renderArchive();
+        }
+
         render();
+        focusTaskInput();
     </script>
 </body>
 </html>
