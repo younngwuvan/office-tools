@@ -19,24 +19,33 @@
 
         #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; width: 100%; height: 100%; background: radial-gradient(circle at top, #1a0f0a 0%, #050505 100%); }
 
-        /* ИСПРАВЛЕННЫЙ ЗАГОЛОВОК */
-        .header-container { text-align: center; width: 100%; max-width: 100vw; overflow: hidden; padding: 0 10px; box-sizing: border-box; }
+        /* ЗАГОЛОВОК */
+        .header-container { text-align: center; margin-bottom: 20px; width: 100%; }
         .main-title {
-            font-size: clamp(1.8rem, 8vw, 4.5rem); font-weight: 900; letter-spacing: clamp(5px, 2vw, 20px); text-transform: uppercase; margin: 0;
+            font-size: clamp(2rem, 8vw, 4.5rem); font-weight: 900; letter-spacing: clamp(5px, 2vw, 15px); text-transform: uppercase; margin: 0;
             background: linear-gradient(180deg, #fff 0%, #777 50%, #333 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 20px rgba(255, 77, 0, 0.4)); white-space: nowrap;
+            filter: drop-shadow(0 0 20px rgba(255, 77, 0, 0.4));
         }
+        .sub-title { color: var(--accent); letter-spacing: clamp(4px, 1vw, 10px); font-weight: 900; font-size: clamp(0.7rem, 2vw, 1rem); text-transform: uppercase; margin-top: 5px; display: block; }
+        .date-widget { color: #555; letter-spacing: 2px; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; margin-top: 10px; }
 
-        .date-widget { color: var(--accent); letter-spacing: 3px; font-weight: 700; font-size: clamp(0.6rem, 3vw, 0.9rem); text-transform: uppercase; margin-top: 5px; }
+        /* КОЛЬЦА СТАТИСТИКИ */
+        .rings-container { display: flex; gap: clamp(15px, 5vw, 50px); margin: 30px 0; justify-content: center; width: 100%; }
+        .ring-box { text-align: center; position: relative; width: 70px; }
+        .ring-label { font-size: 0.6rem; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; }
+        .ring-value { 
+            position: absolute; top: 35px; left: 50%; transform: translate(-50%, -50%); 
+            font-size: 0.85rem; font-weight: 900; color: #fff; width: 100%; text-align: center;
+        }
+        .progress-ring { width: 70px; height: 70px; transform: rotate(-90deg); }
+        .progress-ring circle { fill: none; stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
 
-        /* КОЛЬЦА */
-        .rings-container { display: flex; gap: clamp(10px, 4vw, 50px); margin: 20px 0; justify-content: center; width: 100%; }
-        .ring-box { text-align: center; position: relative; }
-        .ring-label { font-size: 0.55rem; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
-        .ring-value { position: absolute; top: 25px; left: 50%; transform: translate(-50%, -50%); font-size: 0.75rem; font-weight: 900; color: #fff; }
-        .progress-ring { width: 50px; height: 50px; transform: rotate(-90deg); }
-        .progress-ring circle { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+        @media (max-width: 600px) {
+            .ring-box { width: 50px; }
+            .progress-ring { width: 50px; height: 50px; }
+            .ring-value { top: 25px; font-size: 0.7rem; }
+        }
 
         /* ПАНЕЛЬ ВВОДА */
         .input-panel {
@@ -47,20 +56,19 @@
         @media (min-width: 1100px) {
             .input-panel { flex-direction: row; padding: 15px 25px; border-radius: 20px; }
             input, select { min-width: 150px; }
-            .ring-value { top: 35px; font-size: 0.9rem; }
-            .progress-ring { width: 70px; height: 70px; }
+            body { padding: 30px; }
         }
 
         input, select { background: #000; border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 10px; outline: none; flex: 1; font-size: 0.9rem; }
-        .add-btn { background: var(--accent); color: #fff; border: none; padding: 12px 30px; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; }
+        .add-btn { background: var(--accent); color: #fff; border: none; padding: 12px 40px; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; }
+        .add-btn:hover { box-shadow: 0 0 25px var(--accent); transform: translateY(-2px); }
 
-        /* СЕТКА С АДАПТИВНЫМИ ОКНАМИ */
+        /* СЕТКА */
         .week-grid { display: grid; grid-template-columns: 1fr; gap: 10px; width: 100%; max-width: 1600px; }
         
         @media (min-width: 1100px) {
             .week-grid { grid-template-columns: repeat(7, 1fr); gap: 15px; }
             .day-card { min-height: 450px !important; }
-            body { padding: 20px; }
         }
 
         .day-card { 
@@ -69,22 +77,21 @@
             animation: driftIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
         }
         .day-card.selected { border-color: #fff; background: rgba(50,50,50,0.5); }
-        .day-card.today { border-color: var(--accent); box-shadow: 0 0 15px rgba(255, 77, 0, 0.1); }
-        
+        .day-card.today { border-color: var(--accent); box-shadow: 0 0 15px rgba(255, 77, 0, 0.15); }
         .day-title { color: var(--accent); font-weight: 900; font-size: 0.8rem; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; text-transform: uppercase; }
 
         /* ЗАДАЧА */
-        .task { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; border-left: 4px solid var(--accent); font-size: 0.9rem; }
+        .task { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; border-left: 4px solid var(--accent); font-size: 0.9rem; }
         .task span { flex: 1; cursor: pointer; }
         .task.cat-Дом { border-left-color: var(--home); }
         .task.cat-Работа { border-left-color: var(--work); }
         .task.cat-Личное { border-left-color: var(--personal); }
         .task.urgent { border-left-color: #ff0000; font-weight: bold; background: rgba(255,0,0,0.05); }
-        .del-x { color: #555; cursor: pointer; font-weight: bold; margin-left: 15px; font-size: 1.1rem; }
+        .del-x { color: #555; cursor: pointer; font-weight: bold; margin-left: 10px; }
 
         @keyframes driftIn { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
         
-        summary { color: #333; font-weight: 800; font-size: 0.7rem; letter-spacing: 2px; cursor: pointer; text-align: center; margin: 40px 0; }
+        summary { color: #333; font-weight: 800; font-size: 0.7rem; letter-spacing: 2px; cursor: pointer; text-align: center; margin-top: 50px; }
         #archive { display: flex; flex-direction: column; gap: 5px; opacity: 0.4; padding-bottom: 100px; }
     </style>
 </head>
@@ -94,20 +101,21 @@
 
     <div class="header-container">
         <h1 class="main-title">VAN TRU FREE</h1>
+        <span class="sub-title">FAMILY TRACKER</span>
         <div id="currentDate" class="date-widget"></div>
     </div>
 
     <div class="rings-container">
         <div class="ring-box">
-            <svg class="progress-ring" id="ring-home"><circle stroke="rgba(255,255,255,0.03)" cx="25" cy="25" r="21" fill="none" stroke-width="4""")/>><circle class="ring-active" cx="25" cy="25" r="21" stroke="var(--home)" stroke-dasharray="132" stroke-dashoffset="132" fill="none" stroke-width="4""")/>></svg>
+            <svg class="progress-ring" id="ring-home"><circle stroke="rgba(255,255,255,0.03)" cx="35" cy="35" r="30" fill="none" stroke-width="5""")/>><circle class="ring-active" cx="35" cy="35" r="30" stroke="var(--home)" stroke-dasharray="188.5" stroke-dashoffset="188.5" fill="none" stroke-width="5""")/>></svg>
             <div class="ring-value" id="val-home">0/0</div><div class="ring-label">Дом</div>
         </div>
         <div class="ring-box">
-            <svg class="progress-ring" id="ring-work"><circle stroke="rgba(255,255,255,0.03)" cx="25" cy="25" r="21" fill="none" stroke-width="4""")/>><circle class="ring-active" cx="25" cy="25" r="21" stroke="var(--work)" stroke-dasharray="132" stroke-dashoffset="132" fill="none" stroke-width="4""")/>></svg>
+            <svg class="progress-ring" id="ring-work"><circle stroke="rgba(255,255,255,0.03)" cx="35" cy="35" r="30" fill="none" stroke-width="5""")/>><circle class="ring-active" cx="35" cy="35" r="30" stroke="var(--work)" stroke-dasharray="188.5" stroke-dashoffset="188.5" fill="none" stroke-width="5""")/>></svg>
             <div class="ring-value" id="val-work">0/0</div><div class="ring-label">Работа</div>
         </div>
         <div class="ring-box">
-            <svg class="progress-ring" id="ring-personal"><circle stroke="rgba(255,255,255,0.03)" cx="25" cy="25" r="21" fill="none" stroke-width="4""")/>><circle class="ring-active" cx="25" cy="25" r="21" stroke="var(--personal)" stroke-dasharray="132" stroke-dashoffset="132" fill="none" stroke-width="4""")/>></svg>
+            <svg class="progress-ring" id="ring-personal"><circle stroke="rgba(255,255,255,0.03)" cx="35" cy="35" r="30" fill="none" stroke-width="5""")/>><circle class="ring-active" cx="35" cy="35" r="30" stroke="var(--personal)" stroke-dasharray="188.5" stroke-dashoffset="188.5" fill="none" stroke-width="5""")/>></svg>
             <div class="ring-value" id="val-personal">0/0</div><div class="ring-label">Личное</div>
         </div>
     </div>
@@ -129,7 +137,7 @@
 
     <div class="week-grid" id="grid"></div>
 
-    <details style="width: 100%; max-width: 1100px;"><summary>АРХИВ ВЫПОЛНЕННЫХ</summary><div id="archive"></div></details>
+    <details><summary>АРХИВ ВЫПОЛНЕННЫХ</summary><div id="archive"></div></details>
 
     <script>
         function updateDate() {
@@ -151,7 +159,7 @@
             constructor() { this.init(); }
             init() {
                 this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 5 + 0.5; this.speedX = Math.random() * 0.6 - 0.3; this.speedY = Math.random() * 0.6 - 0.3;
+                this.size = Math.random() * 5 + 0.5; this.speedX = Math.random() * 0.4 - 0.2; this.speedY = Math.random() * 0.4 - 0.2;
                 this.alpha = Math.random() * 0.7;
             }
             update() {
@@ -164,7 +172,7 @@
         function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
         animate();
 
-        let tasks = JSON.parse(localStorage.getItem('vt_v_final_mobile')) || [];
+        let tasks = JSON.parse(localStorage.getItem('vt_v_final_styled')) || [];
         const daysShort = ['mon','tue','wed','thu','fri','sat','sun'];
 
         function addTask() {
@@ -172,7 +180,7 @@
             if(!title) return;
             tasks.push({ id: Date.now(), title, day: document.getElementById('taskDay').value, cat: document.getElementById('taskCat').value, pri: document.getElementById('taskPri').value, done: false });
             document.getElementById('taskName').value = '';
-            render(true);
+            render();
         }
 
         function toggleTask(e, id) {
@@ -183,7 +191,7 @@
 
         function deleteTask(e, id) {
             e.stopPropagation();
-            if(confirm('Удалить?')) { tasks = tasks.filter(t => t.id !== id); render(); }
+            if(confirm('Удалить задачу?')) { tasks = tasks.filter(t => t.id !== id); render(); }
         }
 
         function selectDay(dayId) {
@@ -191,8 +199,8 @@
             render();
         }
 
-        function render(isNew = false) {
-            localStorage.setItem('vt_v_final_mobile', JSON.stringify(tasks));
+        function render() {
+            localStorage.setItem('vt_v_final_styled', JSON.stringify(tasks));
             const names = ['ПОНЕДЕЛЬНИК','ВТОРНИК','СРЕДА','ЧЕТВЕРГ','ПЯТНИЦА','СУББОТА','ВОСКРЕСЕНЬЕ'];
             const currentSelectedDay = document.getElementById('taskDay').value;
             const grid = document.getElementById('grid');
@@ -224,7 +232,7 @@
                 const doneCount = cTasks.filter(t => t.done).length;
                 const total = cTasks.length;
                 const ring = document.querySelector(`#ring-${cat === 'Дом' ? 'home' : cat === 'Работа' ? 'work' : 'personal'} .ring-active`);
-                const radius = 21;
+                const radius = 30;
                 const circ = 2 * Math.PI * radius;
                 ring.style.strokeDashoffset = circ * (1 - (total ? doneCount/total : 0));
                 document.getElementById(`val-${cat === 'Дом' ? 'home' : cat === 'Работа' ? 'work' : 'personal'}`).innerText = `${doneCount}/${total}`;
