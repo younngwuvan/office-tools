@@ -2,16 +2,16 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>ULTIMATE 6 | ENGINE BY VAN</title>
+    <title>ULTIMATE 6 // GOLD EDITION</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root {
-            --bg: #0d0d0d;
-            --panel-bg: #141414;
+            --bg: #0a0a0a;
+            --panel-bg: #111111;
+            --gold: #d4af37; /* Тот самый золотой */
             --accent: #a1a1aa;
-            --border: rgba(255, 255, 255, 0.05);
-            --text-dim: #52525b;
-            --input-bg: #0a0a0a;
+            --border: rgba(212, 175, 55, 0.1);
+            --flash: rgba(255, 255, 255, 0.15);
         }
 
         body {
@@ -23,19 +23,24 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow-x: hidden;
+            transition: background-color 0.2s;
         }
 
-        /* Верхняя панель навигации */
+        /* Эффект вспышки */
+        body.flash-active { background-color: #1a1a1a; }
+
         .top-bar {
             width: 100%;
             max-width: 1200px;
             display: flex;
             justify-content: space-between;
-            font-size: 10px;
+            font-size: 11px;
             letter-spacing: 2px;
             margin-bottom: 40px;
-            opacity: 0.6;
         }
+
+        .gold-text { color: var(--gold); font-weight: 600; text-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
 
         .grid {
             display: grid;
@@ -43,16 +48,17 @@
             gap: 30px;
             width: 100%;
             max-width: 1200px;
+            position: relative;
+            z-index: 2;
         }
 
-        /* Стиль окна в духе macOS */
         .window {
             background: var(--panel-bg);
             border: 1px solid var(--border);
             border-radius: 8px;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transition: transform 0.3s;
         }
 
         .window-header {
@@ -62,180 +68,135 @@
             border-bottom: 1px solid var(--border);
         }
 
-        .dots {
-            display: flex;
-            gap: 6px;
-        }
-
-        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dots { display: flex; gap: 6px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: #333; }
         .dot.red { background: #ff5f56; }
-        .dot.yellow { background: #ffbd2e; }
-        .dot.green { background: #27c93f; }
 
-        .window-title {
-            margin-left: 20px;
-            font-size: 9px;
-            color: var(--text-dim);
-            text-transform: uppercase;
-        }
-
-        .window-body { padding: 20px; flex-grow: 1; }
+        .window-title { margin-left: 20px; font-size: 9px; color: #444; text-transform: uppercase; }
 
         textarea {
-            width: 100%;
-            height: 350px;
-            background: var(--input-bg);
-            border: none;
-            color: #d4d4d8;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            resize: none;
-            outline: none;
-            padding: 10px;
-            box-sizing: border-box;
+            width: 100%; height: 380px;
+            background: #080808; border: none;
+            color: #eee; font-family: 'JetBrains Mono', monospace;
+            font-size: 13px; resize: none; outline: none; padding: 20px; box-sizing: border-box;
         }
 
-        .window-footer {
-            padding: 15px 20px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            gap: 15px;
-        }
+        .window-footer { padding: 15px 20px; border-top: 1px solid var(--border); display: flex; gap: 15px; }
 
-        /* Кнопки как на скриншоте */
         .btn {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--accent);
-            padding: 8px 16px;
-            font-size: 11px;
-            cursor: pointer;
-            transition: 0.3s;
-            text-transform: lowercase;
+            background: transparent; border: 1px solid var(--border);
+            color: var(--accent); padding: 8px 16px; font-size: 10px;
+            cursor: pointer; text-transform: lowercase;
         }
 
-        .btn:hover {
-            border-color: #52525b;
-            color: #fff;
-            background: rgba(255,255,255,0.02);
+        .btn:hover { border-color: var(--gold); color: var(--gold); }
+
+        /* Модальное окно (Manual) */
+        #modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 100; align-items: center; justify-content: center;
         }
 
-        /* Нижний лог-панель */
+        .modal-content {
+            background: #141414; border: 1px solid var(--gold);
+            padding: 40px; border-radius: 8px; max-width: 600px; font-size: 12px; line-height: 1.8;
+        }
+
+        .modal-content h2 { color: var(--gold); font-size: 14px; margin-top: 0; letter-spacing: 2px; }
+        .modal-content ol { padding-left: 20px; color: #a1a1aa; }
+        .modal-content li b { color: #eee; }
+
         .log-area {
-            width: 100%;
-            max-width: 1200px;
-            margin-top: 30px;
-            height: 120px;
-            background: var(--panel-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 15px;
-            font-size: 11px;
-            color: var(--text-dim);
+            width: 100%; max-width: 1200px; margin-top: 30px;
+            padding: 15px; font-size: 11px; color: #444; border-top: 1px solid var(--border);
         }
-
-        #datetime { color: var(--accent); }
     </style>
 </head>
 <body>
 
     <div class="top-bar">
-        <div>[ ENGINE BY VAN ]</div>
-        <div style="font-weight: 600;">ULTIMATE 6</div>
-        <div>[ MANUAL ] <span id="datetime">--.--.---- // --:--:--</span></div>
+        <div></div>
+        <div class="gold-text" style="font-size: 14px;">ULTIMATE 6</div>
+        <div class="btn" onclick="toggleModal()" style="border:none; padding:0;">[ MANUAL_GUIDE ]</div>
     </div>
 
     <div class="grid">
-        <!-- Левое окно -->
         <div class="window">
-            <div class="window-header">
-                <div class="dots">
-                    <div class="dot red"></div>
-                    <div class="dot yellow"></div>
-                    <div class="dot green"></div>
-                </div>
-                <div class="window-title">SOURCE_INPUT</div>
-            </div>
-            <div class="window-body">
-                <textarea id="input" placeholder="Вставьте данные (Карточка + История + Цена)..."></textarea>
-            </div>
+            <div class="window-header"><div class="dots"><div class="dot red"></div><div class="dot"></div><div class="dot"></div></div><div class="window-title">SOURCE_INPUT</div></div>
+            <textarea id="input" placeholder="Input raw data..."></textarea>
             <div class="window-footer">
                 <button class="btn" onclick="processData()">./run_analysis</button>
-                <button class="btn" onclick="document.getElementById('input').value=''">clear</button>
             </div>
         </div>
 
-        <!-- Правое окно -->
-        <div class="window">
-            <div class="window-header">
-                <div class="dots">
-                    <div class="dot red"></div>
-                    <div class="dot yellow"></div>
-                    <div class="dot green"></div>
-                </div>
-                <div class="window-title">REFINED_OUTPUT</div>
-            </div>
-            <div class="window-body">
-                <textarea id="output" readonly placeholder="Ожидание дешифровки..."></textarea>
-            </div>
+        <!-- Клик в любое место этого окна вызовет копирование -->
+        <div class="window" onclick="copyResult()" style="cursor: pointer;">
+            <div class="window-header"><div class="dots"><div class="dot red"></div><div class="dot"></div><div class="dot"></div></div><div class="window-title">REFINED_OUTPUT (CLICK_TO_COPY)</div></div>
+            <textarea id="output" readonly placeholder="Awaiting..."></textarea>
             <div class="window-footer">
-                <button class="btn" onclick="copyResult()">cp to_buffer</button>
+                <button class="btn">cp to_buffer</button>
             </div>
         </div>
     </div>
 
-    <div class="log-area" id="status-text">
-        SYSTEM_READY: STANDBY MODE...
+    <div class="log-area" id="status-text">SYSTEM_READY // STANDBY_MODE</div>
+
+    <!-- Окно мануала -->
+    <div id="modal" onclick="toggleModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h2>ULTIMATE 6 // MANUAL_GUIDE</h2>
+            <ol>
+                <li><b>КАРТОЧКА:</b> Скопируйте данные из Карточки товара и вставьте в левое окно. Каждая новая единица должна начинаться со слова «Идентификатор».</li>
+                <li><b>ИСТОРИЯ:</b> Перейдите в раздел «История», скопируйте строку с WB стикером, MX и боксом, добавьте её следом в левое окно.</li>
+                <li><b>ЦЕНА:</b> Скопируйте стоимость напрямую с Wildberries и вставьте финальной строкой.</li>
+                <li><b>СБОРКА:</b> Нажмите <b>./run_analysis</b>. Система сама найдет нужные паттерны.</li>
+                <li><b>ВЫВОД:</b> Кликните по правому окну для мгновенного копирования готовой строки в буфер.</li>
+            </ol>
+            <button class="btn" style="margin-top:20px" onclick="toggleModal()">close_guide</button>
+        </div>
     </div>
 
 <script>
-    function updateClock() {
-        const now = new Date();
-        const d = now.toLocaleDateString('ru-RU').replace(/\./g, '.');
-        const t = now.toLocaleTimeString('ru-RU');
-        document.getElementById('datetime').innerHTML = `${d} // ${t}`;
+    function toggleModal() {
+        const m = document.getElementById('modal');
+        m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
     }
-    setInterval(updateClock, 1000);
-    updateClock();
 
-    function log(msg) {
-        document.getElementById('status-text').innerHTML = `> ${msg.toUpperCase()}`;
-    }
+    function log(msg) { document.getElementById('status-text').innerHTML = `> ${msg.toUpperCase()}`; }
 
     function processData() {
         const text = document.getElementById('input').value;
-        if(!text.trim()) { log('Error: No source data'); return; }
-
+        if(!text.trim()) return;
         log('Compiling patterns...');
-
+        
         setTimeout(() => {
             const allNumbers = text.match(/\b\d{10,11}\b/g) || [];
             const id = allNumbers[0] || "";
             const sticker = allNumbers[1] || id;
-            const statusMatch = text.match(/\b[A-Z]{3,4}\b/);
-            const status = statusMatch ? statusMatch[0] : "";
-            const nameMatch = text.match(/Предмет\s*\n?\s*(.*?)(?=\n|\/|$)/i);
-            const name = nameMatch ? nameMatch[1].trim() : "";
-            const priceMatch = text.match(/(\d+)\s*₽/);
-            const price = priceMatch ? priceMatch[1] : "";
-            const mxMatch = text.match(/(ВЛАД\d+|ЦП\d+)[^\s]*/i);
-            const mx = mxMatch ? mxMatch[0] : "";
-            const boxMatch = text.match(/\b(BOX|CON)\b\s*(\d+)/i);
-            const boxNum = boxMatch ? boxMatch[2] : "";
+            const status = (text.match(/\b[A-Z]{3,4}\b/) || [""])[0];
+            const name = (text.match(/Предмет\s*\n?\s*(.*?)(?=\n|\/|$)/i) || ["", ""])[1].trim();
+            const price = (text.match(/(\d+)\s*₽/) || ["", ""])[1];
+            const mx = (text.match(/(ВЛАД\d+|ЦП\d+)[^\s]*/i) || [""])[0];
+            const box = (text.match(/\b(BOX|CON)\b\s*(\d+)/i) || ["", "", ""])[2];
 
-            const result = `${id}\t${sticker}\t${status}\t${name}\t${price}\t${mx}\t${boxNum}`;
-            document.getElementById('output').value = result;
-            log('Analysis_Success: String generated');
+            document.getElementById('output').value = `${id}\t${sticker}\t${status}\t${name}\t${price}\t${mx}\t${box}`;
+            log('Analysis_Success');
         }, 300);
     }
 
     async function copyResult() {
-        const output = document.getElementById('output');
-        if(!output.value) return;
-        try {
-            await navigator.clipboard.writeText(output.value);
-            log('Clipboard: Transfer_Complete');
-        } catch (err) { log('Error: Clipboard access denied'); }
+        const val = document.getElementById('output').value;
+        if(!val) return;
+        
+        await navigator.clipboard.writeText(val);
+        
+        // Эффект вспышки
+        document.body.classList.add('flash-active');
+        log('Clipboard: Flash_Transfer_Complete');
+        
+        setTimeout(() => {
+            document.body.classList.remove('flash-active');
+        }, 200);
     }
 </script>
 </body>
