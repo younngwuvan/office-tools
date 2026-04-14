@@ -2,229 +2,216 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>ULTIMATE 6 // VAN EDITION</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAN TRU FREE | FAMILY TRACKER</title>
     <style>
+        @import url('https://googleapis.com');
+
         :root {
-            --term-bg: #1e1e1e;
-            --term-border: #333;
-            --text-gray: #b3b3b3;
-            --text-white: #ffffff;
-            --accent: #a1a1aa;
-            --gold: #b38728;
+            --bg: #050505;
+            --accent: #ff4d00;
+            --panel: rgba(20, 20, 20, 0.7);
+            --border: rgba(255, 77, 0, 0.25);
+            --home: #0084ff; --work: #ff4d00; --personal: #00ff62;
         }
 
-        body {
-            background-color: #0f0f0f; color: var(--text-gray);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 0; padding: 40px; display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; transition: background-color 0.4s ease;
+        body { background-color: var(--bg); color: #e0e0e0; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+
+        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; width: 100%; height: 100%; background: radial-gradient(circle at top, #1a0f0a 0%, #050505 100%); }
+
+        .main-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; letter-spacing: clamp(10px, 2vw, 20px); text-transform: uppercase; margin: 0;
+            background: linear-gradient(180deg, #fff 0%, #777 50%, #333 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px rgba(255, 77, 0, 0.4)); text-align: center;
         }
 
-        body.flash-active { background-color: #252525; box-shadow: inset 0 0 150px rgba(255,255,255,0.1); }
+        .date-widget { color: var(--accent); letter-spacing: 5px; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; margin-top: 10px; }
 
-        .header {
-            width: 100%; max-width: 1100px; display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 40px; padding-bottom: 15px; border-bottom: 1px solid var(--term-border);
+        .rings-container { display: flex; gap: clamp(20px, 4vw, 50px); margin: 30px 0; justify-content: center; }
+        .ring-box { text-align: center; position: relative; }
+        .ring-label { font-size: 0.65rem; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; }
+        .ring-value { position: absolute; top: 35px; left: 50%; transform: translate(-50%, -50%); font-size: 0.9rem; font-weight: 900; color: #fff; }
+        .progress-ring { width: 70px; height: 70px; transform: rotate(-90deg); }
+        .progress-ring circle { fill: none; stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+
+        .input-panel {
+            background: var(--panel); backdrop-filter: blur(30px); border: 1px solid var(--border);
+            padding: 15px 25px; border-radius: 20px; display: flex; flex-wrap: wrap; gap: 12px; width: 100%; max-width: 1100px; margin-bottom: 40px;
         }
+        input, select { background: #000; border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 10px; outline: none; flex: 1; min-width: 150px; font-size: 0.9rem; }
+        .add-btn { background: var(--accent); color: #fff; border: none; padding: 0 40px; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; min-height: 45px; }
 
-        .branding { font-family: "SF Mono", monospace; font-size: 0.7rem; color: var(--gold); letter-spacing: 2px; font-weight: bold; }
-        h1 { margin: 0; font-size: 0.9rem; font-weight: 600; letter-spacing: 3px; color: var(--text-white); }
+        .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px; width: 100%; max-width: 1600px; }
+        @media (max-width: 1100px) { .week-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .week-grid { grid-template-columns: 1fr; } }
+
+        .day-card { background: var(--panel); border: 1px solid var(--border); border-radius: 20px; padding: 15px; min-height: 450px; cursor: pointer; transition: 0.4s; position: relative; }
+        .day-card.selected { border-color: #fff; background: rgba(50,50,50,0.5); }
+        .day-card.today { border-color: var(--accent); box-shadow: 0 0 20px rgba(255, 77, 0, 0.2); }
+        .day-card.today::after { content: 'TODAY'; position: absolute; top: 15px; right: 15px; font-size: 0.6rem; color: var(--accent); font-weight: 900; letter-spacing: 1px; }
         
-        .header-right { display: flex; gap: 20px; align-items: center; }
-        #datetime { font-family: "SF Mono", monospace; font-size: 0.7rem; color: #444; }
-        
-        .manual-btn {
-            background: transparent; border: 1px solid #444; color: #666;
-            font-family: "SF Mono", monospace; font-size: 0.6rem;
-            padding: 4px 10px; border-radius: 4px; cursor: pointer; transition: 0.3s;
-            text-transform: uppercase;
-        }
-        .manual-btn:hover { color: var(--text-white); border-color: var(--text-white); }
+        .day-title { color: var(--accent); font-weight: 900; font-size: 0.85rem; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 8px; text-transform: uppercase; }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; width: 100%; max-width: 1100px; }
+        .task { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; border-left: 3px solid var(--accent); font-size: 0.85rem; transition: 0.2s; }
+        .task:hover { background: rgba(255,255,255,0.07); transform: translateX(5px); }
+        .task span { flex: 1; cursor: pointer; }
+        .task.cat-Дом { border-left-color: var(--home); }
+        .task.cat-Работа { border-left-color: var(--work); }
+        .task.cat-Личное { border-left-color: var(--personal); }
+        .task.urgent { border-left-color: #ff0000; font-weight: bold; background: rgba(255,0,0,0.05); }
+        .del-x { color: #555; cursor: pointer; font-weight: bold; margin-left: 10px; }
 
-        .window {
-            background: var(--term-bg); border: 1px solid var(--term-border);
-            border-radius: 10px; padding: 15px; display: flex; flex-direction: column; gap: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5); position: relative;
-        }
-
-        .dots { display: flex; gap: 6px; margin-bottom: 5px; }
-        .dot { width: 10px; height: 10px; border-radius: 50%; }
-        .dot.red { background: #ff5f56; }
-        .dot.yellow { background: #ffbd2e; }
-        .dot.green { background: #27c93f; }
-
-        .label { font-family: "SF Mono", monospace; font-size: 0.6rem; color: #444; text-transform: uppercase; margin-left: 5px; }
-
-        textarea {
-            width: 100%; height: 420px; background: #151515; border: 1px solid transparent;
-            border-radius: 6px; color: var(--text-white); padding: 15px;
-            font-family: "SF Mono", monospace; font-size: 13px; outline: none; resize: none; box-sizing: border-box;
-        }
-
-        #output { cursor: pointer; }
-        #output:hover { background: #1a1a1a; border-color: #444; }
-
-        .btn {
-            background: transparent; border: 1px solid var(--term-border); color: var(--accent);
-            padding: 10px 20px; font-family: "SF Mono", monospace; font-size: 0.7rem;
-            cursor: pointer; transition: 0.2s; border-radius: 6px;
-        }
-        .btn:hover { background: var(--text-white); color: #000; }
-
-        #console-panel {
-            width: 100%; max-width: 1100px; margin-top: 30px; background: var(--term-bg);
-            border: 1px solid var(--term-border); border-radius: 10px; padding: 20px;
-            font-family: "SF Mono", monospace; font-size: 12px; color: var(--text-white);
-            height: 150px; overflow-y: auto; display: flex; flex-direction: column-reverse;
-        }
-
-        .log-line { margin-bottom: 6px; }
-        .prompt { color: #50fa7b; margin-right: 8px; }
-        .path { color: #8be9fd; margin-right: 8px; }
-
-        #modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); z-index: 100;
-            justify-content: center; align-items: center;
-        }
-        .modal-content {
-            background: #1e1e1e; border: 1px solid #444; border-radius: 12px;
-            width: 100%; max-width: 650px; padding: 40px; position: relative;
-            box-shadow: 0 30px 80px rgba(0,0,0,1);
-        }
-        .modal-content h2 { font-family: "SF Mono", monospace; font-size: 1rem; color: var(--text-white); margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 15px; letter-spacing: 2px; }
-        .modal-content p, .modal-content li { font-size: 0.85rem; line-height: 1.7; color: #aaa; margin-bottom: 10px; }
-        .modal-content b { color: var(--text-white); }
-        .close-modal { position: absolute; top: 25px; right: 25px; cursor: pointer; color: #555; font-size: 0.7rem; font-family: "SF Mono", monospace; }
-        .close-modal:hover { color: #fff; }
+        summary { color: #333; font-weight: 800; font-size: 0.7rem; letter-spacing: 3px; cursor: pointer; text-align: center; margin: 50px 0; }
+        #archive { display: flex; flex-direction: column; gap: 5px; opacity: 0.4; padding-bottom: 100px; }
     </style>
 </head>
 <body>
 
-    <div id="modal" onclick="if(event.target.id === 'modal') toggleHelp()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="close-modal" onclick="toggleHelp()">[ ESC_CLOSE ]</div>
-            <h2>ULTIMATE 6 // MANUAL_GUIDE</h2>
-            <ol>
-                <li><b>КАРТОЧКА:</b> Скопируйте данные из <i>Карточки товара</i> и вставьте в левое окно. Каждая новая единица должна начинаться со слова <i>«Идентификатор»</i>.</li>
-                <li><b>ИСТОРИЯ:</b> Перейдите в раздел <i>«История»</i>, скопируйте строку с ВБ стикером, МХ и боксом, добавьте её следом в левое окно.</li>
-                <li><b>ЦЕНА:</b> Скопируйте стоимость напрямую с <i>Wildberries</i> и вставьте финальной строкой.</li>
-                <li><b>СБОРКА:</b> Нажмите <b>./run_analysis</b>. Система сама найдет нужные паттерны в этом массиве текста.</li>
-                <li><b>ВЫВОД:</b> Кликните по правому окну для мгновенного копирования готовой строки в буфер.</li>
-            </ol>
-            <p style="margin-top: 25px; font-size: 0.75rem; color: #444;"><i>* Левое окно автоматически очистится через 3 сек. после копирования. Клик в пустоту закроет мануал.</i></p>
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="header-container">
+        <h1 class="main-title">VAN TRU FREE</h1>
+        <div id="currentDate" class="date-widget"></div>
+    </div>
+
+    <div class="rings-container">
+        <div class="ring-box">
+            <svg class="progress-ring" id="ring-home"><circle stroke="rgba(255,255,255,0.03)" cx="35" cy="35" r="30" fill="none" stroke-width="5""")/>><circle class="ring-active" cx="35" cy="35" r="30" stroke="var(--home)" stroke-dasharray="188.5" stroke-dashoffset="188.5" fill="none" stroke-width="5""")/>></svg>
+            <div class="ring-value" id="val-home">0/0</div><div class="ring-label">Дом</div>
+        </div>
+        <div class="ring-box">
+            <svg class="progress-ring" id="ring-work"><circle stroke="rgba(255,255,255,0.03)" cx="35" cy="35" r="30" fill="none" stroke-width="5""")/>><circle class="ring-active" cx="35" cy="35" r="30" stroke="var(--work)" stroke-dasharray="188.5" stroke-dashoffset="188.5" fill="none" stroke-width="5""")/>></svg>
+            <div class="ring-value" id="val-work">0/0</div><div class="ring-label">Работа</div>
+        </div>
+        <div class="ring-box">
+            <svg class="progress-ring" id="ring-personal"><circle stroke="rgba(255,255,255,0.03)" cx="35" cy="35" r="30" fill="none" stroke-width="5""")/>><circle class="ring-active" cx="35" cy="35" r="30" stroke="var(--personal)" stroke-dasharray="188.5" stroke-dashoffset="188.5" fill="none" stroke-width="5""")/>></svg>
+            <div class="ring-value" id="val-personal">0/0</div><div class="ring-label">Личное</div>
         </div>
     </div>
 
-    <div class="header">
-        <div class="branding">[ ENGINE BY VAN ]</div>
-        <h1>ULTIMATE 6</h1>
-        <div class="header-right">
-            <button class="manual-btn" onclick="toggleHelp()">[ MANUAL ]</button>
-            <div id="datetime">00:00:00</div>
-        </div>
+    <div class="input-panel">
+        <input type="text" id="taskName" placeholder="Какая миссия на сегодня?" onkeydown="if(event.key==='Enter') addTask()">
+        <select id="taskDay">
+            <option value="mon">Понедельник</option><option value="tue">Вторник</option><option value="wed">Среда</option>
+            <option value="thu">Четверг</option><option value="fri">Пятница</option><option value="sat">Суббота</option><option value="sun">Воскресенье</option>
+        </select>
+        <select id="taskCat">
+            <option value="Дом">🏠 Дом</option><option value="Работа">💼 Работа</option><option value="Личное">✨ Личное</option>
+        </select>
+        <select id="taskPri">
+            <option value="normal">Обычный</option><option value="urgent">🔥 СРОЧНО</option>
+        </select>
+        <button class="add-btn" onclick="addTask()">ADD MISSION</button>
     </div>
 
-    <div class="grid">
-        <div class="window">
-            <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
-            <div class="label">source_input</div>
-            <textarea id="input" spellcheck="false" placeholder="Вставьте данные (Карточка + История + Цена)..."></textarea>
-            <div style="display:flex; gap:10px;">
-                <button class="btn" onclick="processData()">./run_analysis</button>
-                <button class="btn" onclick="clearAll()">clear</button>
-            </div>
-        </div>
+    <div class="week-grid" id="grid"></div>
 
-        <div class="window">
-            <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
-            <div class="label">refined_output</div>
-            <textarea id="output" readonly spellcheck="false" placeholder="Ожидание дешифровки..." onclick="copyResult()"></textarea>
-            <button id="copyBtn" class="btn" onclick="copyResult()">cp to_buffer</button>
-        </div>
-    </div>
+    <details style="width: 100%; max-width: 1100px;"><summary>АРХИВ ВЫПОЛНЕННЫХ</summary><div id="archive"></div></details>
 
-    <div id="console-panel"><div id="log-container"></div></div>
-
-<script>
-    function updateClock() { document.getElementById('datetime').innerHTML = new Date().toLocaleString('ru-RU').replace(',', ' //'); }
-    setInterval(updateClock, 1000); updateClock();
-
-    function log(msg) {
-        const container = document.getElementById('log-container');
-        const newLine = document.createElement('div');
-        newLine.className = `log-line`;
-        newLine.innerHTML = `<span class="prompt">wuv@dominator</span><span class="path">~ %</span> ${msg}`;
-        container.prepend(newLine);
-    }
-
-    function toggleHelp() {
-        const m = document.getElementById('modal');
-        m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
-    }
-
-    function clearAll() { document.getElementById('input').value = ""; document.getElementById('output').value = ""; log('cache: cleared'); }
-
-    function typeEffect(element, text) {
-        element.value = "";
-        let i = 0;
-        function type() {
-            if (i < text.length) {
-                element.value += text.charAt(i);
-                i++;
-                setTimeout(type, 1);
-            }
+    <script>
+        // --- ДАТА И ЧАСТИЦЫ ---
+        function updateDate() {
+            const now = new Date();
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            document.getElementById('currentDate').innerText = now.toLocaleDateString('ru-RU', options);
+            
+            // Авто-выбор текущего дня в селекторе
+            const daysMap = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+            const todayId = daysMap[now.getDay()];
+            document.getElementById('taskDay').value = todayId;
+            return todayId;
         }
-        type();
-    }
+        const currentDayId = updateDate();
 
-    function processData() {
-        const text = document.getElementById('input').value;
-        if(!text.trim()) return;
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.onresize = resize; resize();
+        class Particle {
+            constructor() { this.init(); }
+            init() {
+                this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 4 + 0.5; this.speedX = Math.random() * 0.5 - 0.25; this.speedY = Math.random() * 0.5 - 0.25;
+                this.alpha = Math.random() * 0.6;
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x > canvas.width || this.x < 0 || this.y > canvas.height || this.y < 0) this.init();
+            }
+            draw() { ctx.fillStyle = `rgba(255, 77, 0, ${this.alpha})`; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
+        }
+        for (let i = 0; i < 500; i++) particles.push(new Particle());
+        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+        animate();
 
-        log('process: executing pattern_match_v6...');
+        // --- ЛОГИКА ---
+        let tasks = JSON.parse(localStorage.getItem('vt_ultra_vFinal_Date')) || [];
+        const daysShort = ['mon','tue','wed','thu','fri','sat','sun'];
 
-        const allNumbers = text.match(/\b\d{10,11}\b/g) || [];
-        const id = (allNumbers.length > 0) ? allNumbers[0] : "";
-        const sticker = (allNumbers.length > 1) ? allNumbers[1] : id;
+        function addTask() {
+            const title = document.getElementById('taskName').value;
+            if(!title) return;
+            tasks.push({ id: Date.now(), title, day: document.getElementById('taskDay').value, cat: document.getElementById('taskCat').value, pri: document.getElementById('taskPri').value, done: false });
+            document.getElementById('taskName').value = '';
+            render();
+        }
 
-        const statusMatch = text.match(/\b[A-Z]{3,4}\b/g) || [];
-        const status = statusMatch.find(s => s !== "BOX" && s !== "CON") || "";
+        function toggleTask(e, id) {
+            e.stopPropagation();
+            tasks = tasks.map(t => t.id === id ? {...t, done: !t.done} : t);
+            render();
+        }
 
-        const nameMatch = text.match(/Предмет\s*\n?\s*(.*?)(?=\n|\/|$)/i);
-        const name = nameMatch ? nameMatch[1].trim() : "";
+        function deleteTask(e, id) {
+            e.stopPropagation();
+            if(confirm('Удалить эту задачу?')) { tasks = tasks.filter(t => t.id !== id); render(); }
+        }
 
-        const priceMatch = text.match(/(\d+)\s*₽/);
-        const price = priceMatch ? priceMatch[1] : "";
+        function selectDay(dayId) {
+            document.getElementById('taskDay').value = dayId;
+            render();
+        }
 
-        // Строгий поиск МХ по формату точек (чтобы не цеплять имена)
-        const mxMatch = text.match(/(?:ВЛАД|ЦП)[\d\.]+/i);
-        const mx = mxMatch ? mxMatch[0] : "";
+        function render() {
+            localStorage.setItem('vt_ultra_vFinal_Date', JSON.stringify(tasks));
+            const names = ['ПОНЕДЕЛЬНИК','ВТОРНИК','СРЕДА','ЧЕТВЕРГ','ПЯТНИЦА','СУББОТА','ВОСКРЕСЕНЬЕ'];
+            const currentSelectedDay = document.getElementById('taskDay').value;
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            
+            daysShort.forEach((day, i) => {
+                const isToday = day === currentDayId;
+                const card = document.createElement('div');
+                card.className = `day-card ${day === currentSelectedDay ? 'selected' : ''} ${isToday ? 'today' : ''}`;
+                card.onclick = () => selectDay(day);
+                card.innerHTML = `<div class="day-title">${names[i]}</div>`;
+                
+                tasks.filter(t => t.day === day && !t.done).forEach(t => {
+                    const d = document.createElement('div');
+                    d.className = `task ${t.pri} cat-${t.cat}`;
+                    d.onclick = (e) => toggleTask(e, t.id);
+                    d.innerHTML = `<span>${t.title}</span><div class="del-x" onclick="deleteTask(event, ${t.id})">×</div>`;
+                    card.appendChild(d);
+                });
+                grid.appendChild(card);
+            });
 
-        const boxMatch = text.match(/(?:BOX|CON)\s*(\d+)/i);
-        const boxNum = boxMatch ? boxMatch[1] : "";
-
-        const result = `${id}\t${sticker}\t${status}\t${name}\t${price}\t${mx}\t${boxNum}`;
-        
-        typeEffect(document.getElementById('output'), result);
-        log('success: compilation_complete');
-    }
-
-    async function copyResult() {
-        const output = document.getElementById('output');
-        if(!output.value) return;
-        try {
-            await navigator.clipboard.writeText(output.value);
-            log('buffer: transfer success');
-            document.body.classList.add('flash-active');
-            setTimeout(() => document.body.classList.remove('flash-active'), 400);
-            setTimeout(() => { document.getElementById('input').value = ""; log('auto_reset: active'); }, 3000);
-        } catch (err) { log('err: clipboard fail'); }
-    }
-
-    window.addEventListener('keydown', (e) => { if(e.key === 'Escape') { const m = document.getElementById('modal'); if(m.style.display === 'flex') toggleHelp(); } });
-</script>
+            document.getElementById('archive').innerHTML = tasks.filter(t => t.done).map(t => 
+                `<div class="task cat-${t.cat}" style="opacity:0.6" onclick="toggleTask(event, ${t.id})"><span>${t.title}</span><div class="del-x" onclick="deleteTask(event, ${t.id})">×</div></div>`
+            ).join('');
+            
+            ['Дом', 'Работа', 'Личное'].forEach(cat => {
+                const cTasks = tasks.filter(t => t.cat === cat);
+                const doneCount = cTasks.filter(t => t.done).length;
+                const total = cTasks.length;
+                const ring = document.querySelector(`#ring-${cat === 'Дом' ? 'home' : cat === 'Работа' ? 'work' : 'personal'} .ring-active`);
+                ring.style.strokeDashoffset = 188.5 * (1 - (total ? doneCount/total : 0));
+                document.getElementById(`val-${cat === 'Дом' ? 'home' : cat === 'Работа' ? 'work' : 'personal'}`).innerText = `${doneCount}/${total}`;
+            });
+        }
+        render();
+    </script>
 </body>
 </html>
