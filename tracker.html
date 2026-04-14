@@ -19,32 +19,44 @@
 
         #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; width: 100%; height: 100%; background: radial-gradient(circle at top, #1a0f0a 0%, #050505 100%); }
 
-        .header-container { text-align: center; width: 100%; padding-top: env(safe-area-inset-top, 40px); margin-bottom: 10px; }
+        /* МАССИВНЫЙ ЗАГОЛОВОК С ОПУСКАНИЕМ ВНИЗ */
+        .header-container { 
+            text-align: center; 
+            width: 100%; 
+            padding-top: clamp(60px, 10vh, 120px); /* Опустили вниз сильнее */
+            margin-bottom: 40px; 
+            animation: fadeInDown 1.2s ease;
+        }
         
         .main-title {
-            font-size: clamp(2rem, 10vw, 4.5rem); font-weight: 900; letter-spacing: clamp(6px, 3vw, 15px); text-transform: uppercase; margin: 0;
-            background: linear-gradient(180deg, #fff 0%, #777 50%, #333 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 20px rgba(255, 77, 0, 0.4));
+            font-size: clamp(3rem, 12vw, 6rem); /* Сделали больше и массивнее */
+            font-weight: 900; 
+            letter-spacing: clamp(10px, 4vw, 25px); 
+            text-transform: uppercase; 
+            margin: 0;
+            background: linear-gradient(180deg, #fff 0%, #888 50%, #222 100%);
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px rgba(255, 77, 0, 0.5)); /* Усилили свечение */
         }
-        .sub-title { color: var(--accent); letter-spacing: 6px; font-weight: 900; font-size: 0.75rem; text-transform: uppercase; margin-top: 5px; display: block; }
-        .date-widget { color: #555; letter-spacing: 2px; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; margin-top: 8px; }
+        .sub-title { 
+            color: var(--accent); 
+            letter-spacing: clamp(8px, 2vw, 15px); 
+            font-weight: 900; 
+            font-size: clamp(0.9rem, 3vw, 1.3rem); /* Увеличили подзаголовок */
+            text-transform: uppercase; 
+            margin-top: 10px; 
+            display: block; 
+            opacity: 0.9;
+        }
+        .date-widget { color: #555; letter-spacing: 3px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; margin-top: 15px; }
 
-        /* СТАТИСТИКА - ФИКС ЦЕНТРОВКИ */
-        .rings-container { display: flex; gap: clamp(15px, 5vw, 50px); margin: 25px 0; justify-content: center; width: 100%; }
-        .ring-box { 
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            position: relative; width: 80px; 
-        }
+        /* ОСТАЛЬНОЙ ДИЗАЙН (БЕЗ ИЗМЕНЕНИЙ) */
+        .rings-container { display: flex; gap: clamp(15px, 5vw, 50px); margin: 30px 0; justify-content: center; width: 100%; }
+        .ring-box { display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; width: 80px; }
         .ring-label { font-size: 0.6rem; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; font-weight: 700; }
-        .ring-inner {
-            position: relative; width: 80px; height: 80px;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .ring-value { 
-            position: absolute; font-size: 1rem; font-weight: 900; color: #fff; 
-            width: 100%; text-align: center; pointer-events: none;
-        }
+        .ring-inner { position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; }
+        .ring-value { position: absolute; font-size: 1rem; font-weight: 900; color: #fff; width: 100%; text-align: center; pointer-events: none; }
         .progress-ring { width: 80px; height: 80px; transform: rotate(-90deg); }
         .progress-ring circle { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
 
@@ -53,22 +65,13 @@
             .ring-value { font-size: 0.8rem; }
         }
 
-        /* ВВОД */
-        .input-panel {
-            background: var(--panel); backdrop-filter: blur(30px); border: 1px solid var(--border);
-            padding: 15px; border-radius: 15px; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 1100px; margin-bottom: 25px;
-        }
-        
-        @media (min-width: 1100px) {
-            .input-panel { flex-direction: row; padding: 15px 25px; border-radius: 20px; }
-            input, select { min-width: 150px; }
-            body { padding: 0 30px; }
-        }
+        .input-panel { background: var(--panel); backdrop-filter: blur(30px); border: 1px solid var(--border); padding: 15px; border-radius: 15px; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 1100px; margin-bottom: 30px; box-shadow: 0 15px 50px rgba(0,0,0,0.5); }
+        @media (min-width: 1100px) { .input-panel { flex-direction: row; padding: 15px 25px; border-radius: 20px; } input, select { min-width: 150px; } body { padding-bottom: 50px; } }
 
         input, select { background: #000; border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 10px; outline: none; flex: 1; font-size: 1rem; }
         .add-btn { background: var(--accent); color: #fff; border: none; padding: 15px 40px; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; }
+        .add-btn:hover { box-shadow: 0 0 30px var(--accent); transform: translateY(-2px); }
 
-        /* СЕТКА */
         .week-grid { display: grid; grid-template-columns: 1fr; gap: 12px; width: 95%; max-width: 1600px; }
         @media (min-width: 1100px) { .week-grid { grid-template-columns: repeat(7, 1fr); gap: 15px; } .day-card { min-height: 450px !important; } }
 
@@ -76,11 +79,10 @@
         .day-card.selected { border-color: #fff; background: rgba(50,50,50,0.5); }
         .day-card.today { border-color: var(--accent); box-shadow: 0 0 15px rgba(255, 77, 0, 0.2); }
         .day-card.today::after { content: 'TODAY'; position: absolute; top: 12px; right: 12px; font-size: 0.6rem; color: var(--accent); font-weight: 900; }
-        
         .day-title { color: var(--accent); font-weight: 900; font-size: 0.85rem; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 5px; text-transform: uppercase; }
 
         .task { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; border-left: 4px solid var(--accent); font-size: 0.95rem; }
-        .task span { flex: 1; }
+        .task:hover { background: rgba(255,255,255,0.07); transform: translateX(5px); }
         .task.cat-Дом { border-left-color: var(--home); }
         .task.cat-Работа { border-left-color: var(--work); }
         .task.cat-Личное { border-left-color: var(--personal); }
@@ -88,9 +90,10 @@
         .del-x { color: #555; cursor: pointer; font-weight: bold; margin-left: 10px; font-size: 1.2rem; }
 
         @keyframes driftIn { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
-        
-        summary { color: #333; font-weight: 800; font-size: 0.7rem; letter-spacing: 2px; cursor: pointer; text-align: center; margin-top: 50px; }
-        #archive { display: flex; flex-direction: column; gap: 5px; opacity: 0.4; padding-bottom: 80px; width: 95%; }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+
+        summary { color: #333; font-weight: 800; font-size: 0.7rem; letter-spacing: 3px; cursor: pointer; text-align: center; margin-top: 50px; }
+        #archive { display: flex; flex-direction: column; gap: 5px; opacity: 0.4; padding-bottom: 100px; width: 95%; }
     </style>
 </head>
 <body>
@@ -176,11 +179,11 @@
             }
             draw() { ctx.fillStyle = `rgba(255, 77, 0, ${this.alpha})`; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
         }
-        for (let i = 0; i < 400; i++) particles.push(new Particle());
+        for (let i = 0; i < 500; i++) particles.push(new Particle());
         function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
         animate();
 
-        let tasks = JSON.parse(localStorage.getItem('vt_v_final_v10')) || [];
+        let tasks = JSON.parse(localStorage.getItem('vt_v_final_ultra_v2')) || [];
         const daysShort = ['mon','tue','wed','thu','fri','sat','sun'];
 
         function addTask() {
@@ -208,7 +211,7 @@
         }
 
         function render() {
-            localStorage.setItem('vt_v_final_v10', JSON.stringify(tasks));
+            localStorage.setItem('vt_v_final_ultra_v2', JSON.stringify(tasks));
             const names = ['ПОНЕДЕЛЬНИК','ВТОРНИК','СРЕДА','ЧЕТВЕРГ','ПЯТНИЦА','СУББОТА','ВОСКРЕСЕНЬЕ'];
             const currentSelectedDay = document.getElementById('taskDay').value;
             const grid = document.getElementById('grid');
