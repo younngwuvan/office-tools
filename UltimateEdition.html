@@ -2,292 +2,353 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>ULTIMATE 6 // DOMINATOR EDITION</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ULTIMATE 6 // BY VAN</title>
+    <!-- Подключаем шрифты для максимального сходства -->
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #d1d1d1; /* Тот самый правильный серый фон */
-            --window-bg: #1a1a1a;
+            --bg-color: #c7c7c7; /* Тот самый правильный серый фон */
+            --window-bg: #0f0f0f;
             --gold: #d4af37;
-            --green-terminal: #22c55e;
-            --border-radius: 10px;
+            --green: #22c55e;
+            --red-mac: #ff5f56;
+            --yellow-mac: #ffbd2e;
+            --green-mac: #27c93f;
+            --border-alpha: rgba(255, 255, 255, 0.04);
+            --shadow-deep: 0 50px 100px -20px rgba(0, 0, 0, 0.5), 0 30px 60px -30px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Полная кастомизация скроллбара (та самая «палка») */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 2px solid transparent;
+            background-clip: content-box;
+        }
+        textarea:hover::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            background-clip: content-box;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.25);
+            background-clip: content-box;
         }
 
         body {
             background-color: var(--bg-color);
             margin: 0;
-            padding: 40px 20px;
+            padding: 80px 20px;
             font-family: 'Inter', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Полноэкранная вспышка за окнами */
+        /* Эффект органической вспышки */
         #flash-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: white;
             opacity: 0;
             pointer-events: none;
-            z-index: 5;
-            transition: opacity 0.2s ease;
+            z-index: 9999;
         }
 
-        /* Хедер с золотыми надписями */
-        .header {
+        .top-navigation {
             width: 100%;
-            max-width: 1100px;
+            max-width: 1200px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 50px;
-            z-index: 10;
+            margin-bottom: 70px;
+            padding: 0 10px;
         }
 
-        .gold-brand {
+        .engine-label {
             color: var(--gold);
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             text-transform: uppercase;
+            opacity: 0.8;
         }
 
-        .main-title {
+        .central-title {
             color: var(--gold);
-            font-size: 18px;
+            font-size: 22px;
             font-weight: 600;
-            letter-spacing: 8px;
+            letter-spacing: 14px;
             text-transform: uppercase;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
-        .manual-btn {
-            font-size: 11px;
-            color: #666;
-            cursor: pointer;
+        .guide-link {
+            color: #777;
+            font-size: 10px;
             text-transform: lowercase;
+            cursor: pointer;
+            transition: 0.3s;
             border-bottom: 1px solid transparent;
         }
+        .guide-link:hover { color: var(--gold); border-bottom-color: var(--gold); }
 
-        .manual-btn:hover { color: var(--gold); border-color: var(--gold); }
-
-        /* Контейнер окон */
-        .grid {
+        .main-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            gap: 40px;
             width: 100%;
-            max-width: 1100px;
-            z-index: 10;
+            max-width: 1200px;
+            position: relative;
         }
 
-        .window {
+        .mac-window {
             background: var(--window-bg);
-            border-radius: var(--border-radius);
-            box-shadow: 0 40px 100px rgba(0,0,0,0.4);
+            border-radius: 12px;
+            box-shadow: var(--shadow-deep);
             display: flex;
             flex-direction: column;
-            border: 1px solid rgba(255,255,255,0.05);
-            height: 550px;
-            transition: transform 0.2s;
+            height: 600px;
+            border: 1px solid var(--border-alpha);
+            backdrop-filter: blur(10px);
         }
 
-        /* Заголовок окна macOS */
-        .window-header {
-            padding: 15px 20px;
+        .window-top {
+            padding: 18px 22px;
             display: flex;
             align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
         }
 
-        .dots { display: flex; gap: 8px; }
-        .dot { width: 12px; height: 12px; border-radius: 50%; }
-        .dot.red { background: #ff5f56; }
-        .dot.yellow { background: #ffbd2e; }
-        .dot.green { background: #27c93f; }
+        .mac-dots { display: flex; gap: 8px; }
+        .m-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .m-dot.r { background: var(--red-mac); }
+        .m-dot.y { background: var(--yellow-mac); }
+        .m-dot.g { background: var(--green-mac); }
 
-        .window-label {
+        .window-info {
             margin-left: 20px;
             font-size: 9px;
-            color: #444;
-            letter-spacing: 1px;
+            color: #333;
             font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
         }
 
-        textarea {
+        .editor-area {
             flex: 1;
             background: transparent;
             border: none;
-            padding: 30px;
-            color: #d1d1d1;
+            padding: 35px;
+            color: #ccc;
             font-family: 'JetBrains Mono', monospace;
             font-size: 13px;
-            line-height: 1.8;
+            line-height: 2;
             resize: none;
             outline: none;
         }
 
-        .window-footer {
-            padding: 20px 30px;
-            border-top: 1px solid rgba(255,255,255,0.03);
+        .window-action-bar {
+            padding: 20px 35px;
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+            background: rgba(255,255,255,0.01);
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
         }
 
-        .btn-action {
+        .terminal-btn {
             background: transparent;
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #888;
-            padding: 8px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #666;
+            padding: 9px 20px;
             font-size: 10px;
             font-family: 'JetBrains Mono', monospace;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .terminal-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
         }
 
-        .btn-action:hover { border-color: var(--gold); color: var(--gold); }
-
-        /* Лог в стиле терминала */
-        .terminal-log {
+        /* Секция логов */
+        .terminal-output {
             width: 100%;
-            max-width: 1100px;
-            margin-top: 40px;
-            z-index: 10;
+            max-width: 1200px;
+            margin-top: 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        .log-line {
+        .log-entry {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            color: #666;
-            margin-bottom: 6px;
-            transition: color 0.3s;
+            font-size: 10.5px;
+            color: #1a1a1a;
+            opacity: 0.3;
+            transition: all 0.5s;
         }
-
-        .log-line.active { color: var(--green-terminal); }
+        .log-entry.active {
+            color: var(--green);
+            opacity: 1;
+            text-shadow: 0 0 8px rgba(34, 197, 94, 0.3);
+        }
 
         /* Модалка Manual */
-        #modal {
+        #manual-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.94); z-index: 10000; align-items: center; justify-content: center;
+            backdrop-filter: blur(10px);
         }
-        .modal-body {
-            background: #111; padding: 50px; border-radius: 8px; border: 1px solid var(--gold);
-            max-width: 500px; color: #aaa; font-size: 12px; line-height: 2;
+        .modal-inner {
+            background: #0a0a0a; padding: 60px; border-radius: 4px;
+            border-left: 4px solid var(--gold); max-width: 500px;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.5);
         }
+        .modal-inner h2 { color: var(--gold); font-size: 13px; letter-spacing: 5px; margin-bottom: 40px; }
+        .modal-inner p { color: #888; font-size: 12px; line-height: 2.4; margin: 0; }
+
+        @keyframes flashEffect {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .run-flash { animation: flashEffect 0.3s ease-out forwards; }
     </style>
 </head>
 <body>
 
 <div id="flash-overlay"></div>
 
-<div class="header">
-    <div class="gold-brand">[ ENGINE BY VAN ]</div>
-    <div class="main-title">ULTIMATE 6</div>
-    <div class="manual-btn" onclick="toggleModal()">manual_guide</div>
-</div>
+<header class="top-navigation">
+    <div class="engine-label">[ ENGINE BY VAN ]</div>
+    <div class="central-title">ULTIMATE 6</div>
+    <div class="guide-link" onclick="toggleManual()">manual guide</div>
+</header>
 
-<div class="grid">
-    <!-- Источник -->
-    <div class="window">
-        <div class="window-header">
-            <div class="dots">
-                <div class="dot red"></div>
-                <div class="dot yellow"></div>
-                <div class="dot green"></div>
-            </div>
-            <div class="window-label">SOURCE_INPUT_TELEMETRY</div>
+<main class="main-grid">
+    <!-- Левое окно -->
+    <div class="mac-window">
+        <div class="window-top">
+            <div class="mac-dots"><div class="m-dot r"></div><div class="m-dot y"></div><div class="m-dot g"></div></div>
+            <div class="window-info">source_data_telemetry</div>
         </div>
-        <textarea id="input" placeholder="READY FOR DATA INPUT..."></textarea>
-        <div class="window-footer">
-            <button class="btn-action" onclick="processData()">./run_analysis</button>
+        <textarea id="sourceInput" placeholder="READY ДЛЯ ПРИЕМА ДАННЫХ..."></textarea>
+        <div class="window-action-bar">
+            <button class="terminal-btn" onclick="executeProcess()">./run_analysis</button>
         </div>
     </div>
 
-    <!-- Результат (Копирование по клику везде) -->
-    <div class="window" onclick="copyResult()" style="cursor: pointer;">
-        <div class="window-header">
-            <div class="dots">
-                <div class="dot red"></div>
-                <div class="dot yellow"></div>
-                <div class="dot green"></div>
-            </div>
-            <div class="window-label">REFINED_OUTPUT (CLICK_TO_COPY)</div>
+    <!-- Правое окно -->
+    <div class="mac-window" onclick="smartCopy()" style="cursor: pointer;">
+        <div class="window-top">
+            <div class="mac-dots"><div class="m-dot r"></div><div class="m-dot y"></div><div class="m-dot g"></div></div>
+            <div class="window-info">refined_output_buffer</div>
         </div>
-        <textarea id="output" readonly placeholder="AWAITING COMPILATION..."></textarea>
-        <div class="window-footer">
-            <button class="btn-action">cp_to_buffer</button>
+        <textarea id="resultOutput" readonly placeholder="ОЖИДАНИЕ КОМПИЛЯЦИИ..."></textarea>
+        <div class="window-action-bar">
+            <button class="terminal-btn">cp_to_buffer</button>
         </div>
     </div>
-</div>
+</main>
 
-<div class="terminal-log" id="logs">
-    <div class="log-line">> SYSTEM_READY: STANDBY_MODE</div>
-</div>
+<section class="terminal-output" id="terminalLogs">
+    <div class="log-entry active">> SYSTEM_READY: STANDBY_MODE</div>
+</section>
 
-<div id="modal" onclick="toggleModal()">
-    <div class="modal-body" onclick="event.stopPropagation()">
-        <h2 style="color:var(--gold); letter-spacing:3px; font-size:14px;">ULTIMATE 6 // MANUAL</h2>
-        1. Вставьте данные из Карточки товара и Истории в левое окно.<br>
-        2. Добавьте цену и нажмите <b>./run_analysis</b>.<br>
-        3. Нажмите в <b>любую точку</b> правого окна для копирования.<br>
-        4. Вспышка подтвердит успешный захват данных.
+<div id="manual-modal" onclick="toggleManual()">
+    <div class="modal-inner" onclick="event.stopPropagation()">
+        <h2>ULTIMATE 6 // MANUAL</h2>
+        <p>
+            1. ВСТАВЬТЕ СЫРЫЕ ДАННЫЕ В ЛЕВОЕ ОКНО.<br>
+            2. НАЖМИТЕ <b>./RUN_ANALYSIS</b> ДЛЯ ОБРАБОТКИ.<br>
+            3. КЛИКНИТЕ В <b>ЛЮБУЮ ТОЧКУ</b> ПРАВОГО ОКНА.<br>
+            4. ВСПЫШКА ПОДТВЕРДИТ КОПИРОВАНИЕ В БУФЕР ОБМЕНА.
+        </p>
     </div>
 </div>
 
 <script>
-    function toggleModal() {
-        const m = document.getElementById('modal');
-        m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
+    function toggleManual() {
+        const modal = document.getElementById('manual-modal');
+        modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
     }
 
-    function addLog(msg) {
-        const logs = document.getElementById('logs');
-        const line = document.createElement('div');
-        line.className = 'log-line active';
-        line.innerHTML = `> ${msg.toUpperCase()}`;
-        logs.prepend(line);
-        if(logs.children.length > 4) logs.lastChild.remove();
-    }
-
-    function processData() {
-        const text = document.getElementById('input').value;
-        if(!text.trim()) { addLog('error: no_input_detected'); return; }
+    function pushLog(message) {
+        const container = document.getElementById('terminalLogs');
+        const entry = document.createElement('div');
+        entry.className = 'log-entry active';
+        entry.innerHTML = `> ${message.toUpperCase()}`;
         
-        addLog('initiating_compilation...');
+        // Убираем активность с прошлых логов
+        Array.from(container.children).forEach(child => child.classList.remove('active'));
+        
+        container.prepend(entry);
+        if(container.children.length > 6) container.lastChild.remove();
+    }
+
+    function executeProcess() {
+        const input = document.getElementById('sourceInput').value;
+        if(!input.trim()) { pushLog('error: missing_source_data'); return; }
+        
+        pushLog('initiating_pattern_recognition...');
         
         setTimeout(() => {
-            // Парсинг данных
-            const allNums = text.match(/\b\d{10,11}\b/g) || [];
-            const id = allNums[0] || "";
-            const sticker = allNums[1] || id;
-            const status = (text.match(/\b[A-Z]{3,4}\b/) || [""])[0];
-            const nameMatch = text.match(/Предмет\s*\n?\s*(.*?)(?=\n|\/|$)/i);
+            // Улучшенный парсинг
+            const allNumbers = input.match(/\b\d{10,11}\b/g) || [];
+            const id = allNumbers[0] || "";
+            const sticker = allNumbers[1] || id;
+            
+            const statusMatch = input.match(/\b[A-Z]{3,4}\b/);
+            const status = statusMatch ? statusMatch[0] : "";
+            
+            const nameMatch = input.match(/Предмет\s*\n?\s*(.*?)(?=\n|\/|$)/i);
             const name = nameMatch ? nameMatch[1].trim() : "";
-            const price = (text.match(/(\d+)\s*₽/) || ["", ""])[1];
-            const mx = (text.match(/(ВЛАД\d+|ЦП\d+)[^\s]*/i) || [""])[0];
-            const box = (text.match(/\b(BOX|CON)\b\s*(\d+)/i) || ["", "", ""])[2];
+            
+            const priceMatch = input.match(/(\d+)\s*₽/);
+            const price = priceMatch ? priceMatch[1] : "";
+            
+            const mxMatch = input.match(/(ВЛАД\d+|ЦП\d+)[^\s]*/i);
+            const mx = mxMatch ? mxMatch[0] : "";
+            
+            const boxMatch = input.match(/\b(BOX|CON)\b\s*(\d+)/i);
+            const boxNum = boxMatch ? boxMatch[2] : "";
 
-            document.getElementById('output').value = `${id}\t${sticker}\t${status}\t${name}\t${price}\t${mx}\t${box}`;
-            addLog('compilation_success: data_refined');
-        }, 400);
+            const compiled = `${id}\t${sticker}\t${status}\t${name}\t${price}\t${mx}\t${boxNum}`;
+            document.getElementById('resultOutput').value = compiled;
+            
+            pushLog('compilation_complete: data_refined');
+        }, 450);
     }
 
-    async function copyResult() {
-        const output = document.getElementById('output');
-        if(!output.value) return;
+    async function smartCopy() {
+        const content = document.getElementById('resultOutput').value;
+        if(!content) return;
 
         try {
-            await navigator.clipboard.writeText(output.value);
+            await navigator.clipboard.writeText(content);
             
-            // Та самая вспышка
+            // Запуск той самой вспышки
             const flash = document.getElementById('flash-overlay');
-            flash.style.opacity = '1';
-            setTimeout(() => flash.style.opacity = '0', 250);
+            flash.classList.remove('run-flash');
+            void flash.offsetWidth; // Магия для рестарта анимации
+            flash.classList.add('run-flash');
             
-            addLog('clipboard_transfer_complete');
-        } catch (e) {
-            addLog('error: clipboard_access_denied');
+            pushLog('clipboard: flash_transfer_complete');
+        } catch (err) {
+            pushLog('error: clipboard_access_denied');
         }
     }
 </script>
