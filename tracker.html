@@ -759,10 +759,6 @@
       -webkit-box-orient: vertical;
     }
 
-    .task-title.can-preview {
-      cursor: zoom-in;
-    }
-
     .task.cat-Дом {
       border-left-color: var(--home);
     }
@@ -793,6 +789,7 @@
       padding-top: 1px;
     }
 
+    .preview-btn,
     .edit-btn {
       color: var(--muted);
       cursor: pointer;
@@ -809,12 +806,22 @@
       transition: 0.25s ease;
       background: transparent;
       user-select: none;
+      flex-shrink: 0;
     }
 
+    .preview-btn {
+      font-size: 0.82rem;
+    }
+
+    .preview-btn:hover,
     .edit-btn:hover {
       color: var(--text);
       background: var(--task-hover);
       transform: scale(1.05);
+    }
+
+    .preview-btn.hidden {
+      display: none;
     }
 
     .del-x {
@@ -827,11 +834,13 @@
     }
 
     @media (hover: hover) {
+      .preview-btn,
       .edit-btn,
       .del-x {
         opacity: 0.72;
       }
 
+      .task:hover .preview-btn,
       .task:hover .edit-btn,
       .task:hover .del-x {
         opacity: 1;
@@ -1997,12 +2006,6 @@
       }, 180);
     }
 
-    function isTaskTitleClamped(taskElement) {
-      const titleEl = taskElement.querySelector('.task-title');
-      if (!titleEl) return false;
-      return titleEl.scrollHeight > titleEl.clientHeight + 1;
-    }
-
     function handleTaskClick(e, id) {
       if (longPressTriggered) {
         longPressTriggered = false;
@@ -2010,17 +2013,6 @@
       }
 
       if (draggedTaskId !== null) return;
-
-      const task = tasks.find((t) => t.id === id);
-      if (!task) return;
-
-      const taskEl = e.currentTarget;
-      const clamped = isTaskTitleClamped(taskEl);
-
-      if (clamped) {
-        openPreviewModal(task.title);
-        return;
-      }
 
       toggleTask(e, id);
     }
@@ -2053,6 +2045,16 @@
       if (!task) return;
 
       await openEditModal(task);
+    }
+
+    function previewTask(e, id) {
+      e.stopPropagation();
+      cancelLongPress();
+
+      const task = tasks.find((t) => t.id === id);
+      if (!task) return;
+
+      openPreviewModal(task.title);
     }
 
     function startLongPress(e, id) {
@@ -2284,6 +2286,7 @@
       d.innerHTML = `
         <span class="task-title">${escapeHtml(t.title)}</span>
         <div class="task-actions">
+          <div class="preview-btn hidden" onclick="previewTask(event, ${t.id})">👁</div>
           <div class="edit-btn" onclick="editTask(event, ${t.id})">✎</div>
           <div class="del-x" onclick="deleteTask(event, ${t.id})">×</div>
         </div>
@@ -2291,11 +2294,11 @@
 
       requestAnimationFrame(() => {
         const titleEl = d.querySelector('.task-title');
-        if (!titleEl) return;
+        const previewBtn = d.querySelector('.preview-btn');
+        if (!titleEl || !previewBtn) return;
 
-        if (titleEl.scrollHeight > titleEl.clientHeight + 1) {
-          titleEl.classList.add('can-preview');
-        }
+        const isClamped = titleEl.scrollHeight > titleEl.clientHeight + 1;
+        previewBtn.classList.toggle('hidden', !isClamped);
       });
 
       return d;
