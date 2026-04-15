@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>VAN TRU FREE | FAMILY TRACKER</title>
     <style>
-        @import url('https://googleapis.com');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
 
         :root {
             --bg: #050505;
@@ -23,7 +23,7 @@
             --shadow: 0 15px 50px rgba(0,0,0,0.5);
             --title-grad: linear-gradient(180deg, #fff 0%, #888 50%, #222 100%);
             --title-shadow: drop-shadow(0 0 30px rgba(255, 77, 0, 0.5));
-            --bg-grad: radial-gradient(circle at top, #1a0f0a 0%, #0b0b0b 35%, #050505 100%);
+            --bg-grad: radial-gradient(circle at top, #121212 0%, #080808 45%, #050505 100%);
             --home: #0084ff;
             --work: #ff4d00;
             --personal: #00ff62;
@@ -78,10 +78,6 @@
             height: 100%;
             background: var(--bg-grad);
             transition: background 0.35s ease;
-        }
-
-        body[data-theme="light"] #bg-canvas {
-            background: var(--bg-grad);
         }
 
         .header-container {
@@ -172,7 +168,7 @@
 
         .theme-bar {
             width: 90%;
-            max-width: 1100px;
+            max-width: 1220px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -194,14 +190,15 @@
             border-radius: 999px;
             padding: 5px 6px 5px 12px;
             backdrop-filter: blur(18px);
-            box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.03),
-                0 8px 24px rgba(0,0,0,0.22);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 8px 24px rgba(0,0,0,0.22);
             user-select: none;
         }
 
-        .theme-switch-label {
-            font-size: 0.66rem;
+        .theme-switch-label,
+        .filter-label,
+        .week-progress-label,
+        .tools-label {
+            font-size: 0.62rem;
             font-weight: 900;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -209,7 +206,8 @@
             white-space: nowrap;
         }
 
-        .theme-switch input {
+        .theme-switch input,
+        #jsonFileInput {
             display: none;
         }
 
@@ -243,12 +241,13 @@
             transition: 0.3s ease;
         }
 
-        body[data-theme="light"] .theme-switch {
+        body[data-theme="light"] .theme-switch,
+        body[data-theme="light"] .filter-group,
+        body[data-theme="light"] .week-progress,
+        body[data-theme="light"] .tools-group {
             background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(245,245,245,0.92));
-            border: 1px solid rgba(255, 90, 31, 0.12);
-            box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.65),
-                0 8px 24px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255, 90, 31, 0.10);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 8px 24px rgba(0,0,0,0.07);
         }
 
         body[data-theme="light"] .theme-slider {
@@ -265,7 +264,8 @@
         }
 
         .filter-group,
-        .week-progress {
+        .week-progress,
+        .tools-group {
             display: flex;
             align-items: center;
             gap: 8px;
@@ -275,33 +275,22 @@
             border-radius: 999px;
             padding: 5px 8px;
             backdrop-filter: blur(18px);
-            box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.03),
-                0 8px 24px rgba(0,0,0,0.20);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 8px 24px rgba(0,0,0,0.20);
             flex-wrap: wrap;
         }
 
-        body[data-theme="light"] .filter-group,
-        body[data-theme="light"] .week-progress {
-            background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(245,245,245,0.92));
-            border: 1px solid rgba(255, 90, 31, 0.10);
-            box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.7),
-                0 8px 24px rgba(0,0,0,0.07);
-        }
-
-        .filter-label,
-        .week-progress-label {
-            font-size: 0.62rem;
+        .week-progress-value {
             font-weight: 900;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--muted);
-            padding: 0 6px 0 4px;
+            color: var(--accent);
+            font-size: 0.74rem;
+            letter-spacing: 1px;
+            padding-right: 4px;
         }
 
         .filter-btn,
-        .archive-clear-btn {
+        .archive-clear-btn,
+        .tool-btn,
+        .import-label {
             background: transparent;
             color: var(--text);
             border: 1px solid transparent;
@@ -313,16 +302,24 @@
             text-transform: uppercase;
             cursor: pointer;
             transition: 0.25s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .filter-btn:hover,
-        .archive-clear-btn:hover {
+        .archive-clear-btn:hover,
+        .tool-btn:hover,
+        .import-label:hover {
             transform: translateY(-1px);
             background: rgba(255,255,255,0.04);
         }
 
         body[data-theme="light"] .filter-btn:hover,
-        body[data-theme="light"] .archive-clear-btn:hover {
+        body[data-theme="light"] .archive-clear-btn:hover,
+        body[data-theme="light"] .tool-btn:hover,
+        body[data-theme="light"] .import-label:hover {
             background: rgba(0,0,0,0.04);
         }
 
@@ -330,17 +327,12 @@
             background: linear-gradient(180deg, #ff6a1f 0%, #ff4d00 100%);
             color: #fff;
             border-color: transparent;
-            box-shadow:
-                0 0 0 1px rgba(255,255,255,0.05),
-                0 8px 18px rgba(255, 77, 0, 0.24);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 8px 18px rgba(255, 77, 0, 0.24);
         }
 
-        .week-progress-value {
-            font-weight: 900;
-            color: var(--accent);
-            font-size: 0.74rem;
-            letter-spacing: 1px;
-            padding-right: 4px;
+        .tool-btn,
+        .import-label {
+            border: 1px solid rgba(255, 77, 0, 0.14);
         }
 
         .rings-container {
@@ -432,55 +424,15 @@
         }
 
         #ring-home .ring-active {
-            filter:
-                drop-shadow(0 0 5px rgba(0,132,255,0.20))
-                drop-shadow(0 0 14px rgba(0,132,255,0.10));
+            filter: drop-shadow(0 0 5px rgba(0,132,255,0.20)) drop-shadow(0 0 14px rgba(0,132,255,0.10));
         }
 
         #ring-work .ring-active {
-            filter:
-                drop-shadow(0 0 6px rgba(255,77,0,0.26))
-                drop-shadow(0 0 16px rgba(255,77,0,0.12));
+            filter: drop-shadow(0 0 6px rgba(255,77,0,0.26)) drop-shadow(0 0 16px rgba(255,77,0,0.12));
         }
 
         #ring-personal .ring-active {
-            filter:
-                drop-shadow(0 0 5px rgba(0,255,98,0.20))
-                drop-shadow(0 0 14px rgba(0,255,98,0.10));
-        }
-
-        @media (max-width: 700px) {
-            .ring-box {
-                width: 76px;
-            }
-
-            .ring-inner,
-            .progress-ring {
-                width: 76px;
-                height: 76px;
-            }
-
-            .ring-value {
-                font-size: 0.8rem;
-            }
-
-            .theme-bar {
-                justify-content: center;
-            }
-
-            .filter-group,
-            .week-progress {
-                justify-content: center;
-            }
-
-            .hero-clock {
-                margin-top: 8px;
-                letter-spacing: 0.1em;
-            }
-
-            .clock-seconds {
-                margin-left: 4px;
-            }
+            filter: drop-shadow(0 0 5px rgba(0,255,98,0.20)) drop-shadow(0 0 14px rgba(0,255,98,0.10));
         }
 
         .input-panel {
@@ -581,6 +533,41 @@
             }
         }
 
+        @media (max-width: 700px) {
+            .ring-box {
+                width: 76px;
+            }
+
+            .ring-inner,
+            .progress-ring {
+                width: 76px;
+                height: 76px;
+            }
+
+            .ring-value {
+                font-size: 0.8rem;
+            }
+
+            .theme-bar {
+                justify-content: center;
+            }
+
+            .filter-group,
+            .week-progress,
+            .tools-group {
+                justify-content: center;
+            }
+
+            .hero-clock {
+                margin-top: 8px;
+                letter-spacing: 0.1em;
+            }
+
+            .clock-seconds {
+                margin-left: 4px;
+            }
+        }
+
         .day-card {
             background: linear-gradient(180deg, rgba(14,14,16,0.82), rgba(8,8,10,0.88));
             border: 1px solid rgba(255, 77, 0, 0.14);
@@ -592,48 +579,41 @@
             position: relative;
             animation: driftIn 0.8s ease both;
             backdrop-filter: blur(24px);
-            box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.025),
-                0 10px 28px rgba(0,0,0,0.16);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.025), 0 10px 28px rgba(0,0,0,0.16);
         }
 
         .day-card:hover {
             transform: translateY(-2px);
             border-color: rgba(255, 77, 0, 0.20);
-            box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.03),
-                0 14px 30px rgba(0,0,0,0.22);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 14px 30px rgba(0,0,0,0.22);
         }
 
         .day-card.selected {
             border-color: rgba(255,255,255,0.26);
             background: linear-gradient(180deg, rgba(20,20,22,0.88), rgba(10,10,12,0.92));
-            box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.03),
-                0 16px 32px rgba(0,0,0,0.24);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 16px 32px rgba(0,0,0,0.24);
         }
 
         .day-card.today {
             border-color: rgba(255, 77, 0, 0.38);
-            box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.03),
-                0 0 0 1px rgba(255,77,0,0.06),
-                0 14px 32px rgba(255, 77, 0, 0.10);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 0 0 1px rgba(255,77,0,0.06), 0 14px 32px rgba(255, 77, 0, 0.10);
+        }
+
+        .day-card.drag-over {
+            border-color: rgba(255, 77, 0, 0.55);
+            box-shadow: inset 0 0 0 1px rgba(255, 77, 0, 0.18), 0 0 24px rgba(255, 77, 0, 0.18);
+            transform: translateY(-2px) scale(1.01);
         }
 
         body[data-theme="light"] .day-card {
             background: linear-gradient(180deg, rgba(255,255,255,0.84), rgba(246,246,248,0.92));
             border: 1px solid rgba(255, 90, 31, 0.10);
-            box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.75),
-                0 10px 24px rgba(0,0,0,0.06);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.75), 0 10px 24px rgba(0,0,0,0.06);
         }
 
         body[data-theme="light"] .day-card:hover {
             border-color: rgba(255, 90, 31, 0.16);
-            box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.82),
-                0 14px 28px rgba(0,0,0,0.08);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.82), 0 14px 28px rgba(0,0,0,0.08);
         }
 
         body[data-theme="light"] .day-card.selected {
@@ -643,10 +623,7 @@
 
         body[data-theme="light"] .day-card.today {
             border-color: rgba(255, 90, 31, 0.24);
-            box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.85),
-                0 0 0 1px rgba(255,90,31,0.05),
-                0 14px 28px rgba(255,90,31,0.08);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), 0 0 0 1px rgba(255,90,31,0.05), 0 14px 28px rgba(255,90,31,0.08);
         }
 
         .day-title-row {
@@ -667,10 +644,6 @@
             text-transform: uppercase;
             flex: 1;
             min-width: 0;
-        }
-
-        body[data-theme="light"] .day-title-row {
-            border-bottom: 1px solid rgba(255, 90, 31, 0.08);
         }
 
         .day-meta {
@@ -713,7 +686,7 @@
             border-left: 4px solid var(--accent);
             font-size: 0.92rem;
             color: var(--text);
-            transition: 0.25s ease, opacity 0.25s ease, transform 0.25s ease;
+            transition: 0.25s ease, opacity 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
             gap: 10px;
         }
 
@@ -725,6 +698,12 @@
         .task.closing {
             opacity: 0;
             transform: translateX(18px) scale(0.98);
+        }
+
+        .task.dragging {
+            opacity: 0.45;
+            transform: scale(0.98);
+            box-shadow: 0 0 0 1px rgba(255,77,0,0.12);
         }
 
         .task-title {
@@ -796,10 +775,7 @@
         }
 
         @media (hover: hover) {
-            .edit-btn {
-                opacity: 0.72;
-            }
-
+            .edit-btn,
             .del-x {
                 opacity: 0.72;
             }
@@ -884,6 +860,13 @@
             <button class="filter-btn" data-filter="Личное" type="button">Личное</button>
         </div>
 
+        <div class="tools-group">
+            <span class="tools-label">JSON</span>
+            <button class="tool-btn" type="button" onclick="exportTasks()">Export</button>
+            <label class="import-label" for="jsonFileInput">Import</label>
+            <input id="jsonFileInput" type="file" accept=".json,application/json" />
+        </div>
+
         <label class="theme-switch">
             <span class="theme-switch-label" id="themeLabel">DARK MODE</span>
             <input type="checkbox" id="themeToggle" />
@@ -962,13 +945,16 @@
     <script>
         let currentDayId = '';
         let activeFilter = 'all';
-        let tasks = JSON.parse(localStorage.getItem('vt_v_final_ultra_v3_safe')) || [];
+        let tasks = JSON.parse(localStorage.getItem('vt_v_final_ultra_v4_dnd_json')) || [];
+        let draggedTaskId = null;
 
+        const STORAGE_KEY = 'vt_v_final_ultra_v4_dnd_json';
         const daysShort = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
         const dayNames = ['ПОНЕДЕЛЬНИК', 'ВТОРНИК', 'СРЕДА', 'ЧЕТВЕРГ', 'ПЯТНИЦА', 'СУББОТА', 'ВОСКРЕСЕНЬЕ'];
 
         const taskInput = document.getElementById('taskName');
         const taskDaySelect = document.getElementById('taskDay');
+        const jsonFileInput = document.getElementById('jsonFileInput');
 
         let longPressTimer = null;
         let longPressTriggered = false;
@@ -1065,15 +1051,10 @@
                 this.y = Math.random() * canvas.height;
 
                 const bigSpark = Math.random() < 0.18;
-                this.size = bigSpark
-                    ? Math.random() * 2.6 + 2.2
-                    : Math.random() * 1.4 + 0.55;
-
+                this.size = bigSpark ? Math.random() * 2.6 + 2.2 : Math.random() * 1.4 + 0.55;
                 this.speedX = Math.random() * 0.26 - 0.13;
                 this.speedY = Math.random() * 0.26 - 0.13;
-                this.alpha = bigSpark
-                    ? Math.random() * 0.45 + 0.45
-                    : Math.random() * 0.35 + 0.18;
+                this.alpha = bigSpark ? Math.random() * 0.45 + 0.45 : Math.random() * 0.35 + 0.18;
             }
 
             update() {
@@ -1095,15 +1076,12 @@
                 } else {
                     ctx.fillStyle = `rgba(255, 77, 0, ${this.alpha})`;
                     ctx.shadowBlur = this.size > 2 ? 12 : 6;
-                    ctx.shadowColor = this.size > 2
-                        ? 'rgba(255, 77, 0, 0.30)'
-                        : 'rgba(255, 77, 0, 0.16)';
+                    ctx.shadowColor = this.size > 2 ? 'rgba(255, 77, 0, 0.30)' : 'rgba(255, 77, 0, 0.16)';
                 }
 
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
-
                 ctx.shadowBlur = 0;
             }
         }
@@ -1123,8 +1101,24 @@
 
         animate();
 
+        function normalizeTask(raw) {
+            if (!raw || typeof raw !== 'object') return null;
+            if (!daysShort.includes(raw.day)) return null;
+            if (!['Дом', 'Работа', 'Личное'].includes(raw.cat)) return null;
+            if (!['normal', 'urgent'].includes(raw.pri)) return null;
+
+            return {
+                id: typeof raw.id === 'number' ? raw.id : Date.now() + Math.floor(Math.random() * 10000),
+                title: String(raw.title || '').trim(),
+                day: raw.day,
+                cat: raw.cat,
+                pri: raw.pri,
+                done: Boolean(raw.done)
+            };
+        }
+
         function saveTasks() {
-            localStorage.setItem('vt_v_final_ultra_v3_safe', JSON.stringify(tasks));
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
         }
 
         function passesFilter(task) {
@@ -1172,7 +1166,7 @@
                 longPressTriggered = false;
                 return;
             }
-
+            if (draggedTaskId !== null) return;
             toggleTask(e, id);
         }
 
@@ -1267,7 +1261,100 @@
             });
         }
 
-        function bindTaskInteractions(el, id) {
+        function exportTasks() {
+            const payload = {
+                app: 'VAN TRU FREE',
+                version: 1,
+                exportedAt: new Date().toISOString(),
+                tasks
+            };
+
+            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const date = new Date().toISOString().slice(0, 10);
+
+            a.href = url;
+            a.download = `van-tru-free-backup-${date}.json`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        function importTasksFromFile(file) {
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const parsed = JSON.parse(event.target.result);
+                    const sourceTasks = Array.isArray(parsed) ? parsed : parsed.tasks;
+
+                    if (!Array.isArray(sourceTasks)) {
+                        alert('Неверный JSON: список задач не найден.');
+                        return;
+                    }
+
+                    const normalized = sourceTasks
+                        .map(normalizeTask)
+                        .filter((t) => t && t.title);
+
+                    if (!normalized.length && sourceTasks.length) {
+                        alert('Не удалось импортировать задачи: неверный формат.');
+                        return;
+                    }
+
+                    const replace = confirm(
+                        `Импортировать ${normalized.length} задач?\n\nНажми OK — заменить текущие задачи.\nНажми Cancel — добавить к текущим.`
+                    );
+
+                    if (replace) {
+                        tasks = normalized;
+                    } else {
+                        const existingIds = new Set(tasks.map((t) => t.id));
+                        normalized.forEach((t) => {
+                            let nextId = t.id;
+                            while (existingIds.has(nextId)) {
+                                nextId += Math.floor(Math.random() * 1000) + 1;
+                            }
+                            existingIds.add(nextId);
+                            tasks.push({ ...t, id: nextId });
+                        });
+                    }
+
+                    render();
+                    alert(`Импорт завершён: ${normalized.length} задач.`);
+                } catch (error) {
+                    alert('Ошибка чтения JSON-файла.');
+                } finally {
+                    jsonFileInput.value = '';
+                }
+            };
+
+            reader.readAsText(file);
+        }
+
+        jsonFileInput.addEventListener('change', (e) => {
+            const file = e.target.files && e.target.files[0];
+            importTasksFromFile(file);
+        });
+
+        function moveTaskToDay(taskId, newDay) {
+            const task = tasks.find((t) => t.id === taskId);
+            if (!task || task.done || !daysShort.includes(newDay) || task.day === newDay) return;
+
+            tasks = tasks.map((t) => t.id === taskId ? { ...t, day: newDay } : t);
+            render();
+        }
+
+        function clearDragOverState() {
+            document.querySelectorAll('.day-card.drag-over').forEach((card) => {
+                card.classList.remove('drag-over');
+            });
+        }
+
+        function bindTaskInteractions(el, id, taskData, isArchive) {
             el.onclick = (e) => handleTaskClick(e, id);
             el.ondblclick = (e) => editTask(e, id);
 
@@ -1278,6 +1365,24 @@
             el.onmouseleave = cancelLongPress;
             el.ontouchend = cancelLongPress;
             el.ontouchcancel = cancelLongPress;
+
+            if (!isArchive && !taskData.done) {
+                el.draggable = true;
+
+                el.addEventListener('dragstart', (e) => {
+                    draggedTaskId = id;
+                    el.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/plain', String(id));
+                    cancelLongPress();
+                });
+
+                el.addEventListener('dragend', () => {
+                    draggedTaskId = null;
+                    el.classList.remove('dragging');
+                    clearDragOverState();
+                });
+            }
         }
 
         function createTaskElement(t, isArchive = false) {
@@ -1288,7 +1393,7 @@
                 d.style.opacity = '0.55';
             }
 
-            bindTaskInteractions(d, t.id);
+            bindTaskInteractions(d, t.id, t, isArchive);
 
             d.innerHTML = `
                 <span class="task-title">${t.title}</span>
@@ -1313,7 +1418,31 @@
 
                 const card = document.createElement('div');
                 card.className = `day-card ${day === currentSelectedDay ? 'selected' : ''} ${isToday ? 'today' : ''}`;
-                card.onclick = () => selectDay(day);
+                card.dataset.day = day;
+
+                card.addEventListener('click', () => selectDay(day));
+
+                card.addEventListener('dragover', (e) => {
+                    if (draggedTaskId === null) return;
+                    e.preventDefault();
+                    card.classList.add('drag-over');
+                });
+
+                card.addEventListener('dragleave', (e) => {
+                    if (!card.contains(e.relatedTarget)) {
+                        card.classList.remove('drag-over');
+                    }
+                });
+
+                card.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    card.classList.remove('drag-over');
+
+                    const taskId = Number(e.dataTransfer.getData('text/plain'));
+                    if (!taskId) return;
+
+                    moveTaskToDay(taskId, day);
+                });
 
                 const header = document.createElement('div');
                 header.className = 'day-title-row';
