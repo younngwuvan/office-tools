@@ -1,186 +1,2420 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>ULTIMATE 6 // DOMINATOR</title>
-    <link href="https://googleapis.com" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #bcbcbc; /* Тот самый серый фон из оригинала */
-            --panel: #0d0d0d;
-            --gold: #d4af37;
-            --green: #22c55e;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>VAN TRU FREE | FAMILY TRACKER</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
 
-        /* Кастомная "палка" скролла */
-        textarea::-webkit-scrollbar { width: 5px; }
-        textarea::-webkit-scrollbar-track { background: transparent; }
-        textarea::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
-        textarea:hover::-webkit-scrollbar-thumb { background: #333; }
+    :root {
+      --bg: #050505;
+      --text: #e0e0e0;
+      --muted: #555;
+      --accent: #ff4d00;
+      --panel: rgba(20, 20, 20, 0.7);
+      --panel-solid: rgba(20, 20, 20, 0.92);
+      --border: rgba(255, 77, 0, 0.25);
+      --input-bg: #000;
+      --input-text: #fff;
+      --task-bg: rgba(255,255,255,0.03);
+      --task-hover: rgba(255,255,255,0.07);
+      --selected-bg: rgba(50,50,50,0.5);
+      --shadow: 0 15px 50px rgba(0,0,0,0.5);
+      --title-grad: linear-gradient(180deg, #fff 0%, #888 50%, #222 100%);
+      --title-shadow: drop-shadow(0 0 30px rgba(255, 77, 0, 0.5));
+      --bg-grad: radial-gradient(circle at top, #121212 0%, #080808 45%, #050505 100%);
+      --home: #0084ff;
+      --work: #ff4d00;
+      --personal: #00ff62;
+      --danger: #ff3b30;
+      --success: #23d160;
+      --warning: #ffb020;
+      --ring-track: rgba(255,255,255,0.045);
+    }
 
-        body {
-            background-color: var(--bg);
-            color: #1a1a1a;
-            font-family: 'Inter', sans-serif;
-            margin: 0; padding: 60px 20px;
-            display: flex; flex-direction: column; align-items: center;
-        }
+    body[data-theme="light"] {
+      --bg: #f6f7f9;
+      --text: #161616;
+      --muted: #6d6d6d;
+      --accent: #ff5a1f;
+      --panel: rgba(255, 255, 255, 0.74);
+      --panel-solid: rgba(255, 255, 255, 0.92);
+      --border: rgba(255, 90, 31, 0.18);
+      --input-bg: rgba(255, 255, 255, 0.94);
+      --input-text: #111;
+      --task-bg: rgba(0,0,0,0.035);
+      --task-hover: rgba(0,0,0,0.06);
+      --selected-bg: rgba(0,0,0,0.045);
+      --shadow: 0 15px 45px rgba(0,0,0,0.10);
+      --title-grad: linear-gradient(180deg, #111 0%, #5b5b5b 50%, #a1a1a1 100%);
+      --title-shadow: drop-shadow(0 0 18px rgba(255, 90, 31, 0.18));
+      --bg-grad: radial-gradient(circle at top, #f7efe9 0%, #f4f5f7 35%, #f6f7f9 100%);
+      --ring-track: rgba(0,0,0,0.08);
+    }
 
-        #flash {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: white; opacity: 0; pointer-events: none; z-index: 1000;
-            transition: opacity 0.2s ease-out;
-        }
+    * {
+      box-sizing: border-box;
+    }
 
-        .header {
-            width: 1100px; display: grid; grid-template-columns: 1fr auto 1fr;
-            align-items: center; margin-bottom: 50px;
-        }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0 0 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background-color 0.35s ease, color 0.35s ease;
+    }
 
-        .brand { color: var(--gold); font-size: 10px; letter-spacing: 3px; font-weight: 600; text-transform: uppercase; }
-        .main-title { color: var(--gold); font-size: 20px; font-weight: 600; letter-spacing: 12px; text-transform: uppercase; text-align: center; }
-        .manual-btn { text-align: right; font-size: 10px; color: #666; cursor: pointer; border-bottom: 1px solid transparent; }
-        .manual-btn:hover { color: var(--gold); border-bottom-color: var(--gold); }
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-grad);
+      transition: background 0.35s ease;
+    }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 35px; width: 1100px; }
+    .header-container {
+      text-align: center;
+      width: 100%;
+      padding-top: clamp(42px, 7vh, 82px);
+      margin-bottom: 10px;
+      animation: fadeInDown 1.2s ease;
+      position: relative;
+    }
 
-        .panel {
-            background: var(--panel);
-            border-radius: 10px;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.3);
-            display: flex; flex-direction: column;
-            border: 1px solid rgba(255,255,255,0.02);
-            height: 550px;
-        }
+    .main-title {
+      font-size: clamp(3rem, 12vw, 6rem);
+      font-weight: 900;
+      letter-spacing: clamp(10px, 4vw, 25px);
+      text-transform: uppercase;
+      margin: 0;
+      background: var(--title-grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: var(--title-shadow);
+      transition: filter 0.35s ease;
+    }
 
-        .panel-header {
-            padding: 15px 20px; display: flex; align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-        }
+    .sub-title {
+      color: var(--accent);
+      letter-spacing: clamp(8px, 2vw, 15px);
+      font-weight: 900;
+      font-size: clamp(0.9rem, 3vw, 1.3rem);
+      text-transform: uppercase;
+      margin-top: 8px;
+      display: block;
+      opacity: 0.9;
+    }
 
-        .dots { display: flex; gap: 8px; }
-        .dot { width: 11px; height: 11px; border-radius: 50%; background: #1a1a1a; }
-        .dot.r { background: #ff5f56; }
-        .dot.y { background: #ffbd2e; }
-        .dot.g { background: #27c93f; }
+    .hero-clock {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+      gap: 0;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      filter: drop-shadow(0 0 24px rgba(255, 77, 0, 0.22));
+      animation: fadeInDown 1.2s ease;
+      user-select: none;
+    }
 
-        .label { margin-left: 20px; font-size: 9px; color: #2a2a2a; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; }
+    .clock-main {
+      font-size: clamp(2.2rem, 6vw, 4.4rem);
+      line-height: 1;
+      background: linear-gradient(180deg, #ffffff 0%, #cfcfcf 35%, #7f7f7f 65%, #2a2a2a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
 
-        textarea {
-            flex: 1; background: transparent; border: none; padding: 30px;
-            color: #d1d1d1; font-family: 'JetBrains Mono', monospace;
-            font-size: 13px; line-height: 1.8; resize: none; outline: none;
-        }
+    .clock-seconds {
+      font-size: clamp(1rem, 2.4vw, 1.8rem);
+      line-height: 1;
+      color: var(--accent);
+      margin-left: 6px;
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 14px rgba(255, 77, 0, 0.35);
+    }
 
-        .footer { padding: 20px 30px; border-top: 1px solid rgba(255,255,255,0.02); }
+    .date-widget {
+      color: var(--muted);
+      letter-spacing: 3px;
+      font-weight: 700;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
 
-        .btn {
-            background: transparent; border: 1px solid #1a1a1a; color: #444;
-            padding: 8px 18px; font-size: 10px; font-family: 'JetBrains Mono', monospace;
-            cursor: pointer; transition: 0.2s;
-        }
-        .btn:hover { border-color: var(--gold); color: var(--gold); }
-        .btn:focus { border-color: #1e3a8a; color: #1e3a8a; }
+    body[data-theme="light"] .hero-clock {
+      filter: drop-shadow(0 0 18px rgba(255, 90, 31, 0.18));
+    }
 
-        /* Тот самый терминал снизу */
-        .terminal { width: 1100px; margin-top: 40px; font-family: 'JetBrains Mono', monospace; }
-        .log-line { font-size: 10px; color: #1a1a1a; margin-bottom: 5px; opacity: 0.3; }
-        .log-line.active { color: var(--green); opacity: 1; text-shadow: 0 0 5px rgba(34, 197, 94, 0.3); }
+    body[data-theme="light"] .clock-main {
+      background: linear-gradient(180deg, #171717 0%, #5c5c5c 45%, #a7a7a7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
 
-        /* Модалка Manual */
-        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal-content { background: #0a0a0a; padding: 60px; border-left: 3px solid var(--gold); max-width: 450px; }
-    </style>
+    .theme-bar {
+      width: 90%;
+      max-width: 1220px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      margin-top: 4px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .theme-switch {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-width: 132px;
+      height: 36px;
+      background: linear-gradient(180deg, rgba(20,20,20,0.88), rgba(8,8,8,0.92));
+      border: 1px solid rgba(255, 77, 0, 0.16);
+      border-radius: 999px;
+      padding: 5px 6px 5px 12px;
+      backdrop-filter: blur(18px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 8px 24px rgba(0,0,0,0.22);
+      user-select: none;
+    }
+
+    .theme-switch-label,
+    .filter-label,
+    .week-progress-label,
+    .tools-label {
+      font-size: 0.62rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .theme-switch input,
+    #jsonFileInput {
+      display: none;
+    }
+
+    .theme-slider {
+      width: 48px;
+      height: 24px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(255,77,0,0.12), rgba(255,255,255,0.05));
+      border: 1px solid rgba(255, 77, 0, 0.12);
+      position: relative;
+      cursor: pointer;
+      transition: 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .theme-slider::before {
+      content: '🌙';
+      position: absolute;
+      top: 50%;
+      left: 2px;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #0e0e0e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.62rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+      transition: 0.3s ease;
+    }
+
+    body[data-theme="light"] .theme-switch,
+    body[data-theme="light"] .filter-group,
+    body[data-theme="light"] .week-progress,
+    body[data-theme="light"] .tools-group {
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(245,245,245,0.92));
+      border: 1px solid rgba(255, 90, 31, 0.10);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 8px 24px rgba(0,0,0,0.07);
+    }
+
+    body[data-theme="light"] .theme-slider {
+      background: linear-gradient(90deg, rgba(255,190,120,0.42), rgba(255,90,31,0.10));
+      border: 1px solid rgba(255, 90, 31, 0.12);
+    }
+
+    body[data-theme="light"] .theme-slider::before {
+      content: '☀';
+      left: 26px;
+      background: #fff;
+      color: #ff6a00;
+      box-shadow: 0 2px 8px rgba(255,90,31,0.18);
+    }
+
+    .filter-group,
+    .week-progress,
+    .tools-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 36px;
+      background: linear-gradient(180deg, rgba(18,18,18,0.88), rgba(8,8,8,0.92));
+      border: 1px solid rgba(255, 77, 0, 0.14);
+      border-radius: 999px;
+      padding: 5px 8px;
+      backdrop-filter: blur(18px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 8px 24px rgba(0,0,0,0.20);
+      flex-wrap: wrap;
+    }
+
+    .week-progress-value {
+      font-weight: 900;
+      color: var(--accent);
+      font-size: 0.74rem;
+      letter-spacing: 1px;
+      padding-right: 4px;
+    }
+
+    .filter-btn,
+    .archive-clear-btn,
+    .tool-btn,
+    .import-label,
+    .modal-btn,
+    .day-more-btn {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid transparent;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 0.66rem;
+      font-weight: 900;
+      letter-spacing: 0.9px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: 0.25s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .filter-btn:hover,
+    .archive-clear-btn:hover,
+    .tool-btn:hover,
+    .import-label:hover,
+    .modal-btn:hover,
+    .day-more-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.04);
+    }
+
+    body[data-theme="light"] .filter-btn:hover,
+    body[data-theme="light"] .archive-clear-btn:hover,
+    body[data-theme="light"] .tool-btn:hover,
+    body[data-theme="light"] .import-label:hover,
+    body[data-theme="light"] .modal-btn:hover,
+    body[data-theme="light"] .day-more-btn:hover {
+      background: rgba(0,0,0,0.04);
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(180deg, #ff6a1f 0%, #ff4d00 100%);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 8px 18px rgba(255, 77, 0, 0.24);
+    }
+
+    .tool-btn,
+    .import-label,
+    .day-more-btn {
+      border: 1px solid rgba(255, 77, 0, 0.14);
+    }
+
+    .rings-container {
+      display: flex;
+      gap: clamp(18px, 4vw, 36px);
+      margin: 4px 0 16px;
+      justify-content: center;
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    .ring-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      width: 92px;
+    }
+
+    .ring-label {
+      font-size: 0.56rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      margin-top: 7px;
+      font-weight: 900;
+      opacity: 0.85;
+    }
+
+    .ring-inner {
+      position: relative;
+      width: 92px;
+      height: 92px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ring-inner::after {
+      content: '';
+      position: absolute;
+      inset: 16px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05), rgba(255,255,255,0.01) 55%, transparent 70%);
+      pointer-events: none;
+    }
+
+    body[data-theme="light"] .ring-inner::after {
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.85), rgba(255,255,255,0.35) 55%, transparent 72%);
+    }
+
+    .ring-value {
+      position: absolute;
+      font-size: 0.88rem;
+      font-weight: 900;
+      color: var(--text);
+      width: 100%;
+      text-align: center;
+      pointer-events: none;
+      letter-spacing: -0.02em;
+      text-shadow: 0 0 12px rgba(0,0,0,0.24);
+    }
+
+    .progress-ring {
+      width: 92px;
+      height: 92px;
+      transform: rotate(-90deg);
+      overflow: visible;
+    }
+
+    .progress-ring circle {
+      fill: none;
+      stroke-width: 6.5;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s ease, filter 0.3s ease, stroke 0.3s ease;
+    }
+
+    .ring-track {
+      stroke: rgba(255,255,255,0.055);
+    }
+
+    body[data-theme="light"] .ring-track {
+      stroke: rgba(0,0,0,0.08);
+    }
+
+    .ring-active {
+      opacity: 0.98;
+    }
+
+    #ring-home .ring-active {
+      filter: drop-shadow(0 0 5px rgba(0,132,255,0.20)) drop-shadow(0 0 14px rgba(0,132,255,0.10));
+    }
+
+    #ring-work .ring-active {
+      filter: drop-shadow(0 0 6px rgba(255,77,0,0.26)) drop-shadow(0 0 16px rgba(255,77,0,0.12));
+    }
+
+    #ring-personal .ring-active {
+      filter: drop-shadow(0 0 5px rgba(0,255,98,0.20)) drop-shadow(0 0 14px rgba(0,255,98,0.10));
+    }
+
+    .input-panel {
+      background: rgba(15, 15, 15, 0.76);
+      backdrop-filter: blur(30px);
+      border: 1px solid var(--border);
+      padding: 10px;
+      border-radius: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      width: 90%;
+      max-width: 1100px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow);
+      transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    body[data-theme="light"] .input-panel {
+      background: rgba(255, 255, 255, 0.82);
+    }
+
+    @media (min-width: 1100px) {
+      .input-panel {
+        flex-direction: row;
+        padding: 10px;
+        border-radius: 20px;
+      }
+
+      input, select {
+        min-width: 150px;
+      }
+
+      body {
+        padding-bottom: 40px;
+      }
+    }
+
+    input,
+    select {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--input-text);
+      padding: 11px 12px;
+      border-radius: 11px;
+      outline: none;
+      flex: 1;
+      font-size: 0.96rem;
+      transition: 0.3s ease;
+      min-height: 44px;
+    }
+
+    input::placeholder {
+      color: var(--muted);
+    }
+
+    input:focus,
+    select:focus {
+      border-color: rgba(255, 77, 0, 0.45);
+      box-shadow: 0 0 0 3px rgba(255, 77, 0, 0.08);
+    }
+
+    .add-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0 26px;
+      min-height: 44px;
+      border-radius: 11px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: 0.3s;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .add-btn:hover {
+      box-shadow: 0 0 26px rgba(255, 77, 0, 0.32);
+      transform: translateY(-1px);
+    }
+
+    .week-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      width: 95%;
+      max-width: 1600px;
+    }
+
+    @media (min-width: 1100px) {
+      .week-grid {
+        grid-template-columns: repeat(7, 1fr);
+        gap: 12px;
+      }
+
+      .day-card {
+        min-height: 400px !important;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .ring-box {
+        width: 76px;
+      }
+
+      .ring-inner,
+      .progress-ring {
+        width: 76px;
+        height: 76px;
+      }
+
+      .ring-value {
+        font-size: 0.8rem;
+      }
+
+      .theme-bar {
+        justify-content: center;
+      }
+
+      .filter-group,
+      .week-progress,
+      .tools-group {
+        justify-content: center;
+      }
+
+      .hero-clock {
+        margin-top: 8px;
+        letter-spacing: 0.1em;
+      }
+
+      .clock-seconds {
+        margin-left: 4px;
+      }
+    }
+
+    .day-card {
+      background: linear-gradient(180deg, rgba(14,14,16,0.82), rgba(8,8,10,0.88));
+      border: 1px solid rgba(255, 77, 0, 0.14);
+      border-radius: 17px;
+      padding: 13px;
+      min-height: 100px;
+      cursor: pointer;
+      transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease, background 0.28s ease;
+      position: relative;
+      animation: driftIn 0.8s ease both;
+      backdrop-filter: blur(24px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.025), 0 10px 28px rgba(0,0,0,0.16);
+      overflow: hidden;
+    }
+
+    .day-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 77, 0, 0.20);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 14px 30px rgba(0,0,0,0.22);
+    }
+
+    .day-card.selected {
+      border-color: rgba(255,255,255,0.26);
+      background: linear-gradient(180deg, rgba(20,20,22,0.88), rgba(10,10,12,0.92));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 16px 32px rgba(0,0,0,0.24);
+    }
+
+    .day-card.today {
+      border-color: rgba(255, 77, 0, 0.38);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 0 0 1px rgba(255,77,0,0.06), 0 14px 32px rgba(255, 77, 0, 0.10);
+    }
+
+    .day-card.drag-over {
+      border-color: rgba(255, 77, 0, 0.55);
+      box-shadow: inset 0 0 0 1px rgba(255, 77, 0, 0.18), 0 0 24px rgba(255, 77, 0, 0.18);
+      transform: translateY(-2px) scale(1.01);
+    }
+
+    body[data-theme="light"] .day-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.84), rgba(246,246,248,0.92));
+      border: 1px solid rgba(255, 90, 31, 0.10);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.75), 0 10px 24px rgba(0,0,0,0.06);
+    }
+
+    body[data-theme="light"] .day-card:hover {
+      border-color: rgba(255, 90, 31, 0.16);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.82), 0 14px 28px rgba(0,0,0,0.08);
+    }
+
+    body[data-theme="light"] .day-card.selected {
+      border-color: rgba(0,0,0,0.14);
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,248,249,0.96));
+    }
+
+    body[data-theme="light"] .day-card.today {
+      border-color: rgba(255, 90, 31, 0.24);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), 0 0 0 1px rgba(255,90,31,0.05), 0 14px 28px rgba(255,90,31,0.08);
+    }
+
+    .day-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 77, 0, 0.10);
+      padding-bottom: 7px;
+    }
+
+    .day-title {
+      color: var(--accent);
+      font-weight: 900;
+      font-size: 0.74rem;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .day-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .today-badge {
+      font-size: 0.6rem;
+      color: var(--accent);
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      padding: 3px 6px;
+      border-radius: 999px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .day-count {
+      color: var(--muted);
+      font-size: 0.66rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .day-tasks {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .day-preview-hint {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    .day-more-wrap {
+      margin-top: 6px;
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .day-more-btn {
+      min-height: 34px;
+      padding: 0 12px;
+      font-size: 0.64rem;
+      letter-spacing: 1px;
+    }
+
+    .task {
+      background: var(--task-bg);
+      border-radius: 12px;
+      padding: 12px 12px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-left: 4px solid var(--accent);
+      font-size: 0.96rem;
+      color: var(--text);
+      transition: 0.25s ease, opacity 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+      gap: 10px;
+      touch-action: manipulation;
+      overflow: hidden;
+    }
+
+    .task:hover {
+      background: var(--task-hover);
+      transform: translateX(4px);
+    }
+
+    .task.closing {
+      opacity: 0;
+      transform: translateX(18px) scale(0.98);
+    }
+
+    .task.dragging {
+      opacity: 0.45;
+      transform: scale(0.98);
+      box-shadow: 0 0 0 1px rgba(255,77,0,0.12);
+    }
+
+    .task-title {
+      flex: 1;
+      min-width: 0;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      line-height: 1.3;
+      max-height: calc(1.3em * 3);
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+
+    .task-title.can-preview {
+      cursor: zoom-in;
+    }
+
+    .task.cat-Дом {
+      border-left-color: var(--home);
+    }
+
+    .task.cat-Работа {
+      border-left-color: var(--work);
+    }
+
+    .task.cat-Личное {
+      border-left-color: var(--personal);
+    }
+
+    .task.urgent {
+      border-left-color: #ff0000;
+      font-weight: bold;
+      background: rgba(255,0,0,0.06);
+    }
+
+    body[data-theme="light"] .task.urgent {
+      background: rgba(255, 0, 0, 0.08);
+    }
+
+    .task-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+
+    .edit-btn {
+      color: var(--muted);
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 0.95rem;
+      line-height: 1;
+      border: 1px solid var(--border);
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.25s ease;
+      background: transparent;
+      user-select: none;
+    }
+
+    .edit-btn:hover {
+      color: var(--text);
+      background: var(--task-hover);
+      transform: scale(1.05);
+    }
+
+    .del-x {
+      color: var(--muted);
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1.2rem;
+      line-height: 1;
+      user-select: none;
+    }
+
+    @media (hover: hover) {
+      .edit-btn,
+      .del-x {
+        opacity: 0.72;
+      }
+
+      .task:hover .edit-btn,
+      .task:hover .del-x {
+        opacity: 1;
+      }
+    }
+
+    .archive-header {
+      display: flex;
+      justify-content: flex-end;
+      margin: 10px 0;
+    }
+
+    summary {
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      cursor: pointer;
+      text-align: center;
+      margin-top: 34px;
+    }
+
+    #archive {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      opacity: 0.65;
+      padding-bottom: 70px;
+      width: 95%;
+    }
+
+    .toast-wrap {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 3000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-end;
+      pointer-events: none;
+    }
+
+    .toast {
+      min-width: 260px;
+      max-width: min(92vw, 360px);
+      background: linear-gradient(180deg, rgba(18,18,18,0.92), rgba(8,8,8,0.95));
+      border: 1px solid rgba(255, 77, 0, 0.18);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 12px 14px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+      backdrop-filter: blur(18px);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      transform: translateY(18px) scale(0.98);
+      opacity: 0;
+      animation: toastIn 0.28s ease forwards;
+      pointer-events: auto;
+    }
+
+    body[data-theme="light"] .toast {
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(246,246,248,0.98));
+      border-color: rgba(255, 90, 31, 0.12);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.10);
+    }
+
+    .toast.hide {
+      animation: toastOut 0.24s ease forwards;
+    }
+
+    .toast-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.9rem;
+      font-weight: 900;
+      margin-top: 1px;
+    }
+
+    .toast.success .toast-icon {
+      background: rgba(35, 209, 96, 0.14);
+      color: var(--success);
+    }
+
+    .toast.error .toast-icon {
+      background: rgba(255, 59, 48, 0.14);
+      color: var(--danger);
+    }
+
+    .toast.info .toast-icon {
+      background: rgba(255, 77, 0, 0.14);
+      color: var(--accent);
+    }
+
+    .toast.warning .toast-icon {
+      background: rgba(255, 176, 32, 0.14);
+      color: var(--warning);
+    }
+
+    .toast-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .toast-title {
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .toast-text {
+      font-size: 0.88rem;
+      line-height: 1.35;
+      color: var(--text);
+      opacity: 0.92;
+      word-break: break-word;
+    }
+
+    .toast-close {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+      margin-left: 4px;
+    }
+
+    .modal-root {
+      position: fixed;
+      inset: 0;
+      z-index: 4000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-root.show {
+      display: flex;
+    }
+
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transition: opacity 0.24s ease;
+    }
+
+    .modal-root.show .modal-backdrop {
+      opacity: 1;
+    }
+
+    .modal-card {
+      position: relative;
+      width: min(92vw, 460px);
+      max-height: min(86vh, 820px);
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(18,18,18,0.94), rgba(8,8,8,0.96));
+      border: 1px solid rgba(255, 77, 0, 0.18);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.42);
+      backdrop-filter: blur(18px);
+      transform: translateY(14px) scale(0.97);
+      opacity: 0;
+      transition: transform 0.24s ease, opacity 0.24s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-card.day-modal-card {
+      width: min(96vw, 920px);
+      padding: 0;
+    }
+
+    body[data-theme="light"] .modal-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.97), rgba(246,246,248,0.99));
+      border-color: rgba(255, 90, 31, 0.12);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.12);
+    }
+
+    .modal-root.show .modal-card {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    .modal-kicker {
+      color: var(--accent);
+      font-size: 0.66rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 900;
+      margin: 0 0 8px;
+    }
+
+    .modal-text {
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.45;
+      margin-bottom: 16px;
+      white-space: pre-line;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .modal-btn {
+      min-height: 40px;
+      border: 1px solid rgba(255, 77, 0, 0.14);
+      padding: 0 14px;
+    }
+
+    .modal-btn.primary {
+      background: linear-gradient(180deg, #ff6a1f 0%, #ff4d00 100%);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 8px 18px rgba(255,77,0,0.22);
+    }
+
+    .modal-btn.danger {
+      background: linear-gradient(180deg, #ff5c55 0%, #ff3b30 100%);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 8px 18px rgba(255,59,48,0.22);
+    }
+
+    .modal-btn.ghost {
+      background: transparent;
+    }
+
+    #editTaskInput {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--input-text);
+      padding: 12px 13px;
+      border-radius: 12px;
+      outline: none;
+      font-size: 0.96rem;
+      min-height: 46px;
+      transition: 0.25s ease;
+      width: 100%;
+      margin-bottom: 14px;
+    }
+
+    #editTaskInput:focus {
+      border-color: rgba(255, 77, 0, 0.45);
+      box-shadow: 0 0 0 3px rgba(255, 77, 0, 0.08);
+    }
+
+    #editTaskInput::placeholder {
+      color: var(--muted);
+    }
+
+    .day-modal-head {
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid rgba(255, 77, 0, 0.12);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .day-modal-meta {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .day-modal-sub {
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    .day-modal-title {
+      margin: 3px 0 0;
+      font-size: clamp(1.2rem, 2vw, 1.7rem);
+      font-weight: 900;
+      color: var(--text);
+    }
+
+    .day-modal-stats {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .day-stat-chip {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 0.68rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .day-modal-body {
+      padding: 16px 18px 18px;
+      overflow-y: auto;
+      max-height: calc(min(86vh, 820px) - 110px);
+    }
+
+    .day-modal-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .day-empty {
+      color: var(--muted);
+      font-size: 0.96rem;
+      line-height: 1.5;
+      padding: 24px 6px 10px;
+    }
+
+    @keyframes driftIn {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes toastOut {
+      from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+      }
+    }
+  </style>
 </head>
 <body>
+  <canvas id="bg-canvas"></canvas>
 
-<div id="flash"></div>
+  <div class="header-container">
+    <h1 class="main-title">VAN TRU FREE</h1>
+    <span class="sub-title">FAMILY TRACKER</span>
+    <div class="hero-clock" id="heroClock">
+      <span class="clock-main">00:00</span><span class="clock-seconds">:00</span>
+    </div>
+    <div id="currentDate" class="date-widget"></div>
+  </div>
 
-<div class="header">
-    <div class="brand">[ ENGINE BY VAN ]</div>
-    <div class="main-title">ULTIMATE 6</div>
-    <div class="manual-btn" onclick="toggleM()">manual guide</div>
-</div>
+  <div class="theme-bar">
+    <div class="week-progress">
+      <span class="week-progress-label">Week Progress</span>
+      <span class="week-progress-value" id="weekProgressValue">0%</span>
+    </div>
 
-<div class="grid">
-    <div class="panel">
-        <div class="panel-header">
-            <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
-            <div class="label">source_data_telemetry</div>
+    <div class="filter-group" id="filterGroup">
+      <span class="filter-label">Filter</span>
+      <button class="filter-btn active" data-filter="all" type="button">Все</button>
+      <button class="filter-btn" data-filter="Дом" type="button">Дом</button>
+      <button class="filter-btn" data-filter="Работа" type="button">Работа</button>
+      <button class="filter-btn" data-filter="Личное" type="button">Личное</button>
+    </div>
+
+    <div class="tools-group">
+      <span class="tools-label">JSON</span>
+      <button class="tool-btn" type="button" onclick="exportTasks()">Export</button>
+      <label class="import-label" for="jsonFileInput">Import</label>
+      <input id="jsonFileInput" type="file" accept=".json,application/json" />
+    </div>
+
+    <label class="theme-switch">
+      <span class="theme-switch-label" id="themeLabel">DARK MODE</span>
+      <input type="checkbox" id="themeToggle" />
+      <span class="theme-slider"></span>
+    </label>
+  </div>
+
+  <div class="rings-container">
+    <div class="ring-box">
+      <div class="ring-inner">
+        <svg class="progress-ring" id="ring-home" viewBox="0 0 86 86">
+          <circle class="ring-track" cx="43" cy="43" r="34"></circle>
+          <circle class="ring-active" cx="43" cy="43" r="34" stroke="var(--home)" stroke-dasharray="213.6" stroke-dashoffset="213.6"></circle>
+        </svg>
+        <div class="ring-value" id="val-home">0/0</div>
+      </div>
+      <div class="ring-label">Дом</div>
+    </div>
+
+    <div class="ring-box">
+      <div class="ring-inner">
+        <svg class="progress-ring" id="ring-work" viewBox="0 0 86 86">
+          <circle class="ring-track" cx="43" cy="43" r="34"></circle>
+          <circle class="ring-active" cx="43" cy="43" r="34" stroke="var(--work)" stroke-dasharray="213.6" stroke-dashoffset="213.6"></circle>
+        </svg>
+        <div class="ring-value" id="val-work">0/0</div>
+      </div>
+      <div class="ring-label">Работа</div>
+    </div>
+
+    <div class="ring-box">
+      <div class="ring-inner">
+        <svg class="progress-ring" id="ring-personal" viewBox="0 0 86 86">
+          <circle class="ring-track" cx="43" cy="43" r="34"></circle>
+          <circle class="ring-active" cx="43" cy="43" r="34" stroke="var(--personal)" stroke-dasharray="213.6" stroke-dashoffset="213.6"></circle>
+        </svg>
+        <div class="ring-value" id="val-personal">0/0</div>
+      </div>
+      <div class="ring-label">Личное</div>
+    </div>
+  </div>
+
+  <div class="input-panel">
+    <input type="text" id="taskName" placeholder="Какая миссия на сегодня?" onkeydown="if(event.key==='Enter') addTask()" />
+    <select id="taskDay">
+      <option value="mon">Понедельник</option>
+      <option value="tue">Вторник</option>
+      <option value="wed">Среда</option>
+      <option value="thu">Четверг</option>
+      <option value="fri">Пятница</option>
+      <option value="sat">Суббота</option>
+      <option value="sun">Воскресенье</option>
+    </select>
+    <select id="taskCat">
+      <option value="Дом">🏠 Дом</option>
+      <option value="Работа">💼 Работа</option>
+      <option value="Личное">✨ Личное</option>
+    </select>
+    <select id="taskPri">
+      <option value="normal">Обычный</option>
+      <option value="urgent">🔥 СРОЧНО</option>
+    </select>
+    <button class="add-btn" onclick="addTask()">ADD MISSION</button>
+  </div>
+
+  <div class="week-grid" id="grid"></div>
+
+  <details style="width: 95%;">
+    <summary>АРХИВ ВЫПОЛНЕННЫХ</summary>
+    <div class="archive-header">
+      <button class="archive-clear-btn" type="button" onclick="clearArchive()">Очистить архив</button>
+    </div>
+    <div id="archive"></div>
+  </details>
+
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <div class="modal-root" id="modalRoot" aria-hidden="true">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-kicker" id="modalKicker">Подтверждение</div>
+      <h3 class="modal-title" id="modalTitle">Заголовок</h3>
+      <div class="modal-text" id="modalText">Текст</div>
+      <div class="modal-actions" id="modalActions"></div>
+    </div>
+  </div>
+
+  <div class="modal-root" id="editModalRoot" aria-hidden="true">
+    <div class="modal-backdrop" id="editModalBackdrop"></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+      <div class="modal-kicker">Редактирование</div>
+      <h3 class="modal-title" id="editModalTitle">Изменить задачу</h3>
+      <div class="modal-text" style="margin-bottom: 12px;">Обнови текст задачи и сохрани изменения.</div>
+
+      <input
+        type="text"
+        id="editTaskInput"
+        placeholder="Новое название задачи"
+        maxlength="140"
+      />
+
+      <div class="modal-actions">
+        <button class="modal-btn ghost" type="button" id="editCancelBtn">Отмена</button>
+        <button class="modal-btn primary" type="button" id="editSaveBtn">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-root" id="previewModalRoot" aria-hidden="true">
+    <div class="modal-backdrop" id="previewModalBackdrop"></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="previewModalTitle">
+      <div class="modal-kicker">Просмотр</div>
+      <h3 class="modal-title" id="previewModalTitle">Полный текст задачи</h3>
+      <div class="modal-text" id="previewModalText" style="color: var(--text); white-space: pre-wrap; word-break: break-word;"></div>
+      <div class="modal-actions">
+        <button class="modal-btn primary" type="button" id="previewCloseBtn">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-root" id="dayModalRoot" aria-hidden="true">
+    <div class="modal-backdrop" id="dayModalBackdrop"></div>
+    <div class="modal-card day-modal-card" role="dialog" aria-modal="true" aria-labelledby="dayModalTitle">
+      <div class="day-modal-head">
+        <div class="day-modal-meta">
+          <div class="day-modal-sub">Просмотр дня</div>
+          <h3 class="day-modal-title" id="dayModalTitle">День</h3>
         </div>
-        <textarea id="in" placeholder="READY FOR INPUT..."></textarea>
-        <div class="footer"><button class="btn" onclick="run()">./run_analysis</button></div>
-    </div>
-
-    <!-- Клик в любое место вызывает копирование -->
-    <div class="panel" onclick="copy()">
-        <div class="panel-header">
-            <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
-            <div class="label">refined_output_buffer</div>
+        <div class="day-modal-stats">
+          <div class="day-stat-chip" id="dayModalCountChip">0 задач</div>
+          <button class="modal-btn primary" type="button" id="dayModalCloseBtn">Закрыть</button>
         </div>
-        <textarea id="out" readonly placeholder="AWAITING COMPILATION..."></textarea>
-        <div class="footer"><button class="btn">cp_to_buffer</button></div>
+      </div>
+      <div class="day-modal-body">
+        <div class="day-modal-list" id="dayModalList"></div>
+        <div class="day-empty" id="dayModalEmpty" style="display:none;">На этот день задач нет.</div>
+      </div>
     </div>
-</div>
+  </div>
 
-<div class="terminal" id="logs">
-    <div class="log-line active">> SYSTEM_READY: STANDBY_MODE</div>
-</div>
+  <script>
+    let currentDayId = '';
+    let activeFilter = 'all';
+    let tasks = JSON.parse(localStorage.getItem('vt_v_final_ultra_v5_premium')) || [];
+    let draggedTaskId = null;
+    let openedDayModalId = null;
 
-<div id="modal" onclick="toggleM()">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <h3 style="color:var(--gold); font-size:12px; letter-spacing:4px; margin-bottom:30px;">MANUAL</h3>
-        <p style="color:#666; font-size:11px; line-height:2.4; margin:0;">
-            1. ВСТАВЬТЕ СЫРЫЕ ДАННЫЕ В ЛЕВОЕ ОКНО.<br>
-            2. НАЖМИТЕ ./RUN_ANALYSIS ДЛЯ СБОРКИ.<br>
-            3. КЛИКНИТЕ В ЛЮБУЮ ТОЧКУ ПРАВОГО ОКНА ДЛЯ КОПИРОВАНИЯ.<br>
-            4. ВСПЫШКА ПОДТВЕРДИТ УСПЕХ.
-        </p>
-    </div>
-</div>
+    const STORAGE_KEY = 'vt_v_final_ultra_v5_premium';
+    const daysShort = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+    const dayNames = ['ПОНЕДЕЛЬНИК', 'ВТОРНИК', 'СРЕДА', 'ЧЕТВЕРГ', 'ПЯТНИЦА', 'СУББОТА', 'ВОСКРЕСЕНЬЕ'];
 
-<script>
-    function toggleM() { const m = document.getElementById('modal'); m.style.display = (m.style.display === 'flex') ? 'none' : 'flex'; }
+    const taskInput = document.getElementById('taskName');
+    const taskDaySelect = document.getElementById('taskDay');
+    const jsonFileInput = document.getElementById('jsonFileInput');
+    const toastWrap = document.getElementById('toastWrap');
+    const modalRoot = document.getElementById('modalRoot');
+    const modalBackdrop = document.getElementById('modalBackdrop');
+    const modalKicker = document.getElementById('modalKicker');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalText = document.getElementById('modalText');
+    const modalActions = document.getElementById('modalActions');
 
-    function log(msg) {
-        const l = document.getElementById('logs');
-        const d = document.createElement('div');
-        d.className = 'log-line active';
-        d.innerHTML = '> ' + msg.toUpperCase();
-        l.prepend(d);
-        if(l.children.length > 5) l.lastChild.remove();
-        Array.from(l.children).slice(1).forEach(i => i.classList.remove('active'));
+    const editModalRoot = document.getElementById('editModalRoot');
+    const editModalBackdrop = document.getElementById('editModalBackdrop');
+    const editTaskInput = document.getElementById('editTaskInput');
+    const editCancelBtn = document.getElementById('editCancelBtn');
+    const editSaveBtn = document.getElementById('editSaveBtn');
+
+    const previewModalRoot = document.getElementById('previewModalRoot');
+    const previewModalBackdrop = document.getElementById('previewModalBackdrop');
+    const previewModalText = document.getElementById('previewModalText');
+    const previewCloseBtn = document.getElementById('previewCloseBtn');
+
+    const dayModalRoot = document.getElementById('dayModalRoot');
+    const dayModalBackdrop = document.getElementById('dayModalBackdrop');
+    const dayModalTitle = document.getElementById('dayModalTitle');
+    const dayModalCountChip = document.getElementById('dayModalCountChip');
+    const dayModalList = document.getElementById('dayModalList');
+    const dayModalEmpty = document.getElementById('dayModalEmpty');
+    const dayModalCloseBtn = document.getElementById('dayModalCloseBtn');
+
+    let longPressTimer = null;
+    let longPressTriggered = false;
+    let modalResolver = null;
+    let lastFocusedElement = null;
+    let editModalResolver = null;
+    let editingTaskId = null;
+    let previewModalResolver = null;
+    let dayModalResolver = null;
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
     }
 
-    function run() {
-        const text = document.getElementById('in').value;
-        if(!text.trim()) return;
-        log('analyzing_patterns...');
+    function showToast(message, type = 'info', title = '') {
+      const icons = {
+        success: '✓',
+        error: '!',
+        info: '•',
+        warning: '!'
+      };
+
+      const labels = {
+        success: title || 'Успешно',
+        error: title || 'Ошибка',
+        info: title || 'Информация',
+        warning: title || 'Внимание'
+      };
+
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <div class="toast-icon">${icons[type] || '•'}</div>
+        <div class="toast-body">
+          <div class="toast-title">${labels[type]}</div>
+          <div class="toast-text">${escapeHtml(message)}</div>
+        </div>
+        <button class="toast-close" type="button" aria-label="Закрыть">×</button>
+      `;
+
+      const closeBtn = toast.querySelector('.toast-close');
+      let removed = false;
+
+      const removeToast = () => {
+        if (removed) return;
+        removed = true;
+        toast.classList.add('hide');
+        setTimeout(() => toast.remove(), 240);
+      };
+
+      closeBtn.addEventListener('click', removeToast);
+      toastWrap.appendChild(toast);
+      setTimeout(removeToast, 3200);
+    }
+
+    function closeModal(result = null) {
+      modalRoot.classList.remove('show');
+      modalRoot.setAttribute('aria-hidden', 'true');
+
+      const resolver = modalResolver;
+      modalResolver = null;
+
+      setTimeout(() => {
+        modalActions.innerHTML = '';
+      }, 180);
+
+      if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+        lastFocusedElement.focus();
+      }
+
+      if (resolver) resolver(result);
+    }
+
+    function openModal(config) {
+      return new Promise((resolve) => {
+        lastFocusedElement = document.activeElement;
+        modalResolver = resolve;
+
+        modalKicker.textContent = config.kicker || 'Подтверждение';
+        modalTitle.textContent = config.title || 'Подтверждение';
+        modalText.textContent = config.text || '';
+        modalActions.innerHTML = '';
+
+        (config.buttons || []).forEach((btn) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = `modal-btn ${btn.className || 'ghost'}`;
+          button.textContent = btn.label;
+          button.addEventListener('click', () => closeModal(btn.value));
+          modalActions.appendChild(button);
+        });
+
+        modalRoot.classList.add('show');
+        modalRoot.setAttribute('aria-hidden', 'false');
+
+        const primary = modalActions.querySelector('.primary, .danger, .modal-btn');
+        if (primary) {
+          setTimeout(() => primary.focus(), 30);
+        }
+      });
+    }
+
+    function closeEditModal(result = null) {
+      editModalRoot.classList.remove('show');
+      editModalRoot.setAttribute('aria-hidden', 'true');
+
+      const resolver = editModalResolver;
+      editModalResolver = null;
+      editingTaskId = null;
+
+      if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+        lastFocusedElement.focus();
+      }
+
+      if (resolver) resolver(result);
+    }
+
+    function openEditModal(task) {
+      return new Promise((resolve) => {
+        lastFocusedElement = document.activeElement;
+        editModalResolver = resolve;
+        editingTaskId = task.id;
+
+        editTaskInput.value = task.title || '';
+
+        editModalRoot.classList.add('show');
+        editModalRoot.setAttribute('aria-hidden', 'false');
+
         setTimeout(() => {
-            const allNumbers = text.match(/\b\d{10,11}\b/g) || [];
-            const id = allNumbers[0] || "";
-            const sticker = allNumbers[1] || id;
-            const status = (text.match(/\b[A-Z]{3,4}\b/) || [""])[0];
-            const nameMatch = text.match(/Предмет\s*\n?\s*(.*?)(?=\n|\/|$)/i);
-            const name = nameMatch ? nameMatch[1].trim() : "";
-            const price = (text.match(/(\d+)\s*₽/) || ["",""])[1];
-            const mx = (text.match(/(ВЛАД\d+|ЦП\d+)[^\s]*/i) || [""])[0];
-            const box = (text.match(/\b(BOX|CON)\b\s*(\d+)/i) || ["","",""])[2];
-
-            document.getElementById('out').value = `${id}\t${sticker}\t${status}\t${name}\t${price}\t${mx}\t${box}`;
-            log('compilation_success');
-        }, 400);
+          editTaskInput.focus();
+          editTaskInput.select();
+        }, 30);
+      });
     }
 
-    async function copy() {
-        const v = document.getElementById('out').value;
-        if(!v) return;
-        await navigator.clipboard.writeText(v);
-        const f = document.getElementById('flash');
-        f.style.opacity = '1';
-        setTimeout(() => f.style.opacity = '0', 200);
-        log('clipboard_transfer_complete');
+    function submitEditModal() {
+      if (editingTaskId === null) return;
+
+      const clean = editTaskInput.value.trim();
+
+      if (!clean) {
+        showToast('Название задачи не может быть пустым.', 'warning', 'Редактирование');
+        editTaskInput.focus();
+        return;
+      }
+
+      tasks = tasks.map((t) => t.id === editingTaskId ? { ...t, title: clean } : t);
+      render();
+
+      if (openedDayModalId) {
+        refreshOpenedDayModal();
+      }
+
+      closeEditModal(clean);
+      showToast('Задача обновлена.', 'success', 'Сохранено');
     }
-</script>
+
+    function openPreviewModal(taskTitle) {
+      return new Promise((resolve) => {
+        lastFocusedElement = document.activeElement;
+        previewModalResolver = resolve;
+
+        previewModalText.textContent = taskTitle || '';
+
+        previewModalRoot.classList.add('show');
+        previewModalRoot.setAttribute('aria-hidden', 'false');
+
+        setTimeout(() => {
+          previewCloseBtn.focus();
+        }, 30);
+      });
+    }
+
+    function closePreviewModal(result = null) {
+      previewModalRoot.classList.remove('show');
+      previewModalRoot.setAttribute('aria-hidden', 'true');
+
+      const resolver = previewModalResolver;
+      previewModalResolver = null;
+
+      if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+        lastFocusedElement.focus();
+      }
+
+      if (resolver) resolver(result);
+    }
+
+    function getDayNameById(dayId) {
+      const idx = daysShort.indexOf(dayId);
+      return idx >= 0 ? dayNames[idx] : 'ДЕНЬ';
+    }
+
+    function getDayVisibleActiveTasks(dayId) {
+      return tasks.filter((t) => t.day === dayId && !t.done && passesFilter(t));
+    }
+
+    function openDayModal(dayId) {
+      return new Promise((resolve) => {
+        lastFocusedElement = document.activeElement;
+        dayModalResolver = resolve;
+        openedDayModalId = dayId;
+
+        renderDayModal(dayId);
+
+        dayModalRoot.classList.add('show');
+        dayModalRoot.setAttribute('aria-hidden', 'false');
+
+        setTimeout(() => {
+          dayModalCloseBtn.focus();
+        }, 30);
+      });
+    }
+
+    function closeDayModal(result = null) {
+      dayModalRoot.classList.remove('show');
+      dayModalRoot.setAttribute('aria-hidden', 'true');
+
+      const resolver = dayModalResolver;
+      dayModalResolver = null;
+      openedDayModalId = null;
+
+      if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+        lastFocusedElement.focus();
+      }
+
+      if (resolver) resolver(result);
+    }
+
+    function refreshOpenedDayModal() {
+      if (!openedDayModalId) return;
+      if (!dayModalRoot.classList.contains('show')) return;
+      renderDayModal(openedDayModalId);
+    }
+
+    function renderDayModal(dayId) {
+      const list = getDayVisibleActiveTasks(dayId);
+      dayModalTitle.textContent = getDayNameById(dayId);
+      dayModalCountChip.textContent = `${list.length} задач`;
+
+      dayModalList.innerHTML = '';
+
+      if (!list.length) {
+        dayModalEmpty.style.display = 'block';
+        return;
+      }
+
+      dayModalEmpty.style.display = 'none';
+
+      list.forEach((t) => {
+        const taskEl = createTaskElement(t, false);
+        dayModalList.appendChild(taskEl);
+      });
+    }
+
+    modalBackdrop.addEventListener('click', () => closeModal(null));
+    editModalBackdrop.addEventListener('click', () => closeEditModal(null));
+    previewModalBackdrop.addEventListener('click', () => closePreviewModal(null));
+    dayModalBackdrop.addEventListener('click', () => closeDayModal(null));
+    editCancelBtn.addEventListener('click', () => closeEditModal(null));
+    editSaveBtn.addEventListener('click', submitEditModal);
+    previewCloseBtn.addEventListener('click', () => closePreviewModal(null));
+    dayModalCloseBtn.addEventListener('click', () => closeDayModal(null));
+
+    editTaskInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        submitEditModal();
+      }
+
+      if (e.key === 'Escape') {
+        closeEditModal(null);
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+
+      if (previewModalRoot.classList.contains('show')) {
+        closePreviewModal(null);
+        return;
+      }
+
+      if (editModalRoot.classList.contains('show')) {
+        closeEditModal(null);
+        return;
+      }
+
+      if (dayModalRoot.classList.contains('show')) {
+        closeDayModal(null);
+        return;
+      }
+
+      if (modalRoot.classList.contains('show')) {
+        closeModal(null);
+      }
+    });
+
+    async function confirmDeleteTask(taskTitle) {
+      return await openModal({
+        kicker: 'Удаление',
+        title: 'Удалить задачу?',
+        text: `Это действие нельзя отменить.\n\n${taskTitle}`,
+        buttons: [
+          { label: 'Отмена', value: false, className: 'ghost' },
+          { label: 'Удалить', value: true, className: 'danger' }
+        ]
+      });
+    }
+
+    async function confirmClearArchive(doneCount) {
+      return await openModal({
+        kicker: 'Архив',
+        title: 'Очистить архив?',
+        text: `Будут удалены все выполненные задачи: ${doneCount}.`,
+        buttons: [
+          { label: 'Отмена', value: false, className: 'ghost' },
+          { label: 'Очистить', value: true, className: 'danger' }
+        ]
+      });
+    }
+
+    async function askImportMode(importCount) {
+      return await openModal({
+        kicker: 'Импорт JSON',
+        title: 'Как импортировать задачи?',
+        text: `Найдено задач: ${importCount}.\n\nВыбери способ импорта.`,
+        buttons: [
+          { label: 'Отмена', value: 'cancel', className: 'ghost' },
+          { label: 'Добавить к текущим', value: 'append', className: 'primary' },
+          { label: 'Заменить текущие', value: 'replace', className: 'danger' }
+        ]
+      });
+    }
+
+    function updateDate(setDaySelect = false) {
+      const now = new Date();
+      const options = { day: 'numeric', month: 'long', year: 'numeric' };
+      document.getElementById('currentDate').innerText = now.toLocaleDateString('ru-RU', options);
+
+      const daysMap = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+      currentDayId = daysMap[now.getDay()];
+
+      if (setDaySelect) {
+        taskDaySelect.value = currentDayId;
+      }
+    }
+
+    function updateHeroClock() {
+      const clock = document.getElementById('heroClock');
+      if (!clock) return;
+
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      const ss = String(now.getSeconds()).padStart(2, '0');
+
+      clock.innerHTML = `
+        <span class="clock-main">${hh}:${mm}</span><span class="clock-seconds">:${ss}</span>
+      `;
+    }
+
+    updateDate(true);
+    updateHeroClock();
+    setInterval(() => {
+      updateDate(false);
+      updateHeroClock();
+    }, 1000);
+
+    const themeToggle = document.getElementById('themeToggle');
+    const themeLabel = document.getElementById('themeLabel');
+    const systemThemeQuery = window.matchMedia('(prefers-color-scheme: light)');
+
+    function getPreferredTheme() {
+      const savedTheme = localStorage.getItem('vt_theme');
+      if (savedTheme === 'dark' || savedTheme === 'light') return savedTheme;
+      return systemThemeQuery.matches ? 'light' : 'dark';
+    }
+
+    function applyTheme(theme, persist = false) {
+      document.body.setAttribute('data-theme', theme);
+      themeToggle.checked = theme === 'light';
+      themeLabel.innerText = theme === 'light' ? 'DAY MODE' : 'DARK MODE';
+      if (persist) localStorage.setItem('vt_theme', theme);
+    }
+
+    function initTheme() {
+      applyTheme(getPreferredTheme(), false);
+    }
+
+    themeToggle.addEventListener('change', () => {
+      const newTheme = themeToggle.checked ? 'light' : 'dark';
+      applyTheme(newTheme, true);
+    });
+
+    systemThemeQuery.addEventListener('change', (e) => {
+      const savedTheme = localStorage.getItem('vt_theme');
+      if (!savedTheme) {
+        applyTheme(e.matches ? 'light' : 'dark', false);
+      }
+    });
+
+    initTheme();
+
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const particleCount = window.innerWidth < 768 ? 260 : 520;
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+      constructor() {
+        this.init();
+      }
+
+      init() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        const bigSpark = Math.random() < 0.22;
+        this.size = bigSpark ? Math.random() * 2.8 + 2.1 : Math.random() * 1.6 + 0.45;
+        this.speedX = Math.random() * 0.42 - 0.21;
+        this.speedY = Math.random() * 0.42 - 0.21;
+        this.alpha = bigSpark ? Math.random() * 0.5 + 0.4 : Math.random() * 0.38 + 0.16;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x > canvas.width || this.x < 0 || this.y > canvas.height || this.y < 0) {
+          this.init();
+        }
+      }
+
+      draw() {
+        const theme = document.body.getAttribute('data-theme') || 'dark';
+
+        if (theme === 'light') {
+          ctx.fillStyle = `rgba(255, 110, 40, ${this.alpha * 0.20})`;
+          ctx.shadowBlur = this.size > 2 ? 8 : 4;
+          ctx.shadowColor = 'rgba(255, 110, 40, 0.14)';
+        } else {
+          ctx.fillStyle = `rgba(255, 77, 0, ${this.alpha})`;
+          ctx.shadowBlur = this.size > 2 ? 12 : 6;
+          ctx.shadowColor = this.size > 2 ? 'rgba(255, 77, 0, 0.30)' : 'rgba(255, 77, 0, 0.16)';
+        }
+
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p) => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    function normalizeTask(raw) {
+      if (!raw || typeof raw !== 'object') return null;
+      if (!daysShort.includes(raw.day)) return null;
+      if (!['Дом', 'Работа', 'Личное'].includes(raw.cat)) return null;
+      if (!['normal', 'urgent'].includes(raw.pri)) return null;
+
+      return {
+        id: typeof raw.id === 'number' ? raw.id : Date.now() + Math.floor(Math.random() * 10000),
+        title: String(raw.title || '').trim(),
+        day: raw.day,
+        cat: raw.cat,
+        pri: raw.pri,
+        done: Boolean(raw.done)
+      };
+    }
+
+    function saveTasks() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    }
+
+    function passesFilter(task) {
+      return activeFilter === 'all' || task.cat === activeFilter;
+    }
+
+    function focusTaskInput() {
+      taskInput.focus();
+    }
+
+    function addTask() {
+      const title = taskInput.value.trim();
+      if (!title) {
+        showToast('Введи название задачи, чтобы добавить миссию.', 'warning', 'Пустое поле');
+        focusTaskInput();
+        return;
+      }
+
+      tasks.push({
+        id: Date.now(),
+        title,
+        day: document.getElementById('taskDay').value,
+        cat: document.getElementById('taskCat').value,
+        pri: document.getElementById('taskPri').value,
+        done: false
+      });
+
+      taskInput.value = '';
+      render();
+      focusTaskInput();
+      showToast(`Задача "${title}" добавлена.`, 'success', 'Добавлено');
+
+      if (openedDayModalId) {
+        refreshOpenedDayModal();
+      }
+    }
+
+    function toggleTask(e, id) {
+      e.stopPropagation();
+
+      const taskEl = e.currentTarget;
+      const task = tasks.find((t) => t.id === id);
+      if (!task) return;
+
+      if (taskEl && taskEl.classList) {
+        taskEl.classList.add('closing');
+      }
+
+      setTimeout(() => {
+        tasks = tasks.map((t) => t.id === id ? { ...t, done: !t.done } : t);
+        render();
+
+        if (openedDayModalId) {
+          refreshOpenedDayModal();
+        }
+
+        const becameDone = !task.done;
+        showToast(
+          becameDone ? `Задача "${task.title}" отправлена в архив.` : `Задача "${task.title}" восстановлена.`,
+          'success',
+          becameDone ? 'Выполнено' : 'Возвращено'
+        );
+      }, 180);
+    }
+
+    function isTaskTitleClamped(taskElement) {
+      const titleEl = taskElement.querySelector('.task-title');
+      if (!titleEl) return false;
+      return titleEl.scrollHeight > titleEl.clientHeight + 1;
+    }
+
+    function handleTaskClick(e, id) {
+      if (longPressTriggered) {
+        longPressTriggered = false;
+        return;
+      }
+
+      if (draggedTaskId !== null) return;
+
+      const task = tasks.find((t) => t.id === id);
+      if (!task) return;
+
+      const taskEl = e.currentTarget;
+      const clamped = isTaskTitleClamped(taskEl);
+
+      if (clamped) {
+        openPreviewModal(task.title);
+        return;
+      }
+
+      toggleTask(e, id);
+    }
+
+    async function deleteTask(e, id) {
+      e.stopPropagation();
+      cancelLongPress();
+
+      const task = tasks.find((t) => t.id === id);
+      if (!task) return;
+
+      const ok = await confirmDeleteTask(task.title);
+      if (!ok) return;
+
+      tasks = tasks.filter((t) => t.id !== id);
+      render();
+
+      if (openedDayModalId) {
+        refreshOpenedDayModal();
+      }
+
+      showToast(`Задача "${task.title}" удалена.`, 'success', 'Удалено');
+    }
+
+    async function editTask(e, id) {
+      e.stopPropagation();
+      cancelLongPress();
+
+      const task = tasks.find((t) => t.id === id);
+      if (!task) return;
+
+      await openEditModal(task);
+    }
+
+    function startLongPress(e, id) {
+      cancelLongPress();
+      longPressTriggered = false;
+
+      longPressTimer = setTimeout(() => {
+        longPressTriggered = true;
+        editTask(e, id);
+      }, 550);
+    }
+
+    function cancelLongPress() {
+      clearTimeout(longPressTimer);
+    }
+
+    function selectDay(dayId) {
+      taskDaySelect.value = dayId;
+      render();
+      openDayModal(dayId);
+    }
+
+    async function clearArchive() {
+      const doneCount = tasks.filter((t) => t.done).length;
+      if (!doneCount) {
+        showToast('Архив уже пуст.', 'info', 'Архив');
+        return;
+      }
+
+      const ok = await confirmClearArchive(doneCount);
+      if (!ok) return;
+
+      tasks = tasks.filter((t) => !t.done);
+      render();
+      showToast(`Удалено выполненных задач: ${doneCount}.`, 'success', 'Архив очищен');
+    }
+
+    function setFilter(filterValue) {
+      activeFilter = filterValue;
+      document.querySelectorAll('.filter-btn').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.filter === filterValue);
+      });
+      render();
+
+      if (openedDayModalId) {
+        refreshOpenedDayModal();
+      }
+
+      showToast(`Фильтр: ${filterValue === 'all' ? 'Все' : filterValue}.`, 'info', 'Фильтр');
+    }
+
+    document.querySelectorAll('.filter-btn').forEach((btn) => {
+      btn.addEventListener('click', () => setFilter(btn.dataset.filter));
+    });
+
+    function updateWeekProgress() {
+      const total = tasks.length;
+      const done = tasks.filter((t) => t.done).length;
+      const percent = total ? Math.round((done / total) * 100) : 0;
+      document.getElementById('weekProgressValue').innerText = `${percent}%`;
+    }
+
+    function updateRings() {
+      ['Дом', 'Работа', 'Личное'].forEach((cat) => {
+        const cTasks = tasks.filter((t) => t.cat === cat);
+        const doneCount = cTasks.filter((t) => t.done).length;
+        const total = cTasks.length;
+
+        const key = cat === 'Дом' ? 'home' : cat === 'Работа' ? 'work' : 'personal';
+        const ring = document.querySelector(`#ring-${key} .ring-active`);
+        const radius = 34;
+        const circ = 2 * Math.PI * radius;
+        ring.style.strokeDashoffset = circ * (1 - (total ? doneCount / total : 0));
+
+        document.getElementById(`val-${key}`).innerText = `${doneCount}/${total}`;
+      });
+    }
+
+    function exportTasks() {
+      const payload = {
+        app: 'VAN TRU FREE',
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        tasks
+      };
+
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const date = new Date().toISOString().slice(0, 10);
+
+      a.href = url;
+      a.download = `van-tru-free-backup-${date}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+
+      showToast('JSON-файл с задачами успешно экспортирован.', 'success', 'Export');
+    }
+
+    async function importTasksFromFile(file) {
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        try {
+          const parsed = JSON.parse(event.target.result);
+          const sourceTasks = Array.isArray(parsed) ? parsed : parsed.tasks;
+
+          if (!Array.isArray(sourceTasks)) {
+            showToast('Неверный JSON: список задач не найден.', 'error', 'Import');
+            return;
+          }
+
+          const normalized = sourceTasks
+            .map(normalizeTask)
+            .filter((t) => t && t.title);
+
+          if (!normalized.length && sourceTasks.length) {
+            showToast('Не удалось импортировать задачи: неверный формат.', 'error', 'Import');
+            return;
+          }
+
+          const mode = await askImportMode(normalized.length);
+          if (mode === 'cancel' || mode === null) {
+            showToast('Импорт отменён.', 'info', 'Import');
+            return;
+          }
+
+          if (mode === 'replace') {
+            tasks = normalized;
+          } else if (mode === 'append') {
+            const existingIds = new Set(tasks.map((t) => t.id));
+            normalized.forEach((t) => {
+              let nextId = t.id;
+              while (existingIds.has(nextId)) {
+                nextId += Math.floor(Math.random() * 1000) + 1;
+              }
+              existingIds.add(nextId);
+              tasks.push({ ...t, id: nextId });
+            });
+          }
+
+          render();
+
+          if (openedDayModalId) {
+            refreshOpenedDayModal();
+          }
+
+          showToast(`Импорт завершён: ${normalized.length} задач.`, 'success', 'Import');
+        } catch (error) {
+          showToast('Ошибка чтения JSON-файла.', 'error', 'Import');
+        } finally {
+          jsonFileInput.value = '';
+        }
+      };
+
+      reader.readAsText(file);
+    }
+
+    jsonFileInput.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      importTasksFromFile(file);
+    });
+
+    function moveTaskToDay(taskId, newDay) {
+      const task = tasks.find((t) => t.id === taskId);
+      if (!task || task.done || !daysShort.includes(newDay) || task.day === newDay) return;
+
+      tasks = tasks.map((t) => t.id === taskId ? { ...t, day: newDay } : t);
+      taskDaySelect.value = newDay;
+      render();
+
+      if (openedDayModalId) {
+        refreshOpenedDayModal();
+      }
+
+      showToast(`Задача "${task.title}" перенесена.`, 'success', 'Перемещено');
+    }
+
+    function clearDragOverState() {
+      document.querySelectorAll('.day-card.drag-over').forEach((card) => {
+        card.classList.remove('drag-over');
+      });
+    }
+
+    function bindTaskInteractions(el, id, taskData, isArchive) {
+      el.onclick = (e) => handleTaskClick(e, id);
+      el.ondblclick = (e) => editTask(e, id);
+
+      el.onmousedown = (e) => startLongPress(e, id);
+      el.ontouchstart = (e) => startLongPress(e, id);
+
+      el.onmouseup = cancelLongPress;
+      el.onmouseleave = cancelLongPress;
+      el.ontouchend = cancelLongPress;
+      el.ontouchcancel = cancelLongPress;
+
+      if (!isArchive && !taskData.done) {
+        el.draggable = true;
+
+        el.addEventListener('dragstart', (e) => {
+          draggedTaskId = id;
+          el.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', String(id));
+          cancelLongPress();
+        });
+
+        el.addEventListener('dragend', () => {
+          draggedTaskId = null;
+          el.classList.remove('dragging');
+          clearDragOverState();
+        });
+      }
+    }
+
+    function createTaskElement(t, isArchive = false) {
+      const d = document.createElement('div');
+      d.className = `task ${t.pri || ''} cat-${t.cat}`;
+
+      if (isArchive) {
+        d.style.opacity = '0.55';
+      }
+
+      bindTaskInteractions(d, t.id, t, isArchive);
+
+      d.innerHTML = `
+        <span class="task-title">${escapeHtml(t.title)}</span>
+        <div class="task-actions">
+          <div class="edit-btn" onclick="editTask(event, ${t.id})">✎</div>
+          <div class="del-x" onclick="deleteTask(event, ${t.id})">×</div>
+        </div>
+      `;
+
+      requestAnimationFrame(() => {
+        const titleEl = d.querySelector('.task-title');
+        if (!titleEl) return;
+
+        if (titleEl.scrollHeight > titleEl.clientHeight + 1) {
+          titleEl.classList.add('can-preview');
+        }
+      });
+
+      return d;
+    }
+
+    function renderWeekGrid() {
+      const currentSelectedDay = taskDaySelect.value;
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+
+      const PREVIEW_LIMIT = 4;
+
+      daysShort.forEach((day, i) => {
+        const isToday = day === currentDayId;
+        const visibleTasks = tasks.filter((t) => t.day === day && !t.done && passesFilter(t));
+        const previewTasks = visibleTasks.slice(0, PREVIEW_LIMIT);
+        const hiddenCount = Math.max(0, visibleTasks.length - PREVIEW_LIMIT);
+        const allActiveInDay = tasks.filter((t) => t.day === day && !t.done);
+
+        const card = document.createElement('div');
+        card.className = `day-card ${day === currentSelectedDay ? 'selected' : ''} ${isToday ? 'today' : ''}`;
+        card.dataset.day = day;
+
+        card.addEventListener('click', () => selectDay(day));
+
+        card.addEventListener('dragover', (e) => {
+          if (draggedTaskId === null) return;
+          e.preventDefault();
+          card.classList.add('drag-over');
+        });
+
+        card.addEventListener('dragleave', (e) => {
+          if (!card.contains(e.relatedTarget)) {
+            card.classList.remove('drag-over');
+          }
+        });
+
+        card.addEventListener('drop', (e) => {
+          e.preventDefault();
+          card.classList.remove('drag-over');
+
+          const taskId = Number(e.dataTransfer.getData('text/plain'));
+          if (!taskId) return;
+
+          moveTaskToDay(taskId, day);
+        });
+
+        const header = document.createElement('div');
+        header.className = 'day-title-row';
+        header.innerHTML = `
+          <div class="day-title">${dayNames[i]}</div>
+          <div class="day-meta">
+            ${isToday ? '<span class="today-badge">TODAY</span>' : ''}
+            <div class="day-count">${visibleTasks.length}/${allActiveInDay.length} задач</div>
+          </div>
+        `;
+        card.appendChild(header);
+
+        const taskList = document.createElement('div');
+        taskList.className = 'day-tasks';
+
+        previewTasks.forEach((t) => {
+          const taskEl = createTaskElement(t, false);
+          taskEl.addEventListener('click', (e) => e.stopPropagation());
+          taskEl.addEventListener('dblclick', (e) => e.stopPropagation());
+          taskList.appendChild(taskEl);
+        });
+
+        card.appendChild(taskList);
+
+        if (hiddenCount > 0) {
+          const moreWrap = document.createElement('div');
+          moreWrap.className = 'day-more-wrap';
+
+          const moreBtn = document.createElement('button');
+          moreBtn.type = 'button';
+          moreBtn.className = 'day-more-btn';
+          moreBtn.textContent = `+ ещё ${hiddenCount}`;
+          moreBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            selectDay(day);
+          });
+
+          moreWrap.appendChild(moreBtn);
+          card.appendChild(moreWrap);
+        }
+
+        if (visibleTasks.length > 0) {
+          const hint = document.createElement('div');
+          hint.className = 'day-preview-hint';
+          hint.textContent = hiddenCount > 0 ? 'Открой день для полного списка' : 'Клик по дню — открыть список';
+          card.appendChild(hint);
+        }
+
+        grid.appendChild(card);
+      });
+    }
+
+    function renderArchive() {
+      const archive = document.getElementById('archive');
+      const doneTasks = tasks.filter((t) => t.done && passesFilter(t));
+      archive.innerHTML = '';
+
+      doneTasks.forEach((t) => {
+        const taskEl = createTaskElement(t, true);
+        archive.appendChild(taskEl);
+      });
+    }
+
+    function render() {
+      saveTasks();
+      updateWeekProgress();
+      updateRings();
+      renderWeekGrid();
+      renderArchive();
+    }
+
+    render();
+    focusTaskInput();
+  </script>
 </body>
 </html>
