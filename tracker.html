@@ -109,6 +109,38 @@
             opacity: 0.9;
         }
 
+        .hero-clock {
+            margin-top: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            gap: 0;
+            font-weight: 900;
+            letter-spacing: 0.16em;
+            filter: drop-shadow(0 0 24px rgba(255, 77, 0, 0.22));
+            animation: fadeInDown 1.2s ease;
+            user-select: none;
+        }
+
+        .clock-main {
+            font-size: clamp(2.2rem, 6vw, 4.4rem);
+            line-height: 1;
+            background: linear-gradient(180deg, #ffffff 0%, #cfcfcf 35%, #7f7f7f 65%, #2a2a2a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .clock-seconds {
+            font-size: clamp(1rem, 2.4vw, 1.8rem);
+            line-height: 1;
+            color: var(--accent);
+            margin-left: 6px;
+            letter-spacing: 0.08em;
+            text-shadow: 0 0 14px rgba(255, 77, 0, 0.35);
+        }
+
         .date-widget {
             color: var(--muted);
             letter-spacing: 3px;
@@ -116,6 +148,18 @@
             font-size: 0.8rem;
             text-transform: uppercase;
             margin-top: 15px;
+        }
+
+        body[data-theme="light"] .hero-clock {
+            filter: drop-shadow(0 0 18px rgba(255, 90, 31, 0.18));
+        }
+
+        body[data-theme="light"] .clock-main {
+            background: linear-gradient(180deg, #171717 0%, #5c5c5c 45%, #a7a7a7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
         }
 
         .theme-bar,
@@ -331,6 +375,15 @@
             .week-progress {
                 justify-content: center;
             }
+
+            .hero-clock {
+                margin-top: 14px;
+                letter-spacing: 0.1em;
+            }
+
+            .clock-seconds {
+                margin-left: 4px;
+            }
         }
 
         .input-panel {
@@ -430,29 +483,9 @@
             box-shadow: 0 0 15px rgba(255, 77, 0, 0.14);
         }
 
-        .day-meta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-}
-
-.today-badge {
-    font-size: 0.6rem;
-    color: var(--accent);
-    font-weight: 900;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    border: 1px solid var(--border);
-    padding: 3px 6px;
-    border-radius: 999px;
-    line-height: 1;
-    flex-shrink: 0;
-}
-
         .day-title-row {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
             gap: 10px;
             margin-bottom: 12px;
@@ -465,6 +498,29 @@
             font-weight: 900;
             font-size: 0.85rem;
             text-transform: uppercase;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .day-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .today-badge {
+            font-size: 0.56rem;
+            color: var(--accent);
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 1px solid var(--border);
+            padding: 3px 6px;
+            border-radius: 999px;
+            line-height: 1;
+            white-space: nowrap;
         }
 
         .day-count {
@@ -473,6 +529,7 @@
             font-weight: 800;
             letter-spacing: 1px;
             white-space: nowrap;
+            text-align: right;
         }
 
         .task {
@@ -612,6 +669,9 @@
     <div class="header-container">
         <h1 class="main-title">VAN TRU FREE</h1>
         <span class="sub-title">FAMILY TRACKER</span>
+        <div class="hero-clock" id="heroClock">
+            <span class="clock-main">00:00</span><span class="clock-seconds">:00</span>
+        </div>
         <div id="currentDate" class="date-widget"></div>
     </div>
 
@@ -728,7 +788,27 @@
             currentDayId = daysMap[now.getDay()];
             taskDaySelect.value = currentDayId;
         }
+
+        function updateHeroClock() {
+            const clock = document.getElementById('heroClock');
+            if (!clock) return;
+
+            const now = new Date();
+            const hh = String(now.getHours()).padStart(2, '0');
+            const mm = String(now.getMinutes()).padStart(2, '0');
+            const ss = String(now.getSeconds()).padStart(2, '0');
+
+            clock.innerHTML = `
+                <span class="clock-main">${hh}:${mm}</span><span class="clock-seconds">:${ss}</span>
+            `;
+        }
+
         updateDate();
+        updateHeroClock();
+        setInterval(() => {
+            updateDate();
+            updateHeroClock();
+        }, 1000);
 
         const themeToggle = document.getElementById('themeToggle');
         const themeLabel = document.getElementById('themeLabel');
@@ -1014,12 +1094,12 @@
                 const header = document.createElement('div');
                 header.className = 'day-title-row';
                 header.innerHTML = `
-    <div class="day-title">${dayNames[i]}</div>
-    <div class="day-meta">
-        ${isToday ? '<span class="today-badge">TODAY</span>' : ''}
-        <div class="day-count">${visibleTasks.length}/${allActiveInDay.length} задач</div>
-    </div>
-`;
+                    <div class="day-title">${dayNames[i]}</div>
+                    <div class="day-meta">
+                        ${isToday ? '<span class="today-badge">TODAY</span>' : ''}
+                        <div class="day-count">${visibleTasks.length}/${allActiveInDay.length} задач</div>
+                    </div>
+                `;
                 card.appendChild(header);
 
                 visibleTasks.forEach((t) => {
