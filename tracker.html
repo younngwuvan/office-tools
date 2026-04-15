@@ -23,11 +23,12 @@
             --shadow: 0 15px 50px rgba(0,0,0,0.5);
             --title-grad: linear-gradient(180deg, #fff 0%, #888 50%, #222 100%);
             --title-shadow: drop-shadow(0 0 30px rgba(255, 77, 0, 0.5));
-            --bg-grad: radial-gradient(circle at top, #1a0f0a 0%, #050505 100%);
+            --bg-grad: radial-gradient(circle at top, #1a0f0a 0%, #0b0b0b 35%, #050505 100%);
             --home: #0084ff;
             --work: #ff4d00;
             --personal: #00ff62;
             --danger: #ff3b30;
+            --ring-track: rgba(255,255,255,0.045);
         }
 
         body[data-theme="light"] {
@@ -46,17 +47,20 @@
             --shadow: 0 15px 45px rgba(0,0,0,0.10);
             --title-grad: linear-gradient(180deg, #111 0%, #5b5b5b 50%, #a1a1a1 100%);
             --title-shadow: drop-shadow(0 0 18px rgba(255, 90, 31, 0.18));
-            --bg-grad: radial-gradient(circle at top, #ffe8dc 0%, #f6f7f9 100%);
+            --bg-grad: radial-gradient(circle at top, #f7efe9 0%, #f4f5f7 35%, #f6f7f9 100%);
+            --ring-track: rgba(0,0,0,0.08);
         }
 
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
 
         body {
             background-color: var(--bg);
             color: var(--text);
             font-family: 'Inter', sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 0 0 28px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -76,11 +80,15 @@
             transition: background 0.35s ease;
         }
 
+        body[data-theme="light"] #bg-canvas {
+            background: var(--bg-grad);
+        }
+
         .header-container {
             text-align: center;
             width: 100%;
-            padding-top: clamp(60px, 10vh, 120px);
-            margin-bottom: 20px;
+            padding-top: clamp(42px, 7vh, 82px);
+            margin-bottom: 10px;
             animation: fadeInDown 1.2s ease;
             position: relative;
         }
@@ -104,13 +112,13 @@
             font-weight: 900;
             font-size: clamp(0.9rem, 3vw, 1.3rem);
             text-transform: uppercase;
-            margin-top: 10px;
+            margin-top: 8px;
             display: block;
             opacity: 0.9;
         }
 
         .hero-clock {
-            margin-top: 18px;
+            margin-top: 10px;
             display: flex;
             justify-content: center;
             align-items: baseline;
@@ -145,9 +153,9 @@
             color: var(--muted);
             letter-spacing: 3px;
             font-weight: 700;
-            font-size: 0.8rem;
+            font-size: 0.76rem;
             text-transform: uppercase;
-            margin-top: 15px;
+            margin-top: 8px;
         }
 
         body[data-theme="light"] .hero-clock {
@@ -162,49 +170,55 @@
             color: transparent;
         }
 
-        .theme-bar,
-        .utility-bar {
+        .theme-bar {
             width: 90%;
             max-width: 1100px;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 18px;
+            gap: 14px;
+            margin-top: 4px;
+            margin-bottom: 14px;
             flex-wrap: wrap;
         }
 
         .theme-switch {
             display: inline-flex;
             align-items: center;
+            justify-content: space-between;
             gap: 12px;
-            background: var(--panel-solid);
-            border: 1px solid var(--border);
+            min-width: 132px;
+            height: 36px;
+            background: linear-gradient(180deg, rgba(20,20,20,0.88), rgba(8,8,8,0.92));
+            border: 1px solid rgba(255, 77, 0, 0.16);
             border-radius: 999px;
-            padding: 8px 12px;
+            padding: 5px 6px 5px 12px;
             backdrop-filter: blur(18px);
-            box-shadow: var(--shadow);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.03),
+                0 8px 24px rgba(0,0,0,0.22);
             user-select: none;
         }
 
         .theme-switch-label {
-            font-size: 0.75rem;
+            font-size: 0.66rem;
             font-weight: 900;
             letter-spacing: 2px;
             text-transform: uppercase;
             color: var(--muted);
-            min-width: 92px;
-            text-align: right;
+            white-space: nowrap;
         }
 
-        .theme-switch input { display: none; }
+        .theme-switch input {
+            display: none;
+        }
 
         .theme-slider {
-            width: 64px;
-            height: 34px;
+            width: 48px;
+            height: 24px;
             border-radius: 999px;
-            background: linear-gradient(90deg, rgba(255,77,0,0.18), rgba(255,255,255,0.08));
-            border: 1px solid var(--border);
+            background: linear-gradient(90deg, rgba(255,77,0,0.12), rgba(255,255,255,0.05));
+            border: 1px solid rgba(255, 77, 0, 0.12);
             position: relative;
             cursor: pointer;
             transition: 0.3s ease;
@@ -215,65 +229,87 @@
             content: '🌙';
             position: absolute;
             top: 50%;
-            left: 4px;
+            left: 2px;
             transform: translateY(-50%);
-            width: 24px;
-            height: 24px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
-            background: #111;
+            background: #0e0e0e;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.8rem;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.35);
+            font-size: 0.62rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.35);
             transition: 0.3s ease;
         }
 
+        body[data-theme="light"] .theme-switch {
+            background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(245,245,245,0.92));
+            border: 1px solid rgba(255, 90, 31, 0.12);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.65),
+                0 8px 24px rgba(0,0,0,0.08);
+        }
+
         body[data-theme="light"] .theme-slider {
-            background: linear-gradient(90deg, rgba(255,190,120,0.55), rgba(255,90,31,0.16));
+            background: linear-gradient(90deg, rgba(255,190,120,0.42), rgba(255,90,31,0.10));
+            border: 1px solid rgba(255, 90, 31, 0.12);
         }
 
         body[data-theme="light"] .theme-slider::before {
             content: '☀';
-            left: 34px;
+            left: 26px;
             background: #fff;
             color: #ff6a00;
-            box-shadow: 0 3px 10px rgba(255,90,31,0.22);
+            box-shadow: 0 2px 8px rgba(255,90,31,0.18);
         }
 
         .filter-group,
         .week-progress {
             display: flex;
             align-items: center;
-            gap: 10px;
-            background: var(--panel-solid);
-            border: 1px solid var(--border);
+            gap: 8px;
+            min-height: 36px;
+            background: linear-gradient(180deg, rgba(18,18,18,0.88), rgba(8,8,8,0.92));
+            border: 1px solid rgba(255, 77, 0, 0.14);
             border-radius: 999px;
-            padding: 8px 12px;
+            padding: 5px 8px;
             backdrop-filter: blur(18px);
-            box-shadow: var(--shadow);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.03),
+                0 8px 24px rgba(0,0,0,0.20);
             flex-wrap: wrap;
+        }
+
+        body[data-theme="light"] .filter-group,
+        body[data-theme="light"] .week-progress {
+            background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(245,245,245,0.92));
+            border: 1px solid rgba(255, 90, 31, 0.10);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.7),
+                0 8px 24px rgba(0,0,0,0.07);
         }
 
         .filter-label,
         .week-progress-label {
-            font-size: 0.72rem;
+            font-size: 0.62rem;
             font-weight: 900;
             letter-spacing: 2px;
             text-transform: uppercase;
             color: var(--muted);
+            padding: 0 6px 0 4px;
         }
 
         .filter-btn,
         .archive-clear-btn {
             background: transparent;
             color: var(--text);
-            border: 1px solid var(--border);
-            padding: 8px 12px;
+            border: 1px solid transparent;
+            padding: 7px 12px;
             border-radius: 999px;
-            font-size: 0.72rem;
+            font-size: 0.66rem;
             font-weight: 900;
-            letter-spacing: 1px;
+            letter-spacing: 0.9px;
             text-transform: uppercase;
             cursor: pointer;
             transition: 0.25s ease;
@@ -282,27 +318,37 @@
         .filter-btn:hover,
         .archive-clear-btn:hover {
             transform: translateY(-1px);
-            background: var(--task-hover);
+            background: rgba(255,255,255,0.04);
+        }
+
+        body[data-theme="light"] .filter-btn:hover,
+        body[data-theme="light"] .archive-clear-btn:hover {
+            background: rgba(0,0,0,0.04);
         }
 
         .filter-btn.active {
-            background: var(--accent);
+            background: linear-gradient(180deg, #ff6a1f 0%, #ff4d00 100%);
             color: #fff;
             border-color: transparent;
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.05),
+                0 8px 18px rgba(255, 77, 0, 0.24);
         }
 
         .week-progress-value {
             font-weight: 900;
             color: var(--accent);
-            font-size: 0.82rem;
+            font-size: 0.74rem;
             letter-spacing: 1px;
+            padding-right: 4px;
         }
 
         .rings-container {
             display: flex;
-            gap: clamp(15px, 5vw, 50px);
-            margin: 22px 0 30px;
+            gap: clamp(18px, 4vw, 36px);
+            margin: 4px 0 16px;
             justify-content: center;
+            align-items: flex-start;
             width: 100%;
         }
 
@@ -312,64 +358,115 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            width: 80px;
+            width: 92px;
         }
 
         .ring-label {
-            font-size: 0.6rem;
+            font-size: 0.56rem;
             color: var(--muted);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 8px;
-            font-weight: 700;
+            letter-spacing: 1.8px;
+            margin-top: 7px;
+            font-weight: 900;
+            opacity: 0.85;
         }
 
         .ring-inner {
             position: relative;
-            width: 80px;
-            height: 80px;
+            width: 92px;
+            height: 92px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
+        .ring-inner::after {
+            content: '';
+            position: absolute;
+            inset: 16px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05), rgba(255,255,255,0.01) 55%, transparent 70%);
+            pointer-events: none;
+        }
+
+        body[data-theme="light"] .ring-inner::after {
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.85), rgba(255,255,255,0.35) 55%, transparent 72%);
+        }
+
         .ring-value {
             position: absolute;
-            font-size: 1rem;
+            font-size: 0.88rem;
             font-weight: 900;
             color: var(--text);
             width: 100%;
             text-align: center;
             pointer-events: none;
+            letter-spacing: -0.02em;
+            text-shadow: 0 0 12px rgba(0,0,0,0.24);
         }
 
         .progress-ring {
-            width: 80px;
-            height: 80px;
+            width: 92px;
+            height: 92px;
             transform: rotate(-90deg);
+            overflow: visible;
         }
 
         .progress-ring circle {
             fill: none;
-            stroke-width: 6;
+            stroke-width: 6.5;
             stroke-linecap: round;
-            transition: stroke-dashoffset 1s ease;
+            transition: stroke-dashoffset 1s ease, filter 0.3s ease, stroke 0.3s ease;
+        }
+
+        .ring-track {
+            stroke: rgba(255,255,255,0.055);
+        }
+
+        body[data-theme="light"] .ring-track {
+            stroke: rgba(0,0,0,0.08);
+        }
+
+        .ring-active {
+            opacity: 0.98;
+        }
+
+        #ring-home .ring-active {
+            filter:
+                drop-shadow(0 0 5px rgba(0,132,255,0.20))
+                drop-shadow(0 0 14px rgba(0,132,255,0.10));
+        }
+
+        #ring-work .ring-active {
+            filter:
+                drop-shadow(0 0 6px rgba(255,77,0,0.26))
+                drop-shadow(0 0 16px rgba(255,77,0,0.12));
+        }
+
+        #ring-personal .ring-active {
+            filter:
+                drop-shadow(0 0 5px rgba(0,255,98,0.20))
+                drop-shadow(0 0 14px rgba(0,255,98,0.10));
         }
 
         @media (max-width: 700px) {
-            .ring-box, .ring-inner, .progress-ring {
-                width: 65px;
-                height: 65px;
+            .ring-box {
+                width: 76px;
             }
 
-            .ring-value { font-size: 0.8rem; }
+            .ring-inner,
+            .progress-ring {
+                width: 76px;
+                height: 76px;
+            }
 
-            .theme-bar,
-            .utility-bar {
+            .ring-value {
+                font-size: 0.8rem;
+            }
+
+            .theme-bar {
                 justify-content: center;
             }
-
-            .theme-switch-label { min-width: auto; }
 
             .filter-group,
             .week-progress {
@@ -377,7 +474,7 @@
             }
 
             .hero-clock {
-                margin-top: 14px;
+                margin-top: 8px;
                 letter-spacing: 0.1em;
             }
 
@@ -387,66 +484,88 @@
         }
 
         .input-panel {
-            background: var(--panel);
+            background: rgba(15, 15, 15, 0.76);
             backdrop-filter: blur(30px);
             border: 1px solid var(--border);
-            padding: 15px;
-            border-radius: 15px;
+            padding: 10px;
+            border-radius: 18px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 9px;
             width: 90%;
             max-width: 1100px;
-            margin-bottom: 30px;
+            margin-bottom: 18px;
             box-shadow: var(--shadow);
             transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        body[data-theme="light"] .input-panel {
+            background: rgba(255, 255, 255, 0.82);
         }
 
         @media (min-width: 1100px) {
             .input-panel {
                 flex-direction: row;
-                padding: 15px 25px;
+                padding: 10px;
                 border-radius: 20px;
             }
 
-            input, select { min-width: 150px; }
-            body { padding-bottom: 50px; }
+            input, select {
+                min-width: 150px;
+            }
+
+            body {
+                padding-bottom: 40px;
+            }
         }
 
-        input, select {
+        input,
+        select {
             background: var(--input-bg);
             border: 1px solid var(--border);
             color: var(--input-text);
-            padding: 12px;
-            border-radius: 10px;
+            padding: 11px 12px;
+            border-radius: 11px;
             outline: none;
             flex: 1;
-            font-size: 1rem;
+            font-size: 0.96rem;
             transition: 0.3s ease;
+            min-height: 44px;
         }
 
-        input::placeholder { color: var(--muted); }
+        input::placeholder {
+            color: var(--muted);
+        }
+
+        input:focus,
+        select:focus {
+            border-color: rgba(255, 77, 0, 0.45);
+            box-shadow: 0 0 0 3px rgba(255, 77, 0, 0.08);
+        }
 
         .add-btn {
             background: var(--accent);
             color: #fff;
             border: none;
-            padding: 15px 40px;
-            border-radius: 10px;
+            padding: 0 26px;
+            min-height: 44px;
+            border-radius: 11px;
             font-weight: 900;
             cursor: pointer;
             transition: 0.3s;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
         }
 
         .add-btn:hover {
-            box-shadow: 0 0 30px rgba(255, 77, 0, 0.35);
-            transform: translateY(-2px);
+            box-shadow: 0 0 26px rgba(255, 77, 0, 0.32);
+            transform: translateY(-1px);
         }
 
         .week-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 12px;
+            gap: 10px;
             width: 95%;
             max-width: 1600px;
         }
@@ -454,33 +573,80 @@
         @media (min-width: 1100px) {
             .week-grid {
                 grid-template-columns: repeat(7, 1fr);
-                gap: 15px;
+                gap: 12px;
             }
 
-            .day-card { min-height: 450px !important; }
+            .day-card {
+                min-height: 400px !important;
+            }
         }
 
         .day-card {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 15px;
-            padding: 15px;
+            background: linear-gradient(180deg, rgba(14,14,16,0.82), rgba(8,8,10,0.88));
+            border: 1px solid rgba(255, 77, 0, 0.14);
+            border-radius: 17px;
+            padding: 13px;
             min-height: 100px;
             cursor: pointer;
-            transition: 0.35s;
+            transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease, background 0.28s ease;
             position: relative;
             animation: driftIn 0.8s ease both;
             backdrop-filter: blur(24px);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.025),
+                0 10px 28px rgba(0,0,0,0.16);
+        }
+
+        .day-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 77, 0, 0.20);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.03),
+                0 14px 30px rgba(0,0,0,0.22);
         }
 
         .day-card.selected {
-            border-color: var(--text);
-            background: var(--selected-bg);
+            border-color: rgba(255,255,255,0.26);
+            background: linear-gradient(180deg, rgba(20,20,22,0.88), rgba(10,10,12,0.92));
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.03),
+                0 16px 32px rgba(0,0,0,0.24);
         }
 
         .day-card.today {
-            border-color: var(--accent);
-            box-shadow: 0 0 15px rgba(255, 77, 0, 0.14);
+            border-color: rgba(255, 77, 0, 0.38);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.03),
+                0 0 0 1px rgba(255,77,0,0.06),
+                0 14px 32px rgba(255, 77, 0, 0.10);
+        }
+
+        body[data-theme="light"] .day-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.84), rgba(246,246,248,0.92));
+            border: 1px solid rgba(255, 90, 31, 0.10);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.75),
+                0 10px 24px rgba(0,0,0,0.06);
+        }
+
+        body[data-theme="light"] .day-card:hover {
+            border-color: rgba(255, 90, 31, 0.16);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.82),
+                0 14px 28px rgba(0,0,0,0.08);
+        }
+
+        body[data-theme="light"] .day-card.selected {
+            border-color: rgba(0,0,0,0.14);
+            background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,248,249,0.96));
+        }
+
+        body[data-theme="light"] .day-card.today {
+            border-color: rgba(255, 90, 31, 0.24);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.85),
+                0 0 0 1px rgba(255,90,31,0.05),
+                0 14px 28px rgba(255,90,31,0.08);
         }
 
         .day-title-row {
@@ -488,42 +654,34 @@
             align-items: flex-start;
             justify-content: space-between;
             gap: 10px;
-            margin-bottom: 12px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 5px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 77, 0, 0.10);
+            padding-bottom: 7px;
         }
 
         .day-title {
             color: var(--accent);
             font-weight: 900;
-            font-size: 0.85rem;
+            font-size: 0.74rem;
+            letter-spacing: 0.4px;
             text-transform: uppercase;
             flex: 1;
             min-width: 0;
         }
 
-        .day-meta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-}
+        body[data-theme="light"] .day-title-row {
+            border-bottom: 1px solid rgba(255, 90, 31, 0.08);
+        }
 
-.today-badge {
-    font-size: 0.6rem;
-    color: var(--accent);
-    font-weight: 900;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    border: 1px solid var(--border);
-    padding: 3px 6px;
-    border-radius: 999px;
-    line-height: 1;
-    flex-shrink: 0;
-}
+        .day-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
 
         .today-badge {
-            font-size: 0.56rem;
+            font-size: 0.6rem;
             color: var(--accent);
             font-weight: 900;
             letter-spacing: 1px;
@@ -532,12 +690,12 @@
             padding: 3px 6px;
             border-radius: 999px;
             line-height: 1;
-            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .day-count {
             color: var(--muted);
-            font-size: 0.72rem;
+            font-size: 0.66rem;
             font-weight: 800;
             letter-spacing: 1px;
             white-space: nowrap;
@@ -547,13 +705,13 @@
         .task {
             background: var(--task-bg);
             border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 8px;
+            padding: 10px 11px;
+            margin-bottom: 7px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-left: 4px solid var(--accent);
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             color: var(--text);
             transition: 0.25s ease, opacity 0.25s ease, transform 0.25s ease;
             gap: 10px;
@@ -561,7 +719,7 @@
 
         .task:hover {
             background: var(--task-hover);
-            transform: translateX(5px);
+            transform: translateX(4px);
         }
 
         .task.closing {
@@ -575,9 +733,17 @@
             word-break: break-word;
         }
 
-        .task.cat-Дом { border-left-color: var(--home); }
-        .task.cat-Работа { border-left-color: var(--work); }
-        .task.cat-Личное { border-left-color: var(--personal); }
+        .task.cat-Дом {
+            border-left-color: var(--home);
+        }
+
+        .task.cat-Работа {
+            border-left-color: var(--work);
+        }
+
+        .task.cat-Личное {
+            border-left-color: var(--personal);
+        }
 
         .task.urgent {
             border-left-color: #ff0000;
@@ -630,8 +796,13 @@
         }
 
         @media (hover: hover) {
-            .edit-btn { opacity: 0.72; }
-            .del-x { opacity: 0.72; }
+            .edit-btn {
+                opacity: 0.72;
+            }
+
+            .del-x {
+                opacity: 0.72;
+            }
 
             .task:hover .edit-btn,
             .task:hover .del-x {
@@ -642,7 +813,7 @@
         .archive-header {
             display: flex;
             justify-content: flex-end;
-            margin: 12px 0;
+            margin: 10px 0;
         }
 
         summary {
@@ -652,7 +823,7 @@
             letter-spacing: 3px;
             cursor: pointer;
             text-align: center;
-            margin-top: 50px;
+            margin-top: 34px;
         }
 
         #archive {
@@ -660,18 +831,30 @@
             flex-direction: column;
             gap: 5px;
             opacity: 0.65;
-            padding-bottom: 100px;
+            padding-bottom: 70px;
             width: 95%;
         }
 
         @keyframes driftIn {
-            0% { opacity: 0; transform: translateY(30px); }
-            100% { opacity: 1; transform: translateY(0); }
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -693,14 +876,6 @@
             <span class="week-progress-value" id="weekProgressValue">0%</span>
         </div>
 
-        <label class="theme-switch">
-            <span class="theme-switch-label" id="themeLabel">DARK MODE</span>
-            <input type="checkbox" id="themeToggle" />
-            <span class="theme-slider"></span>
-        </label>
-    </div>
-
-    <div class="utility-bar">
         <div class="filter-group" id="filterGroup">
             <span class="filter-label">Filter</span>
             <button class="filter-btn active" data-filter="all" type="button">Все</button>
@@ -708,14 +883,20 @@
             <button class="filter-btn" data-filter="Работа" type="button">Работа</button>
             <button class="filter-btn" data-filter="Личное" type="button">Личное</button>
         </div>
+
+        <label class="theme-switch">
+            <span class="theme-switch-label" id="themeLabel">DARK MODE</span>
+            <input type="checkbox" id="themeToggle" />
+            <span class="theme-slider"></span>
+        </label>
     </div>
 
     <div class="rings-container">
         <div class="ring-box">
             <div class="ring-inner">
-                <svg class="progress-ring" id="ring-home" viewBox="0 0 80 80">
-                    <circle stroke="rgba(255,255,255,0.03)" cx="40" cy="40" r="34"></circle>
-                    <circle class="ring-active" cx="40" cy="40" r="34" stroke="var(--home)" stroke-dasharray="213.6" stroke-dashoffset="213.6"></circle>
+                <svg class="progress-ring" id="ring-home" viewBox="0 0 86 86">
+                    <circle class="ring-track" cx="43" cy="43" r="34"></circle>
+                    <circle class="ring-active" cx="43" cy="43" r="34" stroke="var(--home)" stroke-dasharray="213.6" stroke-dashoffset="213.6"></circle>
                 </svg>
                 <div class="ring-value" id="val-home">0/0</div>
             </div>
@@ -724,9 +905,9 @@
 
         <div class="ring-box">
             <div class="ring-inner">
-                <svg class="progress-ring" id="ring-work" viewBox="0 0 80 80">
-                    <circle stroke="rgba(255,255,255,0.03)" cx="40" cy="40" r="34"></circle>
-                    <circle class="ring-active" cx="40" cy="40" r="34" stroke="var(--work)" stroke-dasharray="213.6" stroke-dashoffset="213.6"></circle>
+                <svg class="progress-ring" id="ring-work" viewBox="0 0 86 86">
+                    <circle class="ring-track" cx="43" cy="43" r="34"></circle>
+                    <circle class="ring-active" cx="43" cy="43" r="34" stroke="var(--work)" stroke-dasharray="213.6" stroke-dashoffset="213.6"></circle>
                 </svg>
                 <div class="ring-value" id="val-work">0/0</div>
             </div>
@@ -735,9 +916,9 @@
 
         <div class="ring-box">
             <div class="ring-inner">
-                <svg class="progress-ring" id="ring-personal" viewBox="0 0 80 80">
-                    <circle stroke="rgba(255,255,255,0.03)" cx="40" cy="40" r="34"></circle>
-                    <circle class="ring-active" cx="40" cy="40" r="34" stroke="var(--personal)" stroke-dasharray="213.6" stroke-dashoffset="213.6"></circle>
+                <svg class="progress-ring" id="ring-personal" viewBox="0 0 86 86">
+                    <circle class="ring-track" cx="43" cy="43" r="34"></circle>
+                    <circle class="ring-active" cx="43" cy="43" r="34" stroke="var(--personal)" stroke-dasharray="213.6" stroke-dashoffset="213.6"></circle>
                 </svg>
                 <div class="ring-value" id="val-personal">0/0</div>
             </div>
@@ -792,13 +973,17 @@
         let longPressTimer = null;
         let longPressTriggered = false;
 
-        function updateDate() {
+        function updateDate(setDaySelect = false) {
             const now = new Date();
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
             document.getElementById('currentDate').innerText = now.toLocaleDateString('ru-RU', options);
+
             const daysMap = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
             currentDayId = daysMap[now.getDay()];
-            taskDaySelect.value = currentDayId;
+
+            if (setDaySelect) {
+                taskDaySelect.value = currentDayId;
+            }
         }
 
         function updateHeroClock() {
@@ -815,10 +1000,10 @@
             `;
         }
 
-        updateDate();
+        updateDate(true);
         updateHeroClock();
         setInterval(() => {
-            updateDate();
+            updateDate(false);
             updateHeroClock();
         }, 1000);
 
@@ -860,6 +1045,7 @@
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
+        const particleCount = window.innerWidth < 768 ? 170 : 320;
 
         function resize() {
             canvas.width = window.innerWidth;
@@ -877,15 +1063,23 @@
             init() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 5 + 0.5;
-                this.speedX = Math.random() * 0.4 - 0.2;
-                this.speedY = Math.random() * 0.4 - 0.2;
-                this.alpha = Math.random() * 0.7;
+
+                const bigSpark = Math.random() < 0.18;
+                this.size = bigSpark
+                    ? Math.random() * 2.6 + 2.2
+                    : Math.random() * 1.4 + 0.55;
+
+                this.speedX = Math.random() * 0.26 - 0.13;
+                this.speedY = Math.random() * 0.26 - 0.13;
+                this.alpha = bigSpark
+                    ? Math.random() * 0.45 + 0.45
+                    : Math.random() * 0.35 + 0.18;
             }
 
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
+
                 if (this.x > canvas.width || this.x < 0 || this.y > canvas.height || this.y < 0) {
                     this.init();
                 }
@@ -893,17 +1087,30 @@
 
             draw() {
                 const theme = document.body.getAttribute('data-theme') || 'dark';
-                ctx.fillStyle = theme === 'light'
-                    ? `rgba(255, 110, 40, ${this.alpha * 0.25})`
-                    : `rgba(255, 77, 0, ${this.alpha})`;
+
+                if (theme === 'light') {
+                    ctx.fillStyle = `rgba(255, 110, 40, ${this.alpha * 0.20})`;
+                    ctx.shadowBlur = this.size > 2 ? 8 : 4;
+                    ctx.shadowColor = 'rgba(255, 110, 40, 0.14)';
+                } else {
+                    ctx.fillStyle = `rgba(255, 77, 0, ${this.alpha})`;
+                    ctx.shadowBlur = this.size > 2 ? 12 : 6;
+                    ctx.shadowColor = this.size > 2
+                        ? 'rgba(255, 77, 0, 0.30)'
+                        : 'rgba(255, 77, 0, 0.16)';
+                }
 
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
+
+                ctx.shadowBlur = 0;
             }
         }
 
-        for (let i = 0; i < 500; i++) particles.push(new Particle());
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -913,6 +1120,7 @@
             });
             requestAnimationFrame(animate);
         }
+
         animate();
 
         function saveTasks() {
@@ -964,6 +1172,7 @@
                 longPressTriggered = false;
                 return;
             }
+
             toggleTask(e, id);
         }
 
@@ -1074,7 +1283,10 @@
         function createTaskElement(t, isArchive = false) {
             const d = document.createElement('div');
             d.className = `task ${t.pri || ''} cat-${t.cat}`;
-            if (isArchive) d.style.opacity = '0.55';
+
+            if (isArchive) {
+                d.style.opacity = '0.55';
+            }
 
             bindTaskInteractions(d, t.id);
 
