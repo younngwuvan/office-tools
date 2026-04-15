@@ -430,15 +430,25 @@
             box-shadow: 0 0 15px rgba(255, 77, 0, 0.14);
         }
 
-        .day-card.today::after {
-            content: 'TODAY';
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            font-size: 0.6rem;
-            color: var(--accent);
-            font-weight: 900;
-        }
+        .day-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.today-badge {
+    font-size: 0.6rem;
+    color: var(--accent);
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    padding: 3px 6px;
+    border-radius: 999px;
+    line-height: 1;
+    flex-shrink: 0;
+}
 
         .day-title-row {
             display: flex;
@@ -1004,9 +1014,12 @@
                 const header = document.createElement('div');
                 header.className = 'day-title-row';
                 header.innerHTML = `
-                    <div class="day-title">${dayNames[i]}</div>
-                    <div class="day-count">${visibleTasks.length}/${allActiveInDay.length} задач</div>
-                `;
+    <div class="day-title">${dayNames[i]}</div>
+    <div class="day-meta">
+        ${isToday ? '<span class="today-badge">TODAY</span>' : ''}
+        <div class="day-count">${visibleTasks.length}/${allActiveInDay.length} задач</div>
+    </div>
+`;
                 card.appendChild(header);
 
                 visibleTasks.forEach((t) => {
