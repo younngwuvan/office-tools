@@ -501,33 +501,29 @@ function processData() {
     let finalResults = [];
 
     blocks.forEach(text => {
-        // 1. ID и Стикер (строго число 10-12 знаков)
+        // 1. ID и Стикер (10-12 цифр)
         const idMatch = text.match(/\b\d{10,12}\b/);
         const id = idMatch ? idMatch[0] : "";
         const sticker = id;
 
-        // 2. Статус (3-4 заглавные буквы, исключая BOX и CON)
-        // Добавил более точный поиск, чтобы не путать с текстом
-        const statusMatch = text.match(/\b(IPG|WLI|LIO|OK|ERR|WAIT)\b/);
-        const status = statusMatch ? statusMatch[0].toUpperCase() : "";
+        // 2. СТАТУС (Универсальный поиск: 3 заглавные буквы, за которыми идет текст раскладки/инвентаризации)
+        const statusMatch = text.match(/\b([A-Z]{3})\b(?=\s+[А-Яа-я])/);
+        const status = statusMatch ? statusMatch[1] : "";
 
-        // 3. Наименование (Берем самое полное из строки "Идентификатор товара")
+        // 3. НАИМЕНОВАНИЕ (Полное название из верхней строки)
         let name = "";
         const altMatch = text.match(/Идентификатор товара\s+\d+\s+\/\s+([^/]+)/i);
-        const nameMatch = text.match(/Предмет\s*\n?\s*([^/\n\r\t]+)/i);
-        
         if (altMatch) name = altMatch[1].trim();
-        else if (nameMatch) name = nameMatch[1].trim();
 
-        // 4. Стоимость (цифры перед ₽)
-        const priceMatch = text.match(/(?:\s|^)(\d[\d\s]*)\s*₽/);
+        // 4. СТОИМОСТЬ (Строго число перед знаком ₽)
+        const priceMatch = text.match(/(\d+[\s\d]*)\s*₽/);
         const price = priceMatch ? priceMatch[1].replace(/\s/g, '') : "";
 
         // 5. MX (ВЛАД или ЦП)
         const mxMatch = text.match(/(?:ВЛАД|ЦП|MX)[\d\.]+/i);
         const mx = mxMatch ? mxMatch[0] : "";
 
-        // 6. BOX (Только если есть слово BOX)
+        // 6. BOX (Строго число после слова BOX)
         const boxMatch = text.match(/BOX\s*(\d+)/i);
         const box = boxMatch ? boxMatch[1] : "";
 
