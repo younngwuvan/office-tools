@@ -3,33 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ULTIMATE 6 | ENGINE BY VAN</title>
+    <title>ULTIMATE 6.2 | ENGINE BY VAN</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root {
-            --bg: #0d0d0d;
-            --panel-bg: #141414;
+            --bg: #080808;
+            --panel-bg: rgba(20, 20, 20, 0.7);
             --accent: #a1a1aa;
+            --accent-bright: #ffffff;
             --border: rgba(255, 255, 255, 0.08);
             --text-dim: #52525b;
-            --input-bg: #0a0a0a;
-            --glow: rgba(161, 161, 170, 0.1);
+            --success: #27c93f;
+            --error: #ff5f56;
+            --font: 'JetBrains Mono', monospace;
         }
+
+        * { box-sizing: border-box; }
 
         body {
             background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 50% -20%, #1a1a1a 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, #0c0c0c 0%, transparent 30%);
             color: var(--accent);
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font);
             margin: 0;
-            padding: 40px;
+            padding: 30px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            transition: all 0.3s ease;
         }
 
-        /* Верхняя панель */
+        /* Навигация */
         .top-bar {
             width: 100%;
             max-width: 1200px;
@@ -37,293 +43,307 @@
             justify-content: space-between;
             font-size: 10px;
             letter-spacing: 2px;
-            margin-bottom: 40px;
-            opacity: 0.6;
+            margin-bottom: 30px;
+            opacity: 0.5;
+            font-weight: 500;
         }
 
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            gap: 25px;
             width: 100%;
             max-width: 1200px;
+            flex-grow: 1;
         }
 
-        /* Окна */
+        /* Стеклянные окна */
         .window {
             background: var(--panel-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .window::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
         }
 
         .window:focus-within {
-            border-color: var(--accent);
-            box-shadow: 0 0 20px var(--glow);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 15px rgba(255,255,255,0.02);
+            transform: translateY(-2px);
         }
 
         .window-header {
-            padding: 12px 15px;
+            padding: 14px 18px;
             display: flex;
             align-items: center;
             border-bottom: 1px solid var(--border);
-            background: rgba(255,255,255,0.02);
+            background: rgba(255, 255, 255, 0.02);
         }
 
-        .dots { display: flex; gap: 6px; }
-        .dot { width: 10px; height: 10px; border-radius: 50%; opacity: 0.8; }
-        .dot.red { background: #ff5f56; }
+        .dots { display: flex; gap: 7px; }
+        .dot { width: 11px; height: 11px; border-radius: 50%; }
+        .dot.red { background: var(--error); box-shadow: 0 0 8px rgba(255,95,86,0.2); }
         .dot.yellow { background: #ffbd2e; }
-        .dot.green { background: #27c93f; }
+        .dot.green { background: var(--success); }
 
         .window-title {
             margin-left: 20px;
-            font-size: 9px;
+            font-size: 10px;
             color: var(--text-dim);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
 
-        .window-body { padding: 0; flex-grow: 1; }
+        .window-body { flex-grow: 1; position: relative; }
 
         textarea {
             width: 100%;
-            height: 380px;
+            height: 400px;
             background: transparent;
             border: none;
-            color: #d4d4d8;
-            font-family: 'JetBrains Mono', monospace;
+            color: #e4e4e7;
+            font-family: var(--font);
             font-size: 13px;
-            line-height: 1.6;
+            line-height: 1.7;
             resize: none;
             outline: none;
             padding: 20px;
-            box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
         }
 
-        /* Футер и кнопки */
+        /* Кнопки */
         .window-footer {
-            padding: 12px 20px;
+            padding: 15px 20px;
             border-top: 1px solid var(--border);
             display: flex;
             gap: 12px;
-            background: rgba(0,0,0,0.2);
+            background: rgba(0, 0, 0, 0.2);
         }
 
         .btn {
-            background: transparent;
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border);
             color: var(--accent);
-            padding: 6px 14px;
-            font-size: 10px;
+            padding: 8px 18px;
+            font-size: 11px;
             font-family: inherit;
             cursor: pointer;
-            transition: 0.2s all;
-            text-transform: lowercase;
-            outline: none;
+            border-radius: 4px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn:hover {
-            background: var(--accent);
+            background: var(--accent-bright);
             color: var(--bg);
-            border-color: var(--accent);
+            border-color: var(--accent-bright);
+            box-shadow: 0 0 15px rgba(255,255,255,0.1);
         }
 
-        .btn:active { transform: translateY(1px); }
+        .btn:active { transform: scale(0.96); }
 
         /* Лог-панель */
         .log-area {
             width: 100%;
             max-width: 1200px;
-            margin-top: 30px;
-            height: 80px;
+            margin-top: 25px;
             background: var(--panel-bg);
+            backdrop-filter: blur(10px);
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 15px 20px;
+            padding: 15px 25px;
             font-size: 11px;
             color: var(--text-dim);
+            min-height: 50px;
             display: flex;
             align-items: center;
-            overflow: hidden;
-            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        #status-text::before {
-            content: "> ";
-            color: var(--accent);
+        #status-text { display: flex; align-items: center; gap: 10px; }
+        #status-text::before { content: '●'; font-size: 8px; color: var(--success); animation: pulse 2s infinite; }
+
+        @keyframes pulse { 
+            0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } 
         }
 
-        #status-text.working::after {
-            content: "_";
-            animation: blink 0.8s infinite;
-        }
-
-        @keyframes blink { 50% { opacity: 0; } }
-
-        /* Эффект ошибки */
+        /* Анимация ошибки */
         .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
         @keyframes shake {
             10%, 90% { transform: translate3d(-1px, 0, 0); }
             20%, 80% { transform: translate3d(2px, 0, 0); }
             30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-            40%, 60% { transform: translate3d(4px, 0, 0); }
         }
 
-        ::selection { background: var(--accent); color: var(--bg); }
+        ::selection { background: rgba(161, 161, 170, 0.3); }
     </style>
 </head>
 <body>
 
     <div class="top-bar">
-        <div>[ ENGINE BY VAN ]</div>
-        <div style="font-weight: 700; color: #fff;">ULTIMATE 6.1</div>
-        <div>[ AUTO_MODE ] <span id="datetime">--.--.---- // --:--:--</span></div>
+        <div>CORE // VAN_ENGINE</div>
+        <div style="color: #fff; font-weight: 700;">ULTIMATE 6.2 PRO</div>
+        <div id="datetime">--.--.---- // --:--:--</div>
     </div>
 
     <div class="grid">
-        <div class="window" id="input-window">
+        <!-- Ввод -->
+        <div class="window" id="input-win">
             <div class="window-header">
                 <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
-                <div class="window-title">SOURCE_INPUT <span style="opacity:0.4">(CTRL+ENTER)</span></div>
+                <div class="window-title">Source Data <span style="opacity:0.3; margin-left:10px;">[Auto-Detect On]</span></div>
             </div>
             <div class="window-body">
-                <textarea id="input" placeholder="Вставьте данные для дешифровки..."></textarea>
+                <textarea id="input" placeholder="Вставьте данные (Ctrl+V)..."></textarea>
             </div>
             <div class="window-footer">
-                <button class="btn" onclick="processData()">./run_analysis</button>
-                <button class="btn" onclick="clearInput()">clear</button>
+                <button class="btn" onclick="processData()">
+                    <span style="font-size: 14px;">⚡</span> run_analysis
+                </button>
+                <button class="btn" onclick="clearAll()">clear</button>
             </div>
         </div>
 
+        <!-- Вывод -->
         <div class="window">
             <div class="window-header">
                 <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
-                <div class="window-title">REFINED_OUTPUT</div>
+                <div class="window-title">Refined Output</div>
             </div>
             <div class="window-body">
-                <textarea id="output" readonly placeholder="Result will appear here..."></textarea>
+                <textarea id="output" readonly placeholder="Ожидание дешифровки..."></textarea>
             </div>
             <div class="window-footer">
-                <button class="btn" onclick="copyResult()">cp to_buffer</button>
+                <button class="btn" id="copy-btn" onclick="copyResult()">
+                    <span>📋</span> cp_to_buffer
+                </button>
             </div>
         </div>
     </div>
 
     <div class="log-area">
-        <div id="status-text">SYSTEM_READY: STANDBY...</div>
+        <div id="status-text">SYSTEM_READY: WAITING FOR INPUT STREAM...</div>
     </div>
 
 <script>
-    // Обновление времени
+    // Часы
     function updateClock() {
         const now = new Date();
-        const d = now.toLocaleDateString('ru-RU');
-        const t = now.toLocaleTimeString('ru-RU');
-        document.getElementById('datetime').innerHTML = `${d} // ${t}`;
+        document.getElementById('datetime').innerHTML = now.toLocaleDateString('ru-RU') + ' // ' + now.toLocaleTimeString('ru-RU');
     }
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Логирование с эффектом «печатания»
-    const statusEl = document.getElementById('status-text');
-    function log(msg) {
-        statusEl.classList.remove('working');
-        statusEl.innerText = msg.toUpperCase();
-        void statusEl.offsetWidth; // Триггер рефлоу
-        statusEl.classList.add('working');
+    const inputArea = document.getElementById('input');
+    const outputArea = document.getElementById('output');
+    const statusText = document.getElementById('status-text');
+
+    function log(msg, type = 'info') {
+        statusText.innerText = msg.toUpperCase();
+        statusText.style.color = type === 'error' ? 'var(--error)' : 'var(--text-dim)';
     }
 
-    // Очистка
-    function clearInput() {
-        document.getElementById('input').value = '';
-        document.getElementById('output').value = '';
-        log('Memory_Cleared');
-    }
-
-    // Горячие клавиши
-    document.addEventListener('keydown', (e) => {
-        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-            processData();
-        }
+    // Авто-запуск при вставке
+    inputArea.addEventListener('paste', () => {
+        setTimeout(processData, 100);
     });
 
-    // Обработка данных
-    function processData() {
-        const inputArea = document.getElementById('input');
-        const outputArea = document.getElementById('output');
-        const text = inputArea.value.trim();
+    // Горячие клавиши (Ctrl+Enter)
+    document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') processData();
+    });
 
-        if(!text) { 
-            log('Error: No source detected');
-            document.getElementById('input-window').classList.add('shake');
-            setTimeout(() => document.getElementById('input-window').classList.remove('shake'), 400);
-            return; 
+    function processData() {
+        const text = inputArea.value.trim();
+        if(!text) {
+            log('Error: Empty source', 'error');
+            document.getElementById('input-win').classList.add('shake');
+            setTimeout(() => document.getElementById('input-win').classList.remove('shake'), 400);
+            return;
         }
 
-        log('Analyzing patterns...');
-        outputArea.value = ''; // Очищаем перед выводом
-
-        // Имитация "раздумий" для солидности
+        log('Analyzing data structures...');
+        
+        // Твоя оригинальная логика парсинга
         setTimeout(() => {
             try {
                 const allNumbers = text.match(/\b\d{10,12}\b/g) || [];
-                const id = allNumbers[0] || "NULL";
+                const id = allNumbers[0] || "";
                 const sticker = allNumbers[1] || id;
                 
                 const statusMatch = text.match(/\b(OK|ERR|WAIT|BOX|CON|[A-Z]{3,4})\b/);
-                const status = statusMatch ? statusMatch[0] : "NONE";
+                const status = statusMatch ? statusMatch[0] : "";
                 
                 const nameMatch = text.match(/(?:Предмет|Name)\s*\n?\s*(.*?)(?=\n|\/|$)/i);
-                const name = nameMatch ? nameMatch[1].trim() : "UNKNOWN_OBJECT";
+                const name = nameMatch ? nameMatch[1].trim() : "";
                 
                 const priceMatch = text.match(/(\d+[\s\d]*)\s*(?:₽|RUB)/);
-                const price = priceMatch ? priceMatch[1].replace(/\s/g, '') : "0";
+                const price = priceMatch ? priceMatch[1].replace(/\s/g, '') : "";
                 
                 const mxMatch = text.match(/(?:ВЛАД|ЦП|MX)\d+[^\s]*/i);
-                const mx = mxMatch ? mxMatch[0] : "NO_LINK";
+                const mx = mxMatch ? mxMatch[0] : "";
                 
                 const boxMatch = text.match(/\b(BOX|CON)\b\s*(\d+)/i);
-                const boxNum = boxMatch ? boxMatch[2] : "-";
+                const boxNum = boxMatch ? boxMatch[2] : "";
 
                 const result = `${id}\t${sticker}\t${status}\t${name}\t${price}\t${mx}\t${boxNum}`;
                 
-                // Эффект появления результата
                 outputArea.value = result;
-                log('Success: String compiled');
+                log('Analysis successful. String generated.');
                 
-            } catch (err) {
-                log('Analysis_Failed: Check source format');
+                // Эффект "подсвечивания" результата
+                outputArea.style.background = 'rgba(255,255,255,0.03)';
+                setTimeout(() => outputArea.style.background = 'transparent', 500);
+
+            } catch (e) {
+                log('Parser Error: Check data format', 'error');
             }
-        }, 500);
+        }, 300);
     }
 
-    // Улучшенное копирование
     async function copyResult() {
-        const output = document.getElementById('output');
-        if(!output.value) {
-            log('Error: Nothing to copy');
-            return;
-        }
+        if(!outputArea.value) return;
         try {
-            await navigator.clipboard.writeText(output.value);
-            log('Clipboard: Data_Transferred');
+            await navigator.clipboard.writeText(outputArea.value);
+            log('Data copied to buffer');
             
-            // Визуальный отклик на кнопке
-            const btn = event.target;
-            const originalText = btn.innerText;
-            btn.innerText = 'done';
-            setTimeout(() => btn.innerText = originalText, 1000);
-        } catch (err) { 
-            log('Error: Buffer_Access_Denied'); 
-        }
+            const btn = document.getElementById('copy-btn');
+            const oldText = btn.innerHTML;
+            btn.innerHTML = '<span>✅</span> copied';
+            btn.style.borderColor = 'var(--success)';
+            
+            setTimeout(() => {
+                btn.innerHTML = oldText;
+                btn.style.borderColor = 'var(--border)';
+            }, 1500);
+        } catch (err) { log('Copy failed', 'error'); }
     }
 
-    // Автофокус при загрузке
-    window.onload = () => document.getElementById('input').focus();
+    function clearAll() {
+        inputArea.value = '';
+        outputArea.value = '';
+        log('System ready: Buffer cleared');
+        inputArea.focus();
+    }
+
+    // Фокус при старте
+    window.onload = () => inputArea.focus();
 </script>
 </body>
 </html>
