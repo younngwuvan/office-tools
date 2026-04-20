@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ULTIMATE 6.3 | BATCH EDITION</title>
+    <title>ULTIMATE 6.4 | FINAL PRECISION</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root {
             --bg: #050505;
-            --panel-bg: rgba(15, 15, 15, 0.8);
+            --panel-bg: rgba(15, 15, 15, 0.85);
             --accent: #a1a1aa;
             --accent-bright: #ffffff;
             --border: rgba(255, 255, 255, 0.08);
@@ -41,25 +41,19 @@
             transition: all 0.3s ease;
         }
 
-        .window:focus-within { border-color: rgba(255, 255, 255, 0.15); box-shadow: 0 0 30px rgba(255,255,255,0.02); }
-
         .window-header {
             padding: 12px 18px; display: flex; align-items: center; border-bottom: 1px solid var(--border);
-            justify-content: space-between;
+            justify-content: space-between; background: rgba(255,255,255,0.02);
         }
 
-        /* Индикаторы данных */
-        .data-health { display: flex; gap: 8px; align-items: center; }
-        .tag { font-size: 8px; padding: 2px 6px; border: 1px solid var(--border); border-radius: 3px; color: var(--text-dim); transition: 0.3s; }
-        .tag.active { color: var(--success); border-color: var(--success); text-shadow: 0 0 5px rgba(39, 201, 63, 0.4); }
+        .data-health { display: flex; gap: 8px; }
+        .tag { font-size: 8px; padding: 2px 6px; border: 1px solid var(--border); border-radius: 3px; color: var(--text-dim); }
+        .tag.active { color: var(--success); border-color: var(--success); }
 
-        .dots { display: flex; gap: 6px; }
-        .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--text-dim); opacity: 0.3; }
-
-        .window-body { flex-grow: 1; position: relative; }
+        .window-body { flex-grow: 1; }
 
         textarea {
-            width: 100%; height: 420px; background: transparent; border: none;
+            width: 100%; height: 450px; background: transparent; border: none;
             color: #d4d4d8; font-family: var(--font); font-size: 12px; line-height: 1.6;
             resize: none; outline: none; padding: 20px;
         }
@@ -68,7 +62,7 @@
 
         .btn {
             background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border);
-            color: var(--accent); padding: 7px 15px; font-size: 10px; cursor: pointer;
+            color: var(--accent); padding: 8px 16px; font-size: 10px; cursor: pointer;
             border-radius: 4px; transition: 0.2s; text-transform: lowercase;
         }
 
@@ -77,48 +71,48 @@
         .log-area {
             width: 100%; max-width: 1200px; margin-top: 20px;
             background: var(--panel-bg); border: 1px solid var(--border);
-            border-radius: 8px; padding: 12px 20px; font-size: 11px; color: var(--text-dim);
+            border-radius: 8px; padding: 15px 20px; font-size: 11px; color: var(--text-dim);
         }
 
         .shake { animation: shake 0.4s ease-in-out; }
-        @keyframes shake { 0%, 100% {transform: x(0);} 25% {transform: translateX(-4px);} 75% {transform: translateX(4px);} }
+        @keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-4px);} 75% {transform: translateX(4px);} }
     </style>
 </head>
 <body>
 
     <div class="top-bar">
-        <div>VAN_ENGINE // V.6.3</div>
-        <div style="color: #fff; font-weight: 700;">BATCH_PROCESSOR</div>
+        <div>CORE // ENGINE_FINAL</div>
+        <div style="color: #fff; font-weight: 700;">ULTIMATE EDITION 6.4</div>
         <div id="datetime">--.--.---- // --:--:--</div>
     </div>
 
     <div class="grid">
         <div class="window" id="win-in">
             <div class="window-header">
-                <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-                <div class="window-title" style="font-size: 9px; margin-left: -50px;">INPUT_STREAM</div>
+                <div style="display:flex; gap:6px;"><div style="width:10px;height:10px;border-radius:50%;background:#ff5f56"></div><div style="width:10px;height:10px;border-radius:50%;background:#ffbd2e"></div><div style="width:10px;height:10px;border-radius:50%;background:#27c93f"></div></div>
+                <div style="font-size: 9px; color: var(--text-dim);">SOURCE_STREAM</div>
             </div>
             <div class="window-body">
-                <textarea id="input" placeholder="Вставьте одну или несколько карточек данных..."></textarea>
+                <textarea id="input" placeholder="Вставьте данные из чата..."></textarea>
             </div>
             <div class="window-footer">
-                <button class="btn" onclick="processData()">./run_batch</button>
+                <button class="btn" onclick="processData()">./run_analysis</button>
                 <button class="btn" onclick="clearAll()">clear</button>
             </div>
         </div>
 
         <div class="window">
             <div class="window-header">
-                <div class="data-health" id="health-bar">
+                <div class="data-health">
                     <span class="tag" id="tag-id">ID</span>
                     <span class="tag" id="tag-name">NAME</span>
                     <span class="tag" id="tag-price">PRICE</span>
-                    <span class="tag" id="tag-mx">LINK</span>
+                    <span class="tag" id="tag-mx">MX</span>
                 </div>
-                <div class="window-title" style="font-size: 9px;">REFINED_RESULT</div>
+                <div style="font-size: 9px; color: var(--text-dim);">REFINED_DATA</div>
             </div>
             <div class="window-body">
-                <textarea id="output" readonly placeholder="Parsed strings will appear here..."></textarea>
+                <textarea id="output" readonly placeholder="Parsed result..."></textarea>
             </div>
             <div class="window-footer">
                 <button class="btn" id="copy-btn" onclick="copyResult()">cp_to_buffer</button>
@@ -126,16 +120,14 @@
         </div>
     </div>
 
-    <div class="log-area" id="log">SYSTEM_READY: WAITING FOR BATCH...</div>
+    <div class="log-area" id="log">> SYSTEM_READY: STANDBY</div>
 
 <script>
-    // Audio Engine (Web Audio API)
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function beep(freq, dur, vol) {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.type = 'sine'; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
         gain.gain.setValueAtTime(vol, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
         osc.connect(gain); gain.connect(audioCtx.destination);
@@ -152,7 +144,6 @@
     const outputArea = document.getElementById('output');
     const logEl = document.getElementById('log');
 
-    // Авто-запуск при вставке
     inputArea.addEventListener('paste', () => setTimeout(processData, 100));
 
     function processData() {
@@ -164,49 +155,51 @@
             return;
         }
 
-        // Разделение на блоки (Batch processing)
-        // Ищем начало новой карточки по слову "Предмет" или "ID:"
-        const blocks = text.split(/(?=Предмет|Name|ID:|Поступление)/i).filter(b => b.trim().length > 15);
-        let results = [];
-        let stats = { id: false, name: false, price: false, mx: false };
+        // Поиск элементов по якорям
+        const find = (regex, index = 1) => {
+            const m = text.match(regex);
+            return m ? m[index].trim() : "";
+        };
 
-        blocks.forEach(block => {
-            const allNumbers = block.match(/\b\d{10,12}\b/g) || [];
-            const id = allNumbers[0] || "";
-            const sticker = allNumbers[1] || id;
-            const statusMatch = block.match(/\b(OK|ERR|WAIT|BOX|CON|[A-Z]{3,4})\b/);
-            const status = statusMatch ? statusMatch[0] : "";
-            const nameMatch = block.match(/(?:Предмет|Name)\s*\n?\s*(.*?)(?=\n|\/|$)/i);
-            const name = nameMatch ? nameMatch[1].trim() : "";
-            const priceMatch = block.match(/(\d+[\s\d]*)\s*(?:₽|RUB)/);
-            const price = priceMatch ? priceMatch[1].replace(/\s/g, '') : "";
-            const mxMatch = block.match(/(?:ВЛАД|ЦП|MX)\d+[^\s]*/i);
-            const mx = mxMatch ? mxMatch[0] : "";
-            const boxMatch = block.match(/\b(BOX|CON)\b\s*(\d+)/i);
-            const boxNum = boxMatch ? boxMatch[2] : "";
-
-            if(id) stats.id = true;
-            if(name) stats.name = true;
-            if(price) stats.price = true;
-            if(mx) stats.mx = true;
-
-            results.push(`${id}\t${sticker}\t${status}\t${name}\t${price}\t${mx}\t${boxNum}`);
-        });
-
-        // Обновление тегов здоровья данных
-        document.getElementById('tag-id').className = stats.id ? 'tag active' : 'tag';
-        document.getElementById('tag-name').className = stats.name ? 'tag active' : 'tag';
-        document.getElementById('tag-price').className = stats.price ? 'tag active' : 'tag';
-        document.getElementById('tag-mx').className = stats.mx ? 'tag active' : 'tag';
-
-        outputArea.value = results.join('\n');
+        // 1. Извлекаем все длинные числа
+        const allNumbers = text.match(/\b\d{8,12}\b/g) || [];
         
-        if(results.length > 0) {
-            beep(800, 0.1, 0.03); // Тонкий "бип" успеха
-            logEl.innerText = `BATCH_SUCCESS: ${results.length} STRINGS PROCESSED`;
+        // ID — самое первое длинное число (10-12 знаков)
+        const id = allNumbers.find(n => n.length >= 10) || "";
+        const sticker = id;
+
+        // 2. Статус (3-4 заглавные буквы)
+        const status = find(/\b([A-Z]{3,4})\b/);
+
+        // 3. Предмет (до слеша или конца строки)
+        const name = find(/(?:Предмет|Name)\s*\n?\s*([^/\n\r]+)/i);
+
+        // 4. Цена (строго перед символом ₽)
+        const price = find(/(\d+[\s\d]*)\s*₽/i).replace(/\s/g, '');
+
+        // 5. MX (ВЛАД или ЦП со всеми цифрами и точками)
+        const mx = find(/((?:ВЛАД|ЦП|MX)[\d\.]+)/i, 0);
+
+        // 6. Коробка (ищем 8-9 значное число после ключевых слов или отличное от ID)
+        let box = find(/(?:Поступление|BOX|CON)\s*(\d+)/i);
+        if(!box) box = allNumbers.find(n => n.length >= 8 && n !== id) || "";
+
+        // Сборка
+        const finalResult = `${id}\t${sticker}\t${status}\t${name}\t${price}\t${mx}\t${box}`;
+        outputArea.value = finalResult;
+
+        // Обновление тегов
+        document.getElementById('tag-id').className = id ? 'tag active' : 'tag';
+        document.getElementById('tag-name').className = name ? 'tag active' : 'tag';
+        document.getElementById('tag-price').className = price ? 'tag active' : 'tag';
+        document.getElementById('tag-mx').className = mx ? 'tag active' : 'tag';
+
+        if(id) {
+            beep(800, 0.05, 0.02);
+            logEl.innerText = `> ANALYSIS_COMPLETE: 1 STRING GENERATED`;
         } else {
             beep(200, 0.2, 0.1);
-            logEl.innerText = `PROCESS_ERROR: NO PATTERNS FOUND`;
+            logEl.innerText = `> WARNING: DATA_INCOMPLETE`;
         }
     }
 
@@ -214,18 +207,17 @@
         if(!outputArea.value) return;
         try {
             await navigator.clipboard.writeText(outputArea.value);
-            beep(1200, 0.05, 0.02); // Очень короткий клик
+            beep(1200, 0.03, 0.02);
             const btn = document.getElementById('copy-btn');
-            btn.innerText = 'copied_';
-            setTimeout(() => btn.innerText = 'cp_to_buffer', 1000);
-            logEl.innerText = 'CLIPBOARD: DATA_TRANSFERRED';
-        } catch (e) { logEl.innerText = 'ERROR: CLIPBOARD_BLOCKED'; }
+            btn.innerText = 'done_';
+            setTimeout(() => btn.innerText = 'cp_to_buffer', 800);
+        } catch (e) { logEl.innerText = '> ERROR: CLIPBOARD_DENIED'; }
     }
 
     function clearAll() {
         inputArea.value = ''; outputArea.value = '';
-        logEl.innerText = 'SYSTEM_RESET: MEMORY_CLEARED';
         document.querySelectorAll('.tag').forEach(t => t.className = 'tag');
+        logEl.innerText = '> SYSTEM_RESET: READY';
         inputArea.focus();
     }
 
