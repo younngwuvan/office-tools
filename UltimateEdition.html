@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ULTIMATE 6.7 | PRECISION ENGINE</title>
+    <title>ULTIMATE 6.8 | MULTI-BATCH EDITION</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root {
@@ -46,7 +46,7 @@
             border-radius: 12px;
             display: flex; flex-direction: column;
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            height: 550px;
+            height: 600px;
         }
 
         .window-header {
@@ -54,9 +54,6 @@
             border-bottom: 1px solid var(--border);
             justify-content: space-between; background: rgba(255,255,255,0.02);
         }
-
-        .dots { display: flex; gap: 6px; }
-        .dot { width: 10px; height: 10px; border-radius: 50%; opacity: 0.6; }
 
         .window-body { flex-grow: 1; display: flex; }
 
@@ -91,39 +88,32 @@
 <body>
 
     <div class="top-bar">
-        <div>VAN_ENGINE // V.6.7</div>
-        <div style="color: #fff; font-weight: 700;">FINAL_COMPILER</div>
+        <div>CORE // V.6.8</div>
+        <div style="color: #fff; font-weight: 700;">MULTI_BATCH_COMPILER</div>
         <div id="datetime">--.--.---- // --:--:--</div>
     </div>
 
     <div class="grid">
-        <!-- Ввод -->
         <div class="window">
             <div class="window-header">
-                <div class="dots">
-                    <div class="dot" style="background:#ff5f56"></div>
-                    <div class="dot" style="background:#ffbd2e"></div>
-                    <div class="dot" style="background:#27c93f"></div>
-                </div>
-                <div style="font-size: 9px; opacity: 0.5;">INPUT_STREAM</div>
+                <div style="font-size: 9px; opacity: 0.5;">INPUT_STREAM (MULTI)</div>
             </div>
             <div class="window-body">
-                <textarea id="input" placeholder="Вставьте данные..."></textarea>
+                <textarea id="input" placeholder="Вставьте сразу много карточек товара..."></textarea>
             </div>
             <div class="window-footer">
-                <button class="btn" onclick="processData()">./compile</button>
+                <button class="btn" onclick="processData()">./run_batch</button>
                 <button class="btn" onclick="clearAll()">clear</button>
             </div>
         </div>
 
-        <!-- Вывод -->
         <div class="window">
             <div class="window-header">
-                <div style="font-size: 9px; opacity: 0.5;">REFINED_RESULT</div>
-                <div style="font-size: 8px; color: var(--success); letter-spacing: 1px;">READY_FOR_TABLE</div>
+                <div style="font-size: 9px; opacity: 0.5;">REFINED_LIST</div>
+                <div id="counter" style="font-size: 8px; color: var(--success);">COUNT: 0</div>
             </div>
             <div class="window-body">
-                <textarea id="output" readonly placeholder="Result..."></textarea>
+                <textarea id="output" readonly placeholder="Result list..."></textarea>
             </div>
             <div class="window-footer">
                 <button class="btn" id="copy-btn" onclick="copyResult()">cp_to_buffer</button>
@@ -131,10 +121,9 @@
         </div>
     </div>
 
-    <div class="log-area" id="log">> SYSTEM_READY: STANDBY</div>
+    <div class="log-area" id="log">> SYSTEM_READY: BATCH_MODE_ENABLED</div>
 
 <script>
-    // Часы
     function updateClock() {
         const now = new Date();
         document.getElementById('datetime').innerHTML = now.toLocaleDateString('ru-RU') + ' // ' + now.toLocaleTimeString('ru-RU');
@@ -145,73 +134,77 @@
     const outputArea = document.getElementById('output');
     const logEl = document.getElementById('log');
 
-    // Авто-запуск при вставке
-    inputArea.addEventListener('paste', () => setTimeout(processData, 100));
+    inputArea.addEventListener('paste', () => setTimeout(processData, 150));
 
     function processData() {
-        const text = inputArea.value.trim();
-        if(!text) return;
+        const fullText = inputArea.value.trim();
+        if(!fullText) return;
 
-        // 1. ID и Стикер (берем первое число из 10-12 знаков)
-        const idMatch = text.match(/\b\d{10,12}\b/);
-        const id = idMatch ? idMatch[0] : "";
-        const sticker = id;
+        // РАЗДЕЛЕНИЕ НА БЛОКИ
+        // Мы режем текст там, где начинается новая карточка (по фразе "Идентификатор товара")
+        const blocks = fullText.split(/(?=Идентификатор товара|Предмет:)/i).filter(b => b.trim().length > 20);
+        let finalResults = [];
 
-        // 2. Статус (3-4 заглавные буквы)
-        const statusMatch = text.match(/\b(WLI|LIO|BOX|CON|OK|ERR)\b/);
-        const status = statusMatch ? statusMatch[0].toUpperCase() : "";
+        blocks.forEach(text => {
+            // --- ЛОГИКА ПАРСИНГА ДЛЯ КАЖДОГО БЛОКА ---
+            
+            // 1. ID и Стикер
+            const idMatch = text.match(/\b\d{10,12}\b/);
+            const id = idMatch ? idMatch[0] : "";
+            const sticker = id;
 
-        // 3. Наименование (после "Предмет" и до слеша)
-        let name = "";
-        const nameMatch = text.match(/Предмет\s*\n?\s*([^/\n\r\t]+)/i);
-        if (nameMatch) {
-            name = nameMatch[1].trim();
-        } else {
-            const altMatch = text.match(/Идентификатор товара\s+\d+\s+\/\s+([^/]+)/i);
-            if (altMatch) name = altMatch[1].trim();
-        }
+            // 2. Статус
+            const statusMatch = text.match(/\b(WLI|LIO|BOX|CON|OK|ERR)\b/);
+            const status = statusMatch ? statusMatch[0].toUpperCase() : "";
 
-        // 4. Стоимость (Берем только цифры строго перед ₽)
-        // Используем (?:\s|^), чтобы отсечь хвосты от MX (например .01)
-        const priceMatch = text.match(/(?:\s|^)(\d[\d\s]*)\s*₽/);
-        const price = priceMatch ? priceMatch[1].replace(/\s/g, '') : "";
+            // 3. Наименование
+            let name = "";
+            const nameMatch = text.match(/Предмет\s*\n?\s*([^/\n\r\t]+)/i);
+            if (nameMatch) {
+                name = nameMatch[1].trim();
+            } else {
+                const altMatch = text.match(/Идентификатор товара\s+\d+\s+\/\s+([^/]+)/i);
+                if (altMatch) name = altMatch[1].trim();
+            }
 
-        // 5. MX (ВЛАД или ЦП)
-        const mxMatch = text.match(/(?:ВЛАД|ЦП|MX)[\d\.]+/i);
-        const mx = mxMatch ? mxMatch[0] : "";
+            // 4. Стоимость
+            const priceMatch = text.match(/(?:\s|^)(\d[\d\s]*)\s*₽/);
+            const price = priceMatch ? priceMatch[1].replace(/\s/g, '') : "";
 
-        // 6. BOX (Только если есть слово BOX)
-        const boxMatch = text.match(/BOX\s*(\d+)/i);
-        const box = boxMatch ? boxMatch[1] : "";
+            // 5. MX
+            const mxMatch = text.match(/(?:ВЛАД|ЦП|MX)[\d\.]+/i);
+            const mx = mxMatch ? mxMatch[0] : "";
 
-        // Сборка финальной строки (Tab Separated)
-        const result = `${id}\t${sticker}\t${status}\t${name}\t${price}\t${mx}\t${box}`;
-        
-        outputArea.value = result;
-        logEl.innerText = id ? `> COMPILATION_SUCCESS: ${id}` : '> WARNING: NO_ID_DETECTED';
+            // 6. BOX (Только если есть слово BOX)
+            const boxMatch = text.match(/BOX\s*(\d+)/i);
+            const box = boxMatch ? boxMatch[1] : "";
+
+            // Собираем строку только если нашли ID (чтобы не плодить пустые строки)
+            if (id) {
+                finalResults.push(`${id}\t${sticker}\t${status}\t${name}\t${price}\t${mx}\t${box}`);
+            }
+        });
+
+        // ВЫВОД
+        outputArea.value = finalResults.join('\n');
+        document.getElementById('counter').innerText = `COUNT: ${finalResults.length}`;
+        logEl.innerText = `> BATCH_COMPLETE: ${finalResults.length} ITEMS PROCESSED`;
     }
 
     async function copyResult() {
         if(!outputArea.value) return;
-        try {
-            await navigator.clipboard.writeText(outputArea.value);
-            const btn = document.getElementById('copy-btn');
-            btn.innerText = 'copied!';
-            btn.style.color = '#27c93f';
-            setTimeout(() => {
-                btn.innerText = 'cp_to_buffer';
-                btn.style.color = '';
-            }, 1000);
-        } catch (e) { logEl.innerText = '> ERROR: CLIPBOARD_DENIED'; }
+        await navigator.clipboard.writeText(outputArea.value);
+        const btn = document.getElementById('copy-btn');
+        btn.innerText = 'copied!';
+        setTimeout(() => btn.innerText = 'cp_to_buffer', 1000);
     }
 
     function clearAll() {
         inputArea.value = ''; outputArea.value = '';
+        document.getElementById('counter').innerText = `COUNT: 0`;
         logEl.innerText = '> SYSTEM_RESET: READY';
         inputArea.focus();
     }
-
-    window.onload = () => inputArea.focus();
 </script>
 </body>
 </html>
