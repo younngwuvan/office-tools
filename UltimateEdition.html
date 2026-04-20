@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ULTIMATE 6.6 | ENGINE BY VAN</title>
+    <title>ULTIMATE 6.7 | PRECISION ENGINE</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root {
@@ -14,7 +14,6 @@
             --border: rgba(255, 255, 255, 0.08);
             --text-dim: #52525b;
             --success: #27c93f;
-            --error: #ff5f56;
             --font: 'JetBrains Mono', monospace;
         }
 
@@ -27,7 +26,6 @@
             font-family: var(--font);
             margin: 0; padding: 25px;
             display: flex; flex-direction: column; align-items: center; min-height: 100vh;
-            overflow-x: hidden;
         }
 
         .top-bar {
@@ -48,13 +46,7 @@
             border-radius: 12px;
             display: flex; flex-direction: column;
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            transition: all 0.3s ease;
             height: 550px;
-        }
-
-        .window:focus-within {
-            border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 30px rgba(255,255,255,0.02);
         }
 
         .window-header {
@@ -93,33 +85,30 @@
             border-radius: 8px; padding: 15px 20px; font-size: 11px; color: var(--text-dim);
         }
 
-        .shake { animation: shake 0.4s ease-in-out; }
-        @keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-4px);} 75% {transform: translateX(4px);} }
-
         ::selection { background: var(--success); color: #000; }
     </style>
 </head>
 <body>
 
     <div class="top-bar">
-        <div>CORE // ENGINE_V.6.6</div>
-        <div style="color: #fff; font-weight: 700;">PRECISION_COMPILE</div>
+        <div>VAN_ENGINE // V.6.7</div>
+        <div style="color: #fff; font-weight: 700;">FINAL_COMPILER</div>
         <div id="datetime">--.--.---- // --:--:--</div>
     </div>
 
     <div class="grid">
         <!-- Ввод -->
-        <div class="window" id="win-in">
+        <div class="window">
             <div class="window-header">
                 <div class="dots">
                     <div class="dot" style="background:#ff5f56"></div>
                     <div class="dot" style="background:#ffbd2e"></div>
                     <div class="dot" style="background:#27c93f"></div>
                 </div>
-                <div style="font-size: 9px; opacity: 0.5;">SOURCE_STREAM</div>
+                <div style="font-size: 9px; opacity: 0.5;">INPUT_STREAM</div>
             </div>
             <div class="window-body">
-                <textarea id="input" placeholder="Вставьте данные из чата в любом порядке..."></textarea>
+                <textarea id="input" placeholder="Вставьте данные..."></textarea>
             </div>
             <div class="window-footer">
                 <button class="btn" onclick="processData()">./compile</button>
@@ -131,10 +120,10 @@
         <div class="window">
             <div class="window-header">
                 <div style="font-size: 9px; opacity: 0.5;">REFINED_RESULT</div>
-                <div style="font-size: 8px; color: var(--success); letter-spacing: 1px;">TAB_SEPARATED</div>
+                <div style="font-size: 8px; color: var(--success); letter-spacing: 1px;">READY_FOR_TABLE</div>
             </div>
             <div class="window-body">
-                <textarea id="output" readonly placeholder="Parsed string..."></textarea>
+                <textarea id="output" readonly placeholder="Result..."></textarea>
             </div>
             <div class="window-footer">
                 <button class="btn" id="copy-btn" onclick="copyResult()">cp_to_buffer</button>
@@ -142,7 +131,7 @@
         </div>
     </div>
 
-    <div class="log-area" id="log">> SYSTEM_READY: STANDBY_MODE</div>
+    <div class="log-area" id="log">> SYSTEM_READY: STANDBY</div>
 
 <script>
     // Часы
@@ -151,18 +140,6 @@
         document.getElementById('datetime').innerHTML = now.toLocaleDateString('ru-RU') + ' // ' + now.toLocaleTimeString('ru-RU');
     }
     setInterval(updateClock, 1000); updateClock();
-
-    // Звуковой движок (тихие системные клики)
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function beep(freq, dur, vol) {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine'; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.start(); osc.stop(audioCtx.currentTime + dur);
-    }
 
     const inputArea = document.getElementById('input');
     const outputArea = document.getElementById('output');
@@ -173,23 +150,18 @@
 
     function processData() {
         const text = inputArea.value.trim();
-        if(!text) {
-            beep(150, 0.2, 0.1);
-            document.getElementById('win-in').classList.add('shake');
-            setTimeout(() => document.getElementById('win-in').classList.remove('shake'), 400);
-            return;
-        }
+        if(!text) return;
 
-        // 1. Извлекаем ID и Стикер (берем ПЕРВОЕ число от 10 знаков)
+        // 1. ID и Стикер (берем первое число из 10-12 знаков)
         const idMatch = text.match(/\b\d{10,12}\b/);
         const id = idMatch ? idMatch[0] : "";
         const sticker = id;
 
         // 2. Статус (3-4 заглавные буквы)
-        const statusMatch = text.match(/\b(WLI|LIO|BOX|CON|ERR|OK)\b/);
+        const statusMatch = text.match(/\b(WLI|LIO|BOX|CON|OK|ERR)\b/);
         const status = statusMatch ? statusMatch[0].toUpperCase() : "";
 
-        // 3. Название предмета (строго после "Предмет" и до первого слеша или переноса)
+        // 3. Наименование (после "Предмет" и до слеша)
         let name = "";
         const nameMatch = text.match(/Предмет\s*\n?\s*([^/\n\r\t]+)/i);
         if (nameMatch) {
@@ -199,53 +171,43 @@
             if (altMatch) name = altMatch[1].trim();
         }
 
-        // 4. Стоимость (строго цифры перед значком ₽)
-        const priceMatch = text.match(/(\d[\d\s]*)\s*₽/);
+        // 4. Стоимость (Берем только цифры строго перед ₽)
+        // Используем (?:\s|^), чтобы отсечь хвосты от MX (например .01)
+        const priceMatch = text.match(/(?:\s|^)(\d[\d\s]*)\s*₽/);
         const price = priceMatch ? priceMatch[1].replace(/\s/g, '') : "";
 
-        // 5. MX (ВЛАД или ЦП со всеми цифрами и точками)
+        // 5. MX (ВЛАД или ЦП)
         const mxMatch = text.match(/(?:ВЛАД|ЦП|MX)[\d\.]+/i);
         const mx = mxMatch ? mxMatch[0] : "";
 
-        // 6. BOX (Только если есть слово BOX. Поступление игнорируем)
+        // 6. BOX (Только если есть слово BOX)
         const boxMatch = text.match(/BOX\s*(\d+)/i);
         const box = boxMatch ? boxMatch[1] : "";
 
-        // Сборка финальной строки (Разделение TAB)
+        // Сборка финальной строки (Tab Separated)
         const result = `${id}\t${sticker}\t${status}\t${name}\t${price}\t${mx}\t${box}`;
         
         outputArea.value = result;
-
-        if(id) {
-            beep(800, 0.05, 0.02);
-            logEl.innerText = `> SUCCESS: ${id} COMPILED`;
-            outputArea.style.boxShadow = 'inset 0 0 20px rgba(39, 201, 63, 0.05)';
-            setTimeout(() => outputArea.style.boxShadow = 'none', 500);
-        } else {
-            beep(200, 0.2, 0.1);
-            logEl.innerText = `> WARNING: PRIMARY_ID_NOT_FOUND`;
-        }
+        logEl.innerText = id ? `> COMPILATION_SUCCESS: ${id}` : '> WARNING: NO_ID_DETECTED';
     }
 
     async function copyResult() {
         if(!outputArea.value) return;
         try {
             await navigator.clipboard.writeText(outputArea.value);
-            beep(1200, 0.03, 0.02);
             const btn = document.getElementById('copy-btn');
-            btn.innerText = 'copied_';
+            btn.innerText = 'copied!';
             btn.style.color = '#27c93f';
             setTimeout(() => {
                 btn.innerText = 'cp_to_buffer';
                 btn.style.color = '';
             }, 1000);
-            logEl.innerText = '> CLIPBOARD: TRANSFER_COMPLETE';
-        } catch (e) { logEl.innerText = '> ERROR: CLIPBOARD_BLOCKED'; }
+        } catch (e) { logEl.innerText = '> ERROR: CLIPBOARD_DENIED'; }
     }
 
     function clearAll() {
         inputArea.value = ''; outputArea.value = '';
-        logEl.innerText = '> SYSTEM_RESET: MEMORY_CLEARED';
+        logEl.innerText = '> SYSTEM_RESET: READY';
         inputArea.focus();
     }
 
