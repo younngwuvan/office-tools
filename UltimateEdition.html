@@ -2,144 +2,121 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ULTIMATE 6.4 | FINAL PRECISION</title>
+    <title>ULTIMATE 6.5 | FINAL ARCHITECTURE</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root {
             --bg: #050505;
-            --panel-bg: rgba(15, 15, 15, 0.85);
+            --panel: #0f0f0f;
             --accent: #a1a1aa;
-            --accent-bright: #ffffff;
             --border: rgba(255, 255, 255, 0.08);
-            --text-dim: #52525b;
             --success: #27c93f;
-            --error: #ff5f56;
-            --font: 'JetBrains Mono', monospace;
         }
 
         body {
-            background-color: var(--bg);
-            background-image: radial-gradient(circle at 50% -20%, #1a1a1a 0%, transparent 50%);
+            background: var(--bg);
             color: var(--accent);
-            font-family: var(--font);
-            margin: 0; padding: 25px;
-            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .top-bar { width: 100%; max-width: 1200px; display: flex; justify-content: space-between; font-size: 10px; letter-spacing: 2px; margin-bottom: 20px; opacity: 0.5; }
-
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 1200px; flex-grow: 1; }
+        .container { width: 100%; max-width: 1100px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
         .window {
-            background: var(--panel-bg);
-            backdrop-filter: blur(20px);
+            background: var(--panel);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            display: flex; flex-direction: column;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            transition: all 0.3s ease;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            height: 500px;
         }
 
-        .window-header {
-            padding: 12px 18px; display: flex; align-items: center; border-bottom: 1px solid var(--border);
-            justify-content: space-between; background: rgba(255,255,255,0.02);
+        .header {
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border);
+            font-size: 10px;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: space-between;
         }
-
-        .data-health { display: flex; gap: 8px; }
-        .tag { font-size: 8px; padding: 2px 6px; border: 1px solid var(--border); border-radius: 3px; color: var(--text-dim); }
-        .tag.active { color: var(--success); border-color: var(--success); }
-
-        .window-body { flex-grow: 1; }
 
         textarea {
-            width: 100%; height: 450px; background: transparent; border: none;
-            color: #d4d4d8; font-family: var(--font); font-size: 12px; line-height: 1.6;
-            resize: none; outline: none; padding: 20px;
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            color: #fff;
+            padding: 15px;
+            font-family: inherit;
+            font-size: 12px;
+            resize: none;
+            outline: none;
         }
 
-        .window-footer { padding: 12px 20px; border-top: 1px solid var(--border); display: flex; gap: 10px; background: rgba(0, 0, 0, 0.2); }
+        .footer {
+            padding: 10px 15px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+        }
 
         .btn {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border);
-            color: var(--accent); padding: 8px 16px; font-size: 10px; cursor: pointer;
-            border-radius: 4px; transition: 0.2s; text-transform: lowercase;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            color: var(--accent);
+            padding: 5px 12px;
+            cursor: pointer;
+            font-size: 10px;
+            text-transform: lowercase;
         }
 
-        .btn:hover { background: var(--accent-bright); color: var(--bg); }
+        .btn:hover { background: #fff; color: #000; }
 
-        .log-area {
-            width: 100%; max-width: 1200px; margin-top: 20px;
-            background: var(--panel-bg); border: 1px solid var(--border);
-            border-radius: 8px; padding: 15px 20px; font-size: 11px; color: var(--text-dim);
+        .log {
+            margin-top: 15px;
+            width: 100%;
+            max-width: 1100px;
+            padding: 12px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            font-size: 11px;
+            color: #52525b;
         }
 
-        .shake { animation: shake 0.4s ease-in-out; }
-        @keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-4px);} 75% {transform: translateX(4px);} }
+        .active-tag { color: var(--success); font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="top-bar">
-        <div>CORE // ENGINE_FINAL</div>
-        <div style="color: #fff; font-weight: 700;">ULTIMATE EDITION 6.4</div>
-        <div id="datetime">--.--.---- // --:--:--</div>
-    </div>
+    <div style="margin-bottom: 20px; font-size: 12px; font-weight: bold;">[ VAN_ENGINE // ULTIMATE_6.5 ]</div>
 
-    <div class="grid">
-        <div class="window" id="win-in">
-            <div class="window-header">
-                <div style="display:flex; gap:6px;"><div style="width:10px;height:10px;border-radius:50%;background:#ff5f56"></div><div style="width:10px;height:10px;border-radius:50%;background:#ffbd2e"></div><div style="width:10px;height:10px;border-radius:50%;background:#27c93f"></div></div>
-                <div style="font-size: 9px; color: var(--text-dim);">SOURCE_STREAM</div>
-            </div>
-            <div class="window-body">
-                <textarea id="input" placeholder="Вставьте данные из чата..."></textarea>
-            </div>
-            <div class="window-footer">
-                <button class="btn" onclick="processData()">./run_analysis</button>
+    <div class="container">
+        <div class="window">
+            <div class="header">SOURCE_DATA</div>
+            <textarea id="input" placeholder="Вставьте данные в любом порядке..."></textarea>
+            <div class="footer">
+                <button class="btn" onclick="processData()">./compile</button>
                 <button class="btn" onclick="clearAll()">clear</button>
             </div>
         </div>
 
         <div class="window">
-            <div class="window-header">
-                <div class="data-health">
-                    <span class="tag" id="tag-id">ID</span>
-                    <span class="tag" id="tag-name">NAME</span>
-                    <span class="tag" id="tag-price">PRICE</span>
-                    <span class="tag" id="tag-mx">MX</span>
-                </div>
-                <div style="font-size: 9px; color: var(--text-dim);">REFINED_DATA</div>
+            <div class="header">
+                RESULT_STRING
+                <div id="indicators">ID:[-] NAME:[-] PRICE:[-]</div>
             </div>
-            <div class="window-body">
-                <textarea id="output" readonly placeholder="Parsed result..."></textarea>
-            </div>
-            <div class="window-footer">
+            <textarea id="output" readonly></textarea>
+            <div class="footer">
                 <button class="btn" id="copy-btn" onclick="copyResult()">cp_to_buffer</button>
             </div>
         </div>
     </div>
 
-    <div class="log-area" id="log">> SYSTEM_READY: STANDBY</div>
+    <div class="log" id="log">> SYSTEM READY...</div>
 
 <script>
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function beep(freq, dur, vol) {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine'; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.start(); osc.stop(audioCtx.currentTime + dur);
-    }
-
-    function updateClock() {
-        const now = new Date();
-        document.getElementById('datetime').innerHTML = now.toLocaleDateString('ru-RU') + ' // ' + now.toLocaleTimeString('ru-RU');
-    }
-    setInterval(updateClock, 1000); updateClock();
-
     const inputArea = document.getElementById('input');
     const outputArea = document.getElementById('output');
     const logEl = document.getElementById('log');
@@ -148,80 +125,69 @@
 
     function processData() {
         const text = inputArea.value.trim();
-        if(!text) {
-            beep(150, 0.2, 0.1);
-            document.getElementById('win-in').classList.add('shake');
-            setTimeout(() => document.getElementById('win-in').classList.remove('shake'), 400);
-            return;
-        }
+        if(!text) return;
 
-        // Поиск элементов по якорям
-        const find = (regex, index = 1) => {
-            const m = text.match(regex);
-            return m ? m[index].trim() : "";
-        };
-
-        // 1. Извлекаем все длинные числа
-        const allNumbers = text.match(/\b\d{8,12}\b/g) || [];
-        
-        // ID — самое первое длинное число (10-12 знаков)
-        const id = allNumbers.find(n => n.length >= 10) || "";
+        // 1. Ищем ID и Стикер (берем ПЕРВОЕ число от 10 знаков)
+        const idMatch = text.match(/\b\d{10,12}\b/);
+        const id = idMatch ? idMatch[0] : "";
         const sticker = id;
 
-        // 2. Статус (3-4 заглавные буквы)
-        const status = find(/\b([A-Z]{3,4})\b/);
+        // 2. Статус (3-4 буквы заглавными: WLI, LIO, BOX и т.д.)
+        const statusMatch = text.match(/\b(WLI|LIO|BOX|CON|ERR|OK)\b/i);
+        const status = statusMatch ? statusMatch[0].toUpperCase() : "";
 
-        // 3. Предмет (до слеша или конца строки)
-        const name = find(/(?:Предмет|Name)\s*\n?\s*([^/\n\r]+)/i);
+        // 3. Наименование (Ищем после "Предмет" или в строке с "Идентификатор товара")
+        let name = "";
+        const nameRegex = /(?:Предмет|Name)\s*\n?\s*([^/\n\r]+)/i;
+        const nameAltRegex = /Идентификатор товара\s+\d+\s+\/\s+([^/]+)/i;
+        
+        const m1 = text.match(nameRegex);
+        const m2 = text.match(nameAltRegex);
+        
+        if (m1) name = m1[1].trim();
+        else if (m2) name = m2[1].trim();
 
-        // 4. Цена (строго перед символом ₽)
-        const price = find(/(\d+[\s\d]*)\s*₽/i).replace(/\s/g, '');
+        // 4. Стоимость (цифры перед знаком ₽)
+        const priceMatch = text.match(/(\d+[\s\d]*)\s*₽/);
+        const price = priceMatch ? priceMatch[1].replace(/\s/g, '') : "";
 
-        // 5. MX (ВЛАД или ЦП со всеми цифрами и точками)
-        const mx = find(/((?:ВЛАД|ЦП|MX)[\d\.]+)/i, 0);
+        // 5. MX (ВЛАД или ЦП)
+        const mxMatch = text.match(/((?:ВЛАД|ЦП|MX)[\d\.]+)/i);
+        const mx = mxMatch ? mxMatch[0] : "";
 
-        // 6. Коробка (ищем 8-9 значное число после ключевых слов или отличное от ID)
-        let box = find(/(?:Поступление|BOX|CON)\s*(\d+)/i);
-        if(!box) box = allNumbers.find(n => n.length >= 8 && n !== id) || "";
+        // 6. BOX (число 8-9 знаков, которое НЕ равно ID)
+        let box = "";
+        const allNums = text.match(/\b\d{8,12}\b/g) || [];
+        box = allNums.find(n => n.length >= 8 && n !== id) || "";
 
-        // Сборка
-        const finalResult = `${id}\t${sticker}\t${status}\t${name}\t${price}\t${mx}\t${box}`;
-        outputArea.value = finalResult;
+        // Сборка по твоему формату: 
+        // ID | Sticker | Status | Name | Price | MX | BOX
+        const result = `${id}\t${sticker}\t${status}\t${name}\t${price}\t${mx}\t${box}`;
+        
+        outputArea.value = result;
+        
+        // Индикация
+        document.getElementById('indicators').innerHTML = 
+            `ID:[${id?'<span class="active-tag">OK</span>':'-'}] ` +
+            `NAME:[${name?'<span class="active-tag">OK</span>':'-'}] ` +
+            `PRICE:[${price?'<span class="active-tag">OK</span>':'-'}]`;
 
-        // Обновление тегов
-        document.getElementById('tag-id').className = id ? 'tag active' : 'tag';
-        document.getElementById('tag-name').className = name ? 'tag active' : 'tag';
-        document.getElementById('tag-price').className = price ? 'tag active' : 'tag';
-        document.getElementById('tag-mx').className = mx ? 'tag active' : 'tag';
-
-        if(id) {
-            beep(800, 0.05, 0.02);
-            logEl.innerText = `> ANALYSIS_COMPLETE: 1 STRING GENERATED`;
-        } else {
-            beep(200, 0.2, 0.1);
-            logEl.innerText = `> WARNING: DATA_INCOMPLETE`;
-        }
+        logEl.innerText = id ? '> SUCCESS: DATA COMPILED' : '> WARNING: ID NOT FOUND';
     }
 
     async function copyResult() {
         if(!outputArea.value) return;
-        try {
-            await navigator.clipboard.writeText(outputArea.value);
-            beep(1200, 0.03, 0.02);
-            const btn = document.getElementById('copy-btn');
-            btn.innerText = 'done_';
-            setTimeout(() => btn.innerText = 'cp_to_buffer', 800);
-        } catch (e) { logEl.innerText = '> ERROR: CLIPBOARD_DENIED'; }
+        await navigator.clipboard.writeText(outputArea.value);
+        const btn = document.getElementById('copy-btn');
+        btn.innerText = 'copied!';
+        setTimeout(() => btn.innerText = 'cp_to_buffer', 1000);
     }
 
     function clearAll() {
-        inputArea.value = ''; outputArea.value = '';
-        document.querySelectorAll('.tag').forEach(t => t.className = 'tag');
-        logEl.innerText = '> SYSTEM_RESET: READY';
+        inputArea.value = '';
+        outputArea.value = '';
         inputArea.focus();
     }
-
-    window.onload = () => inputArea.focus();
 </script>
 </body>
 </html>
