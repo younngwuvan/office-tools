@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -485,70 +486,64 @@
             }, 220);
         }
 
- function processData() {
+function processData() {
     const fullText = inputArea.value.trim();
-    if (!fullText) return;
+    if(!fullText) return;
 
+    // Режем на блоки
     let blocks = [];
     if (fullText.includes("Идентификатор товара") || fullText.includes("Предмет")) {
-        blocks = fullText.split(/(?=Идентификатор товара|Предмет:)/i).filter(function (b) {
-            return b.trim().length > 10;
-        });
+        blocks = fullText.split(/(?=Идентификатор товара|Предмет:)/i).filter(b => b.trim().length > 10);
     } else {
         blocks = [fullText];
     }
 
     let finalResults = [];
 
-   blocks.forEach(function (text) {
-    const idMatch = text.match(/\b\d{10,12}\b/);
-    const id = idMatch ? idMatch[0] : "";
-    const sticker = id;
+    blocks.forEach(text => {
+        // 1. ID и Стикер (строго число 10-12 знаков)
+        const idMatch = text.match(/\b\d{10,12}\b/);
+        const id = idMatch ? idMatch[0] : "";
+        const sticker = id;
 
-    const statusMatch = text.match(/\b(WLI|LIO|CON|OK|ERR)\b/);
-    const status = statusMatch ? statusMatch[0].toUpperCase() : "";
+        // 2. Статус (3-4 заглавные буквы, исключая BOX и CON)
+        // Добавил более точный поиск, чтобы не путать с текстом
+        const statusMatch = text.match(/\b(IPG|WLI|LIO|OK|ERR|WAIT)\b/);
+        const status = statusMatch ? statusMatch[0].toUpperCase() : "";
 
-    let name = "";
-    const nameMatch = text.match(/Предмет\s*\n?\s*([^/\n\r\t]+)/i);
-    const altMatch = text.match(/Идентификатор товара\s+\d+\s+\/\s+([^/]+)/i);
+        // 3. Наименование (Берем самое полное из строки "Идентификатор товара")
+        let name = "";
+        const altMatch = text.match(/Идентификатор товара\s+\d+\s+\/\s+([^/]+)/i);
+        const nameMatch = text.match(/Предмет\s*\n?\s*([^/\n\r\t]+)/i);
+        
+        if (altMatch) name = altMatch[1].trim();
+        else if (nameMatch) name = nameMatch[1].trim();
 
-    if (nameMatch) {
-        name = nameMatch[1].trim();
-    } else if (altMatch) {
-        name = altMatch[1].trim();
-    }
+        // 4. Стоимость (цифры перед ₽)
+        const priceMatch = text.match(/(?:\s|^)(\d[\d\s]*)\s*₽/);
+        const price = priceMatch ? priceMatch[1].replace(/\s/g, '') : "";
 
-    const priceMatch = text.match(/(?:\s|^)(\d[\d\s]*)\s*₽/);
-    const price = priceMatch ? priceMatch[1].replace(/\s/g, '') : "";
+        // 5. MX (ВЛАД или ЦП)
+        const mxMatch = text.match(/(?:ВЛАД|ЦП|MX)[\d\.]+/i);
+        const mx = mxMatch ? mxMatch[0] : "";
 
-    const mxMatch = text.match(/(?:ВЛАД|ЦП|MX)[\d\.]+/i);
-    const mx = mxMatch ? mxMatch[0] : "";
+        // 6. BOX (Только если есть слово BOX)
+        const boxMatch = text.match(/BOX\s*(\d+)/i);
+        const box = boxMatch ? boxMatch[1] : "";
 
-    const boxMatch = text.match(/BOX\s*(\d+)/i);
-    const box = boxMatch ? boxMatch[1] : "";
-
-    if (id || name || price) {
-        finalResults.push(id + '\t' + sticker + '\t' + status + '\t' + name + '\t' + price + '\t' + mx + '\t' + box);
-    }
-});
+        if (id || name || price) {
+            finalResults.push(`${id}\t${sticker}\t${status}\t${name}\t${price}\t${mx}\t${box}`);
+        }
+    });
 
     if (finalResults.length > 0) {
         outputArea.value = finalResults.join('\n');
-        counterEl.innerText = 'COUNT: ' + finalResults.length;
-        logEl.innerText = '> SUCCESS: ' + finalResults.length + ' STRINGS COMPILED';
-        logEl.className = 'log-area success';
-        outputWindow.classList.add('has-output');
-        bumpCounter();
-        flashLog('success');
-    } else {
-        outputArea.value = "";
-        counterEl.innerText = 'COUNT: 0';
-        logEl.innerText = '> WARNING: DATA PATTERNS NOT RECOGNIZED';
-        logEl.className = 'log-area warning';
-        outputWindow.classList.remove('has-output');
-        flashLog('warning');
+        document.getElementById('counter').innerText = `COUNT: ${finalResults.length}`;
+        document.getElementById('output-window').classList.add('has-output');
+        logEl.innerText = `> SUCCESS: ${finalResults.length} STRINGS COMPILED`;
     }
 }
+
 
         async function copyResult() {
             if (!outputArea.value) return;
