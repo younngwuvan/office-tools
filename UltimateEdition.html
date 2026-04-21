@@ -1,578 +1,608 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ULTIMATE 7.0 | FINAL PRECISION</title>
-    <style>
-        :root {
-            --bg: #050505;
-            --bg-soft: #0a0a0a;
-            --panel-bg: rgba(15, 15, 15, 0.95);
-            --panel-bg-2: rgba(255, 255, 255, 0.02);
-            --accent: #a1a1aa;
-            --accent-bright: #ffffff;
-            --border: rgba(255, 255, 255, 0.08);
-            --border-strong: rgba(255, 255, 255, 0.16);
-            --text-dim: #52525b;
-            --success: #27c93f;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --font: monospace;
-            --shadow: 0 15px 35px rgba(0,0,0,0.5);
-            --glow: 0 0 0 1px rgba(255,255,255,0.04), 0 18px 50px rgba(0,0,0,0.55);
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        html, body {
-            min-height: 100%;
-        }
-
-        body {
-            background-color: var(--bg);
-            background-image:
-                radial-gradient(circle at 50% -20%, rgba(255,255,255,0.08) 0%, transparent 45%),
-                radial-gradient(circle at 100% 0%, rgba(255,255,255,0.03) 0%, transparent 30%);
-            color: var(--accent);
-            font-family: var(--font);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            animation: pageFade 0.8s ease;
-        }
-
-        @keyframes pageFade {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .top-bar {
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 10px;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-            opacity: 0.6;
-            gap: 10px;
-            flex-wrap: wrap;
-            animation: slideDown 0.7s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-12px);
-            }
-            to {
-                opacity: 0.6;
-                transform: translateY(0);
-            }
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            width: 100%;
-            max-width: 1200px;
-            flex-grow: 1;
-        }
-
-        .window {
-            position: relative;
-            background: var(--panel-bg);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: var(--shadow);
-            height: 600px;
-            overflow: hidden;
-            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-            animation: windowIn 0.7s ease;
-        }
-
-        .window:nth-child(2) {
-            animation-delay: 0.08s;
-        }
-
-        @keyframes windowIn {
-            from {
-                opacity: 0;
-                transform: translateY(18px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .window:hover {
-            border-color: rgba(255,255,255,0.12);
-            box-shadow: var(--glow);
-        }
-
-        .window:focus-within {
-            border-color: var(--border-strong);
-            box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 20px 55px rgba(0,0,0,0.62);
-            transform: translateY(-1px);
-        }
-
-        .window.has-output {
-    border-color: rgba(39, 201, 63, 0.42);
-    box-shadow:
-        0 0 0 1px rgba(39, 201, 63, 0.16),
-        0 0 14px rgba(39, 201, 63, 0.10),
-        0 0 32px rgba(39, 201, 63, 0.08),
-        0 0 70px rgba(39, 201, 63, 0.05),
-        0 18px 48px rgba(0,0,0,0.60),
-        inset 0 0 18px rgba(39, 201, 63, 0.035);
-    animation: greenPulse 2.8s ease-in-out infinite;
-}
-
-@keyframes greenPulse {
-    0%, 100% {
-        box-shadow:
-            0 0 0 1px rgba(39, 201, 63, 0.16),
-            0 0 14px rgba(39, 201, 63, 0.10),
-            0 0 32px rgba(39, 201, 63, 0.08),
-            0 0 70px rgba(39, 201, 63, 0.05),
-            0 18px 48px rgba(0,0,0,0.60),
-            inset 0 0 18px rgba(39, 201, 63, 0.035);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <title>ULTIMATE 6 PRO | ENGINE BY VAN</title>
+  <style>
+    :root {
+      --bg: #0b0b0f;
+      --surface: #121218;
+      --surface-2: #17171f;
+      --surface-3: #1d1d27;
+      --border: rgba(255,255,255,.08);
+      --border-strong: rgba(255,255,255,.16);
+      --text: #e4e4e7;
+      --text-dim: #9f9fa9;
+      --accent: #f4f4f5;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 24px 60px rgba(0,0,0,.42);
+      --radius: 16px;
+      --radius-sm: 12px;
+      --mono: "JetBrains Mono", "SFMono-Regular", ui-monospace, Menlo, Monaco, Consolas, monospace;
+      --sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
-    50% {
-        box-shadow:
-            0 0 0 1px rgba(39, 201, 63, 0.22),
-            0 0 18px rgba(39, 201, 63, 0.15),
-            0 0 42px rgba(39, 201, 63, 0.11),
-            0 0 90px rgba(39, 201, 63, 0.07),
-            0 18px 48px rgba(0,0,0,0.60),
-            inset 0 0 22px rgba(39, 201, 63, 0.05);
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,.05), transparent 28%),
+        linear-gradient(180deg, #09090b 0%, #0b0b0f 100%);
+      color: var(--text);
+      font-family: var(--sans);
+      padding: 24px;
     }
-}
-
-        .window::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.025), transparent 18%, transparent 82%, rgba(255,255,255,0.015));
-            opacity: 1;
-        }
-
-        .window-header {
-            padding: 12px 18px;
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
-            justify-content: space-between;
-            background: var(--panel-bg-2);
-            position: relative;
-            z-index: 1;
-        }
-
-        .window-body {
-            flex-grow: 1;
-            display: flex;
-            min-height: 0;
-            position: relative;
-            z-index: 1;
-        }
-
-        textarea {
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            border: none;
-            color: #e4e4e7;
-            font-family: var(--font);
-            font-size: 12px;
-            line-height: 1.6;
-            resize: none;
-            outline: none;
-            padding: 20px;
-            transition: color 0.2s ease;
-        }
-
-        #output {
-            color: #f4f4f5;
-        }
-
-        textarea::placeholder {
-            color: #3f3f46;
-            font-size: 11px;
-            text-transform: uppercase;
-        }
-
-        .window-footer {
-            padding: 12px 20px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            gap: 10px;
-            background: rgba(0, 0, 0, 0.2);
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            color: var(--accent);
-            padding: 8px 15px;
-            font-size: 10px;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: 0.22s ease;
-            text-transform: lowercase;
-            font-family: var(--font);
-            letter-spacing: 0.4px;
-        }
-
-        .btn:hover {
-            background: var(--accent-bright);
-            color: var(--bg);
-            transform: translateY(-1px);
-            box-shadow: 0 8px 20px rgba(255,255,255,0.08);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-            box-shadow: none;
-        }
-
-        .btn.success-flash {
-            background: var(--success);
-            color: #000;
-            border-color: rgba(39, 201, 63, 0.35);
-        }
-
-        .counter-badge {
-            font-size: 9px;
-            color: var(--success);
-            border: 1px solid rgba(39, 201, 63, 0.14);
-            background: rgba(39, 201, 63, 0.06);
-            padding: 4px 8px;
-            border-radius: 999px;
-            min-width: 76px;
-            text-align: center;
-            transition: 0.2s ease;
-        }
-
-        .counter-badge.bump {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(39, 201, 63, 0.15);
-        }
-
-        .log-area {
-            width: 100%;
-            max-width: 1200px;
-            margin-top: 20px;
-            background: var(--panel-bg);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 15px 20px;
-            font-size: 11px;
-            color: var(--text-dim);
-            transition: color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
-            animation: logIn 0.9s ease;
-        }
-
-        @keyframes logIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .log-area.success {
-            color: var(--success);
-            border-color: rgba(39, 201, 63, 0.2);
-            box-shadow: 0 0 24px rgba(39, 201, 63, 0.04);
-        }
-
-        .log-area.warning {
-            color: var(--warning);
-            border-color: rgba(245, 158, 11, 0.2);
-            box-shadow: 0 0 24px rgba(245, 158, 11, 0.04);
-        }
-
-        .log-area.error {
-            color: var(--danger);
-            border-color: rgba(239, 68, 68, 0.2);
-            box-shadow: 0 0 24px rgba(239, 68, 68, 0.05);
-        }
-
-        .log-area.flash {
-            transform: translateY(-1px);
-        }
-
-        ::selection {
-            background: var(--success);
-            color: #000;
-        }
-
-        textarea::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
-        }
-
-        textarea::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.02);
-        }
-
-        textarea::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.12);
-            border-radius: 20px;
-        }
-
-        textarea::-webkit-scrollbar-thumb:hover {
-            background: rgba(255,255,255,0.2);
-        }
-
-        @media (max-width: 900px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-
-            .window {
-                height: 420px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            body {
-                padding: 12px;
-            }
-
-            .top-bar {
-                font-size: 9px;
-                letter-spacing: 1px;
-            }
-
-            .window {
-                height: 360px;
-            }
-
-            .window-footer {
-                flex-wrap: wrap;
-            }
-
-            textarea {
-                padding: 16px;
-                font-size: 11px;
-            }
-        }
-    </style>
+    .app { width: min(1400px,100%); margin: 0 auto; display: grid; gap: 20px; }
+    .top-bar,.panel,.log-panel,.summary-bar {
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+    .top-bar {
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      padding: 16px 18px; font-family: var(--mono); font-size: 12px;
+      letter-spacing: .08em; text-transform: uppercase;
+    }
+    .top-bar__title { font-weight: 800; color: var(--accent); text-align: center; letter-spacing: .18em; }
+    .top-bar__muted { color: var(--text-dim); white-space: nowrap; }
+    .summary-bar { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; padding: 14px; }
+    .summary-item { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; min-height: 78px; }
+    .summary-item__label { display: block; font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+    .summary-item__value { font-family: var(--mono); font-size: 15px; color: var(--accent); word-break: break-word; }
+    .workspace { display: grid; grid-template-columns: 1.08fr 1fr; gap: 20px; }
+    .panel { display: flex; flex-direction: column; min-height: 540px; overflow: hidden; }
+    .panel__header {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 14px 18px; border-bottom: 1px solid var(--border); background: rgba(255,255,255,.02);
+    }
+    .panel__title-wrap { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    .dots { display: flex; gap: 8px; flex-shrink: 0; }
+    .dot { width: 11px; height: 11px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(255,255,255,.15); }
+    .dot--red { background: #ff5f57; }
+    .dot--yellow { background: #febc2e; }
+    .dot--green { background: #28c840; }
+    .panel__title { font-family: var(--mono); color: var(--text-dim); font-size: 12px; text-transform: uppercase; letter-spacing: .1em; }
+    .panel__status { font-size: 12px; color: var(--text-dim); white-space: nowrap; }
+    .panel__body { display: grid; gap: 14px; padding: 18px; flex: 1; min-height: 0; }
+    .field-label { display: flex; justify-content: space-between; gap: 10px; align-items: center; font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .08em; }
+    .hint { font-size: 11px; color: var(--text-dim); text-transform: none; letter-spacing: normal; }
+    textarea,.preview,.log-list { width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); outline: none; }
+    textarea { min-height: 280px; resize: vertical; padding: 14px; font: 13px/1.5 var(--mono); transition: border-color .2s ease, box-shadow .2s ease; }
+    textarea:focus,button:focus-visible { border-color: var(--border-strong); box-shadow: 0 0 0 4px rgba(255,255,255,.04); }
+    .panel__footer { display: flex; flex-wrap: wrap; gap: 10px; padding: 16px 18px 18px; border-top: 1px solid var(--border); background: rgba(255,255,255,.015); }
+    .btn {
+      appearance: none; border: 1px solid var(--border); background: var(--surface-2); color: var(--text);
+      border-radius: 12px; padding: 11px 14px; font: 600 12px/1 var(--mono);
+      text-transform: uppercase; letter-spacing: .06em; cursor: pointer;
+      transition: transform .15s ease, border-color .2s ease, background .2s ease, opacity .2s ease;
+    }
+    .btn:hover { border-color: var(--border-strong); background: var(--surface-3); transform: translateY(-1px); }
+    .btn:disabled { cursor: not-allowed; opacity: .55; transform: none; }
+    .btn--primary { background: linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,.04)); color: #fff; }
+    .btn--danger { color: #fecaca; }
+    .btn--success { color: #bbf7d0; }
+    .btn--ghost { background: transparent; }
+    .output-block { display: grid; gap: 12px; min-height: 0; }
+    .preview { min-height: 222px; padding: 14px; overflow: auto; background: linear-gradient(180deg, rgba(255,255,255,.01), rgba(255,255,255,.02)); }
+    .preview-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+    .preview-card { padding: 12px; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--border); }
+    .preview-card__label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+    .preview-card__value { font: 13px/1.5 var(--mono); color: var(--accent); white-space: pre-wrap; word-break: break-word; }
+    .output-textarea { min-height: 130px; }
+    .inline-tools { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .stat-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-dim); font: 12px var(--mono); }
+    .log-panel { padding: 16px; }
+    .log-panel__header { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 12px; }
+    .log-panel__title { font: 700 12px var(--mono); color: var(--text-dim); text-transform: uppercase; letter-spacing: .08em; }
+    .log-list { list-style: none; margin: 0; padding: 12px; min-height: 132px; max-height: 220px; overflow: auto; font: 12px/1.55 var(--mono); }
+    .log-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.04); color: var(--text-dim); }
+    .log-item:last-child { border-bottom: none; }
+    .log-item__time { color: #71717a; flex-shrink: 0; }
+    .log-item[data-level="success"] .log-item__message { color: #bbf7d0; }
+    .log-item[data-level="warning"] .log-item__message { color: #fde68a; }
+    .log-item[data-level="error"] .log-item__message { color: #fecaca; }
+    .log-item[data-level="info"] .log-item__message { color: var(--text); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    @media (max-width: 1080px) { .workspace { grid-template-columns: 1fr; } .summary-bar { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+    @media (max-width: 720px) {
+      body { padding: 14px; }
+      .top-bar { flex-direction: column; align-items: flex-start; }
+      .summary-bar,.preview-grid { grid-template-columns: 1fr; }
+      .panel { min-height: auto; }
+      .panel__header { flex-direction: column; align-items: flex-start; }
+      textarea { min-height: 240px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+  </style>
 </head>
 <body>
+  <main class="app">
+    <header class="top-bar" aria-label="Системная панель">
+      <div class="top-bar__muted">[ engine by van ]</div>
+      <div class="top-bar__title">ULTIMATE 6 PRO</div>
+      <div class="top-bar__muted">[ local time ] <span id="datetime">--.--.---- // --:--:--</span></div>
+    </header>
 
-    <div class="top-bar">
-        <div>CORE // V.7.0</div>
-        <div style="color: #fff; font-weight: 700;">ULTIMATE_COMPILER</div>
-        <div id="datetime">--.--.---- // --:--:--</div>
-    </div>
+    <section class="summary-bar" aria-label="Сводка по текущему результату">
+      <article class="summary-item"><span class="summary-item__label">ID</span><strong class="summary-item__value" id="summary-id">—</strong></article>
+      <article class="summary-item"><span class="summary-item__label">Статус</span><strong class="summary-item__value" id="summary-status">—</strong></article>
+      <article class="summary-item"><span class="summary-item__label">Цена</span><strong class="summary-item__value" id="summary-price">—</strong></article>
+      <article class="summary-item"><span class="summary-item__label">Локация / BOX</span><strong class="summary-item__value" id="summary-location">—</strong></article>
+    </section>
 
-    <div class="grid">
-        <div class="window" id="input-window">
-            <div class="window-header">
-                <div style="font-size: 9px; opacity: 0.5;">INPUT_STREAM</div>
-            </div>
-            <div class="window-body">
-                <textarea id="input" placeholder="[ТУТОРИАЛ]:
-1. СКОПИРУЙТЕ ВЕСЬ ТЕКСТ ИЗ КАРТОЧКИ ТОВАРА И УДАЛИТЕ SKU.
-2. ДАЛЕЕ СКОПИРУЙТЕ НУЖНУЮ СТРОКУ ИЗ СТАТУСА ВЕЩИ."></textarea>
-            </div>
-            <div class="window-footer">
-                <button class="btn" onclick="processData()">./compile</button>
-                <button class="btn" onclick="clearAll()">clear</button>
-            </div>
+    <section class="workspace" aria-label="Рабочая зона">
+      <section class="panel" aria-labelledby="source-title">
+        <div class="panel__header">
+          <div class="panel__title-wrap">
+            <div class="dots" aria-hidden="true"><span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span></div>
+            <div class="panel__title" id="source-title">Source Input</div>
+          </div>
+          <div class="panel__status" id="input-meta">0 символов</div>
         </div>
-
-        <div class="window" id="output-window">
-            <div class="window-header">
-                <div style="font-size: 9px; opacity: 0.5;">RESULT_LIST</div>
-                <div id="counter" class="counter-badge">COUNT: 0</div>
-            </div>
-            <div class="window-body">
-                <textarea id="output" readonly placeholder="[ТУТОРИАЛ]:
-3. СКОПИРУЙТЕ СТОИМОСТЬ С СИМВОЛОМ 903 ₽ ИЗ КАРТОЧКИ ТОВАРА С САЙТА. 
-ГОТОВАЯ СТРОКА ПОЯВИТСЯ ЗДЕСЬ."></textarea>
-            </div>
-            <div class="window-footer">
-                <button class="btn" id="copy-btn" onclick="copyResult()">cp_to_buffer</button>
-            </div>
+        <div class="panel__body">
+          <label class="field-label" for="input"><span>Исходные данные</span><span class="hint">Ctrl/⌘ + Enter — запустить анализ</span></label>
+          <textarea id="input" spellcheck="false" autocomplete="off" placeholder="Вставьте данные: карточка, история, цена, локация, BOX/CON и прочее..."></textarea>
+          <div class="hint">Парсер теперь заточен под реальную структуру блока: Идентификатор товара → ВБ стикер → статус-код → Предмет → цена → МХ → BOX.</div>
         </div>
-    </div>
+        <div class="panel__footer">
+          <button class="btn btn--primary" id="analyzeBtn" type="button">Run Analysis</button>
+          <button class="btn btn--ghost" id="pasteBtn" type="button">Paste</button>
+          <button class="btn btn--danger" id="clearInputBtn" type="button">Clear Input</button>
+          <button class="btn btn--ghost" id="loadDemoBtn" type="button">Load Demo</button>
+        </div>
+      </section>
 
-    <div class="log-area" id="log">> SYSTEM_READY: READY FOR DATA</div>
+      <section class="panel" aria-labelledby="output-title">
+        <div class="panel__header">
+          <div class="panel__title-wrap">
+            <div class="dots" aria-hidden="true"><span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span></div>
+            <div class="panel__title" id="output-title">Refined Output</div>
+          </div>
+          <div class="panel__status" id="parseState">Ожидание анализа</div>
+        </div>
+        <div class="panel__body output-block">
+          <div class="inline-tools">
+            <span class="stat-badge">Формат: TSV</span>
+            <span class="stat-badge" id="badgeCompleteness">Заполнено: 0/7</span>
+          </div>
+          <div class="preview" aria-live="polite"><div class="preview-grid" id="previewGrid"></div></div>
+          <label class="field-label" for="output"><span>Итоговая строка</span><span class="hint">7 полей, BOX может быть пустым</span></label>
+          <textarea id="output" class="output-textarea" readonly placeholder="Здесь появится результат..."></textarea>
+        </div>
+        <div class="panel__footer">
+          <button class="btn btn--success" id="copyTsvBtn" type="button">Copy TSV</button>
+          <button class="btn btn--ghost" id="copyJsonBtn" type="button">Copy JSON</button>
+          <button class="btn btn--ghost" id="downloadBtn" type="button">Download TXT</button>
+          <button class="btn btn--danger" id="resetOutputBtn" type="button">Reset Output</button>
+        </div>
+      </section>
+    </section>
 
-    <script>
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('datetime').innerHTML =
-                now.toLocaleDateString('ru-RU') + ' // ' + now.toLocaleTimeString('ru-RU');
-        }
+    <section class="log-panel" aria-labelledby="log-title">
+      <div class="log-panel__header">
+        <div class="log-panel__title" id="log-title">System Log</div>
+        <button class="btn btn--ghost" id="clearLogBtn" type="button">Clear Log</button>
+      </div>
+      <ul class="log-list" id="logList" aria-live="polite"></ul>
+      <p class="sr-only" id="announce"></p>
+    </section>
+  </main>
 
-        setInterval(updateClock, 1000);
+  <script>
+    (() => {
+      'use strict';
+
+      const FIELD_ORDER = ['id', 'sticker', 'status', 'name', 'price', 'location', 'box'];
+      const FIELD_LABELS = {
+        id: 'Identifier',
+        sticker: 'WB Sticker',
+        status: 'Status Code',
+        name: 'Предмет',
+        price: 'Цена',
+        location: 'МХ',
+        box: 'BOX / CON'
+      };
+
+      const DEMO_TEXT = `ПИдентификатор товара 42442630379 / Чехол на iPhone 17 Pro Max MagSafe со стразами / ВБ стикер 44363836336 / В заказе
+Размер
+0
+Бренд
+О'кейси
+Артикул
+311000147
+Номенклатура
+585834956
+Предмет
+Чехлы для телефонов / Аксессуары для электроники
+800711616
+Поступление
+34088875
+В продаже
+456 ₽
+Нет
+44363836336	WLN	Инвентаризация раскладки	
+Владимир Б3
+ID: 7353
+ВЛАД3.03.15.81.03.01	BOX	296777288`;
+
+      const state = { lastParsed: null, logsLimit: 80 };
+      const elements = {
+        datetime: document.getElementById('datetime'),
+        input: document.getElementById('input'),
+        output: document.getElementById('output'),
+        previewGrid: document.getElementById('previewGrid'),
+        parseState: document.getElementById('parseState'),
+        inputMeta: document.getElementById('input-meta'),
+        badgeCompleteness: document.getElementById('badgeCompleteness'),
+        summaryId: document.getElementById('summary-id'),
+        summaryStatus: document.getElementById('summary-status'),
+        summaryPrice: document.getElementById('summary-price'),
+        summaryLocation: document.getElementById('summary-location'),
+        logList: document.getElementById('logList'),
+        announce: document.getElementById('announce'),
+        analyzeBtn: document.getElementById('analyzeBtn'),
+        pasteBtn: document.getElementById('pasteBtn'),
+        clearInputBtn: document.getElementById('clearInputBtn'),
+        loadDemoBtn: document.getElementById('loadDemoBtn'),
+        copyTsvBtn: document.getElementById('copyTsvBtn'),
+        copyJsonBtn: document.getElementById('copyJsonBtn'),
+        downloadBtn: document.getElementById('downloadBtn'),
+        resetOutputBtn: document.getElementById('resetOutputBtn'),
+        clearLogBtn: document.getElementById('clearLogBtn')
+      };
+
+      function init() {
+        bindEvents();
         updateClock();
+        setInterval(updateClock, 1000);
+        updateInputMeta();
+        renderPreview(createEmptyResult());
+        updateSummary(createEmptyResult());
+        updateCompleteness(0);
+        writeLog('SYSTEM_READY: WB PARSER PROFILE LOADED', 'success');
+      }
 
-        const inputArea = document.getElementById('input');
-        const outputArea = document.getElementById('output');
-        const logEl = document.getElementById('log');
-        const counterEl = document.getElementById('counter');
-        const copyBtn = document.getElementById('copy-btn');
-        const outputWindow = document.getElementById('output-window');
+      function bindEvents() {
+        elements.analyzeBtn.addEventListener('click', handleAnalyze);
+        elements.pasteBtn.addEventListener('click', handlePaste);
+        elements.clearInputBtn.addEventListener('click', clearInput);
+        elements.loadDemoBtn.addEventListener('click', loadDemo);
+        elements.copyTsvBtn.addEventListener('click', () => copyOutput('tsv'));
+        elements.copyJsonBtn.addEventListener('click', () => copyOutput('json'));
+        elements.downloadBtn.addEventListener('click', downloadOutput);
+        elements.resetOutputBtn.addEventListener('click', resetOutput);
+        elements.clearLogBtn.addEventListener('click', clearLog);
+        elements.input.addEventListener('input', updateInputMeta);
+        elements.input.addEventListener('keydown', onEditorKeydown);
+      }
 
-        window.addEventListener('load', function () {
-            inputArea.focus();
-        });
+      function onEditorKeydown(event) {
+        const isSubmit = (event.ctrlKey || event.metaKey) && event.key === 'Enter';
+        if (isSubmit) {
+          event.preventDefault();
+          handleAnalyze();
+        }
+      }
 
-        inputArea.addEventListener('paste', function () {
-            setTimeout(processData, 150);
-        });
+      function updateClock() {
+        const now = new Date();
+        const date = new Intl.DateTimeFormat('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(now);
+        const time = new Intl.DateTimeFormat('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(now);
+        elements.datetime.textContent = `${date} // ${time}`;
+      }
 
-        inputArea.addEventListener('input', function () {
-            if (inputArea.value === '') {
-                clearAll();
-            }
-        });
+      function updateInputMeta() {
+        const value = elements.input.value;
+        const chars = value.length;
+        const lines = value ? value.split(/\r?\n/).length : 0;
+        elements.inputMeta.textContent = `${chars} символов • ${lines} строк`;
+      }
 
-        inputArea.addEventListener('keydown', function (e) {
-            if (e.ctrlKey && e.key === 'Enter') {
-                e.preventDefault();
-                processData();
-            }
+      function normalizeText(text) {
+        return text
+          .replace(/\u00a0/g, ' ')
+          .replace(/\r/g, '')
+          .replace(/[ \t]+\n/g, '\n')
+          .replace(/\n{3,}/g, '\n\n')
+          .trim();
+      }
 
-            if (e.key === 'Escape') {
-                e.preventDefault();
-                clearAll();
-            }
-        });
+      function extractFirstMatch(text, patterns, groupIndex = 1) {
+        for (const pattern of patterns) {
+          const match = text.match(pattern);
+          if (match && match[groupIndex]) return match[groupIndex].trim();
+        }
+        return '';
+      }
 
-        outputArea.addEventListener('dblclick', function () {
-            copyResult();
-        });
+      function extractAllLongNumbers(text) {
+        return [...new Set((text.match(/\b\d{10,13}\b/g) || []).map(item => item.trim()))];
+      }
 
-        function bumpCounter() {
-            counterEl.classList.add('bump');
-            setTimeout(function () {
-                counterEl.classList.remove('bump');
-            }, 220);
+      function escapeRegExp(value) {
+        return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      }
+
+      function cleanName(value) {
+        return value.split('/').map(part => part.trim()).filter(Boolean)[0] || '';
+      }
+
+      function extractIdentifier(text) {
+        const labeled = extractFirstMatch(text, [
+          /идентификатор\s+товара\s*(\d{10,13})/iu,
+          /(?:^|\n)\s*idентификатор\s+товара\s*(\d{10,13})/iu,
+        ]);
+        if (labeled) return labeled;
+        const numbers = extractAllLongNumbers(text);
+        return numbers[0] || '';
+      }
+
+      function extractSticker(text, fallbackId = '') {
+        const labeled = extractFirstMatch(text, [
+          /вб\s*стикер\s*(\d{10,13})/iu,
+          /стикер\s*(\d{10,13})/iu,
+        ]);
+        if (labeled) return labeled;
+        const productId = extractIdentifier(text);
+        const numbers = extractAllLongNumbers(text).filter(num => num !== productId);
+        return numbers[0] || fallbackId || productId || '';
+      }
+
+      function extractStatus(text, sticker = '') {
+        if (sticker) {
+          const nearSticker = text.match(new RegExp(`${escapeRegExp(sticker)}\\s+([A-ZА-ЯЁ]{2,10})\\b`, 'iu'));
+          if (nearSticker && nearSticker[1]) return nearSticker[1].trim().toUpperCase();
+        }
+        const inventoryLine = text.match(/\b\d{10,13}\b\s+([A-ZА-ЯЁ]{2,10})\b(?:\s+[^\n]*)?/iu);
+        if (inventoryLine && inventoryLine[1]) return inventoryLine[1].trim().toUpperCase();
+        const direct = extractFirstMatch(text, [/(?:статус|status)\s*[:\-]?\s*([A-ZА-ЯЁ_\-]{2,20})/iu]);
+        if (direct) return direct.toUpperCase();
+        return '';
+      }
+
+      function extractName(text) {
+        const raw = extractFirstMatch(text, [
+          /предмет\s*\n\s*([^\n]{2,200})/iu,
+          /предмет\s*[:\-]?\s*([^\n]{2,200})/iu,
+          /товар\s*[:\-]?\s*([^\n]{2,200})/iu,
+          /название\s*[:\-]?\s*([^\n]{2,200})/iu,
+        ]);
+        return raw ? cleanName(raw).replace(/\s{2,}/g, ' ') : '';
+      }
+
+      function extractPrice(text) {
+        const raw = extractFirstMatch(text, [
+          /в\s*продаже\s*([\d\s]+)(?:₽|руб)/iu,
+          /(?:цена|price)\s*[:\-]?\s*([\d\s]+)(?:₽|руб)/iu,
+          /([\d\s]+)(?:₽|руб)/iu,
+        ]);
+        return raw ? raw.replace(/\s+/g, '') : '';
+      }
+
+      function extractLocation(text) {
+        return extractFirstMatch(text, [
+          /((?:ВЛАД|ЦП|СПБ|МСК|ЕКБ)\d+(?:\.\d+){2,})/iu,
+          /((?:ВЛАД|ЦП|СПБ|МСК|ЕКБ)[\w\-\/.]+)/iu,
+          /(?:локация|location|склад)\s*[:\-]?\s*([^\s\n]{2,60})/iu,
+        ]).toUpperCase();
+      }
+
+      function extractBox(text) {
+        return extractFirstMatch(text, [
+          /\b(?:BOX|CON)\b\s*[:#\-]?\s*(\d{1,12})/iu,
+          /\b(?:box|con)\s*(\d{1,12})\b/iu,
+        ]);
+      }
+
+      function parseInput(rawText) {
+        const text = normalizeText(rawText);
+        const id = extractIdentifier(text);
+        const sticker = extractSticker(text, id);
+        const status = extractStatus(text, sticker);
+        const name = extractName(text);
+        const price = extractPrice(text);
+        const location = extractLocation(text);
+        const box = extractBox(text);
+
+        const result = { id, sticker, status, name, price, location, box };
+        const filledCount = FIELD_ORDER.reduce((count, key) => count + Number(Boolean(result[key])), 0);
+        const warnings = [];
+        if (!id) warnings.push('Не найден идентификатор товара.');
+        if (!sticker) warnings.push('Не найден ВБ стикер.');
+        if (!status) warnings.push('Не найден статус-код.');
+        if (!name) warnings.push('Не найден предмет.');
+        if (!price) warnings.push('Не найдена цена.');
+        if (!location) warnings.push('Не найден МХ.');
+
+        return {
+          raw: text,
+          result,
+          tsv: FIELD_ORDER.map(key => result[key] || '').join('\t'),
+          json: JSON.stringify(result, null, 2),
+          filledCount,
+          warnings,
+          isComplete: filledCount === FIELD_ORDER.length,
+        };
+      }
+
+      function createEmptyResult() {
+        return {
+          result: Object.fromEntries(FIELD_ORDER.map(key => [key, ''])),
+          filledCount: 0,
+          warnings: [],
+          isComplete: false,
+          tsv: '',
+          json: '{}'
+        };
+      }
+
+      function handleAnalyze() {
+        const raw = elements.input.value;
+        if (!raw.trim()) {
+          writeLog('ERROR: SOURCE INPUT IS EMPTY', 'error');
+          setParseState('Нет данных для анализа');
+          elements.input.focus();
+          return;
         }
 
-        function flashLog(type) {
-            logEl.className = 'log-area ' + type + ' flash';
-            setTimeout(function () {
-                logEl.className = 'log-area ' + type;
-            }, 220);
+        setBusy(true);
+        setParseState('Идёт анализ...');
+
+        window.setTimeout(() => {
+          const parsed = parseInput(raw);
+          state.lastParsed = parsed;
+          elements.output.value = parsed.tsv;
+          renderPreview(parsed);
+          updateSummary(parsed);
+          updateCompleteness(parsed.filledCount);
+
+          if (parsed.warnings.length) {
+            writeLog(`ANALYSIS_DONE_WITH_WARNINGS: ${parsed.warnings.join(' | ')}`, 'warning');
+            setParseState(`Готово с предупреждениями (${parsed.filledCount}/${FIELD_ORDER.length})`);
+          } else {
+            writeLog(`ANALYSIS_SUCCESS: ${parsed.filledCount}/${FIELD_ORDER.length} FIELDS RESOLVED`, 'success');
+            setParseState('Анализ завершён успешно');
+          }
+          setBusy(false);
+        }, 100);
+      }
+
+      function renderPreview(parsed) {
+        const fragment = document.createDocumentFragment();
+        FIELD_ORDER.forEach((key) => {
+          const card = document.createElement('article');
+          card.className = 'preview-card';
+          const label = document.createElement('div');
+          label.className = 'preview-card__label';
+          label.textContent = FIELD_LABELS[key];
+          const value = document.createElement('div');
+          value.className = 'preview-card__value';
+          value.textContent = parsed.result[key] || '—';
+          card.append(label, value);
+          fragment.append(card);
+        });
+        elements.previewGrid.replaceChildren(fragment);
+      }
+
+      function updateSummary(parsed) {
+        elements.summaryId.textContent = parsed.result.id || '—';
+        elements.summaryStatus.textContent = parsed.result.status || '—';
+        elements.summaryPrice.textContent = parsed.result.price ? `${parsed.result.price} ₽` : '—';
+        elements.summaryLocation.textContent = [parsed.result.location, parsed.result.box].filter(Boolean).join(' / ') || '—';
+      }
+
+      function updateCompleteness(count) { elements.badgeCompleteness.textContent = `Заполнено: ${count}/${FIELD_ORDER.length}`; }
+      function setParseState(message) { elements.parseState.textContent = message; }
+      function setBusy(isBusy) { elements.analyzeBtn.disabled = isBusy; elements.analyzeBtn.textContent = isBusy ? 'Analyzing...' : 'Run Analysis'; }
+
+      function writeLog(message, level = 'info') {
+        const item = document.createElement('li');
+        item.className = 'log-item';
+        item.dataset.level = level;
+        const time = document.createElement('span');
+        time.className = 'log-item__time';
+        time.textContent = new Intl.DateTimeFormat('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(new Date());
+        const text = document.createElement('span');
+        text.className = 'log-item__message';
+        text.textContent = message;
+        item.append(time, text);
+        elements.logList.prepend(item);
+        while (elements.logList.children.length > state.logsLimit) elements.logList.removeChild(elements.logList.lastElementChild);
+        elements.announce.textContent = message;
+      }
+
+      async function handlePaste() {
+        if (!navigator.clipboard || !navigator.clipboard.readText) {
+          writeLog('CLIPBOARD_READ_UNAVAILABLE_IN_THIS_BROWSER', 'warning');
+          return;
         }
-
-function processData() {
-    const fullText = inputArea.value.trim();
-    if(!fullText) return;
-
-    // Режем на блоки
-    let blocks = [];
-    if (fullText.includes("Идентификатор товара") || fullText.includes("Предмет")) {
-        blocks = fullText.split(/(?=Идентификатор товара|Предмет:)/i).filter(b => b.trim().length > 10);
-    } else {
-        blocks = [fullText];
-    }
-
-    let finalResults = [];
-
-    blocks.forEach(text => {
-        // 1. ID и Стикер (10-12 цифр)
-        const idMatch = text.match(/\b\d{10,12}\b/);
-        const id = idMatch ? idMatch[0] : "";
-        const sticker = id;
-
-        // 2. СТАТУС (Универсальный поиск: 3 заглавные буквы, за которыми идет текст раскладки/инвентаризации)
-        const statusMatch = text.match(/\b([A-Z]{3})\b(?=\s+[А-Яа-я])/);
-        const status = statusMatch ? statusMatch[1] : "";
-
-        // 3. НАИМЕНОВАНИЕ (Полное название из верхней строки)
-        let name = "";
-        const altMatch = text.match(/Идентификатор товара\s+\d+\s+\/\s+([^/]+)/i);
-        if (altMatch) name = altMatch[1].trim();
-
-        // 4. СТОИМОСТЬ (Строго число перед знаком ₽)
-        const priceMatch = text.match(/(\d+[\s\d]*)\s*₽/);
-        const price = priceMatch ? priceMatch[1].replace(/\s/g, '') : "";
-
-        // 5. MX (ВЛАД или ЦП)
-        const mxMatch = text.match(/(?:ВЛАД|ЦП|MX)[\d\.]+/i);
-        const mx = mxMatch ? mxMatch[0] : "";
-
-        // 6. BOX (Строго число после слова BOX)
-        const boxMatch = text.match(/BOX\s*(\d+)/i);
-        const box = boxMatch ? boxMatch[1] : "";
-
-        if (id || name || price) {
-            finalResults.push(`${id}\t${sticker}\t${status}\t${name}\t${price}\t${mx}\t${box}`);
+        try {
+          const text = await navigator.clipboard.readText();
+          if (!text.trim()) {
+            writeLog('CLIPBOARD_IS_EMPTY', 'warning');
+            return;
+          }
+          elements.input.value = text;
+          updateInputMeta();
+          writeLog('SOURCE_INPUT_INSERTED_FROM_CLIPBOARD', 'success');
+        } catch (error) {
+          writeLog(`CLIPBOARD_READ_FAILED: ${error.message}`, 'error');
         }
-    });
+      }
 
-    if (finalResults.length > 0) {
-        outputArea.value = finalResults.join('\n');
-        document.getElementById('counter').innerText = `COUNT: ${finalResults.length}`;
-        document.getElementById('output-window').classList.add('has-output');
-        logEl.innerText = `> SUCCESS: ${finalResults.length} STRINGS COMPILED`;
-    }
-}
-
-
-        async function copyResult() {
-            if (!outputArea.value) return;
-
-            try {
-                await navigator.clipboard.writeText(outputArea.value);
-                copyBtn.innerText = 'copied!';
-                copyBtn.classList.add('success-flash');
-                logEl.innerText = '> RESULT COPIED TO BUFFER';
-                logEl.className = 'log-area success';
-                flashLog('success');
-
-                setTimeout(function () {
-                    copyBtn.innerText = 'cp_to_buffer';
-                    copyBtn.classList.remove('success-flash');
-                }, 1000);
-            } catch (e) {
-                logEl.innerText = '> ERROR: COPY FAILED';
-                logEl.className = 'log-area error';
-                flashLog('error');
-            }
+      async function copyOutput(mode) {
+        if (!state.lastParsed) {
+          writeLog('NOTHING_TO_COPY: RUN ANALYSIS FIRST', 'warning');
+          return;
         }
-
-        function clearAll() {
-            inputArea.value = '';
-            outputArea.value = '';
-            counterEl.innerText = 'COUNT: 0';
-            logEl.innerText = '> SYSTEM_RESET: READY';
-            logEl.className = 'log-area';
-            copyBtn.innerText = 'cp_to_buffer';
-            copyBtn.classList.remove('success-flash');
-            outputWindow.classList.remove('has-output');
+        const payload = mode === 'json' ? state.lastParsed.json : state.lastParsed.tsv;
+        if (!payload) {
+          writeLog('EMPTY_OUTPUT_CANNOT_BE_COPIED', 'warning');
+          return;
         }
-    </script>
+        try {
+          await navigator.clipboard.writeText(payload);
+          writeLog(`${mode.toUpperCase()}_COPIED_TO_CLIPBOARD`, 'success');
+        } catch (error) {
+          writeLog(`COPY_FAILED: ${error.message}`, 'error');
+        }
+      }
+
+      function downloadOutput() {
+        if (!state.lastParsed || !state.lastParsed.tsv) {
+          writeLog('NOTHING_TO_DOWNLOAD', 'warning');
+          return;
+        }
+        const blob = new Blob([state.lastParsed.tsv], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        const stamp = new Intl.DateTimeFormat('sv-SE', {
+          year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+        }).format(new Date()).replace(/[ :]/g, '-');
+        link.href = url;
+        link.download = `ultimate6-output-${stamp}.txt`;
+        link.click();
+        URL.revokeObjectURL(url);
+        writeLog('OUTPUT_TXT_DOWNLOADED', 'success');
+      }
+
+      function clearInput() {
+        elements.input.value = '';
+        updateInputMeta();
+        writeLog('SOURCE_INPUT_CLEARED', 'info');
+        elements.input.focus();
+      }
+
+      function resetOutput() {
+        state.lastParsed = null;
+        elements.output.value = '';
+        const empty = createEmptyResult();
+        renderPreview(empty);
+        updateSummary(empty);
+        updateCompleteness(0);
+        setParseState('Ожидание анализа');
+        writeLog('OUTPUT_RESET_COMPLETE', 'info');
+      }
+
+      function loadDemo() {
+        elements.input.value = DEMO_TEXT;
+        updateInputMeta();
+        writeLog('DEMO_DATA_LOADED', 'info');
+      }
+
+      function clearLog() {
+        elements.logList.replaceChildren();
+        writeLog('LOG_CLEARED', 'info');
+      }
+
+      init();
+    })();
+  </script>
 </body>
 </html>
