@@ -3,216 +3,122 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Мемуары или биография</title>
-
+  <title>Мемуары или биография — Олег Ван</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-top: #f6e8df;
-      --bg-mid: #eadfd6;
-      --bg-bottom: #d8cbc3;
-
-      --paper: rgba(255, 250, 245, 0.58);
-      --paper-strong: rgba(255, 249, 244, 0.72);
-      --paper-border: rgba(120, 95, 82, 0.10);
-
-      --text: #40332d;
-      --muted: #7a675d;
-      --accent: #9e6e61;
-      --accent-soft: #bb8d7d;
-      --line: rgba(80, 58, 48, 0.08);
-
-      --shadow: 0 20px 60px rgba(87, 58, 46, 0.10);
-      --shadow-soft: 0 18px 40px rgba(87, 58, 46, 0.08);
-
-      --hero-max: 1040px;
-      --content-max: 860px;
-      --radius: 30px;
+      --bg: #d9d2ca;
+      --bg-deep: #c9c0b7;
+      --paper: rgba(250, 246, 241, 0.82);
+      --paper-strong: rgba(252, 249, 245, 0.9);
+      --border: rgba(73, 55, 45, 0.12);
+      --line: rgba(73, 55, 45, 0.10);
+      --text: #2f2521;
+      --muted: #695952;
+      --accent: #7f5a4a;
+      --accent-soft: #9e7b6c;
+      --shadow: 0 18px 50px rgba(47, 37, 33, 0.12);
+      --radius: 28px;
+      --content-max: 850px;
+      --hero-max: 1100px;
     }
 
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      color: var(--text);
       font-family: "Cormorant Garamond", Georgia, serif;
+      color: var(--text);
       background:
-        radial-gradient(circle at 15% 20%, rgba(255, 214, 170, 0.35), transparent 28%),
-        radial-gradient(circle at 85% 18%, rgba(214, 148, 128, 0.20), transparent 24%),
-        radial-gradient(circle at 50% 75%, rgba(160, 109, 98, 0.08), transparent 30%),
-        linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 40%, var(--bg-bottom) 100%);
+        radial-gradient(circle at top, rgba(255,255,255,0.32), transparent 30%),
+        linear-gradient(180deg, #ebe4dc 0%, var(--bg) 34%, var(--bg-deep) 100%);
       min-height: 100vh;
       overflow-x: hidden;
-      position: relative;
     }
 
-    body::before,
-    body::after {
+    body::before {
       content: "";
       position: fixed;
       inset: 0;
       pointer-events: none;
-      z-index: 0;
-    }
-
-    body::before {
-      background:
-        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.18), transparent 18%),
-        radial-gradient(circle at 75% 60%, rgba(255,255,255,0.10), transparent 22%),
-        radial-gradient(circle at 50% 90%, rgba(255,255,255,0.08), transparent 16%);
-      filter: blur(18px);
-    }
-
-    body::after {
       background-image:
         linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-      background-size: 140px 140px;
-      opacity: 0.16;
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.45), transparent 85%);
-      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.45), transparent 85%);
+      background-size: 160px 160px;
+      opacity: 0.18;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent 82%);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent 82%);
     }
 
-    .blossom {
-      position: fixed;
-      width: 420px;
-      height: 420px;
-      border-radius: 50%;
-      filter: blur(46px);
-      opacity: 0.16;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .blossom.one {
-      top: 40px;
-      left: -160px;
-      background: radial-gradient(circle, rgba(202, 136, 136, 0.42), transparent 60%);
-    }
-
-    .blossom.two {
-      bottom: 80px;
-      right: -140px;
-      background: radial-gradient(circle, rgba(227, 184, 144, 0.38), transparent 60%);
-    }
-
-    .branch {
-      position: fixed;
-      z-index: 0;
-      opacity: 0.15;
-      pointer-events: none;
-    }
-
-    .branch.left {
-      top: 0;
-      left: 0;
-      width: 260px;
-      height: 420px;
-    }
-
-    .branch.right {
-      bottom: 0;
-      right: 0;
-      width: 260px;
-      height: 420px;
-      transform: scaleX(-1);
-    }
-
-    .petals {
+    .grain {
       position: fixed;
       inset: 0;
       pointer-events: none;
-      overflow: hidden;
-      z-index: 1;
+      opacity: 0.06;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cg fill='%23000' fill-opacity='.28'%3E%3Ccircle cx='12' cy='18' r='1'/%3E%3Ccircle cx='88' cy='32' r='1'/%3E%3Ccircle cx='45' cy='74' r='1'/%3E%3Ccircle cx='120' cy='110' r='1'/%3E%3Ccircle cx='17' cy='99' r='1'/%3E%3Ccircle cx='70' cy='9' r='1'/%3E%3Ccircle cx='101' cy='64' r='1'/%3E%3Ccircle cx='56' cy='129' r='1'/%3E%3C/g%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
     }
 
-    .petal {
-      position: absolute;
-      top: -40px;
-      width: 14px;
-      height: 10px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.95), rgba(233,181,185,0.85) 55%, rgba(196,126,135,0.75));
-      border-radius: 70% 30% 70% 30%;
-      opacity: 0.55;
-      filter: blur(0.2px);
-      animation-name: fall;
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
-      box-shadow: 0 2px 8px rgba(120, 70, 70, 0.08);
-    }
-
-    @keyframes fall {
-      0% {
-        transform: translate3d(0, -20px, 0) rotate(0deg);
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.55;
-      }
-      100% {
-        transform: translate3d(var(--drift, 80px), 110vh, 0) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
-    .wrap {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-    }
+    .wrap { position: relative; z-index: 1; }
 
     .hero {
-      min-height: 100vh;
+      min-height: 100svh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 40px 20px 60px;
+      padding: 48px 20px 72px;
     }
 
     .hero-inner {
       width: 100%;
       max-width: var(--hero-max);
       text-align: center;
-      padding: 48px 22px;
+      padding: 42px 20px;
+    }
+
+    .eyebrow, .meta, .chapter-label, .quote-label, .footer-meta {
+      font-family: "Inter", sans-serif;
     }
 
     .eyebrow {
-      font-family: "Inter", sans-serif;
       font-size: 12px;
-      letter-spacing: 0.24em;
+      letter-spacing: .22em;
       text-transform: uppercase;
       color: var(--muted);
       margin-bottom: 18px;
-      opacity: 0.88;
     }
 
     h1 {
       margin: 0;
+      font-size: clamp(46px, 8vw, 92px);
+      line-height: 0.95;
       font-weight: 600;
-      font-size: clamp(44px, 7vw, 84px);
-      line-height: 0.98;
-      letter-spacing: 0.01em;
-      color: #3b2f2a;
-      text-wrap: balance;
+      color: #2a211d;
+      letter-spacing: .01em;
+    }
+
+    .hero-author {
+      margin-top: 14px;
+      font-size: clamp(24px, 3vw, 36px);
+      color: var(--accent);
     }
 
     .hero-subtitle {
-      margin: 22px auto 0;
       max-width: 760px;
+      margin: 24px auto 0;
+      font-size: clamp(21px, 2.6vw, 28px);
+      line-height: 1.58;
       color: var(--muted);
-      font-size: clamp(18px, 2.2vw, 24px);
-      line-height: 1.65;
-      padding: 0 6px;
+    }
+
+    .hero-note {
+      margin: 28px auto 0;
+      max-width: 680px;
+      font-size: clamp(18px, 2.1vw, 23px);
+      line-height: 1.6;
+      color: #4a3c35;
     }
 
     .hero-actions {
@@ -220,747 +126,444 @@
       display: flex;
       gap: 14px;
       justify-content: center;
-      align-items: center;
       flex-wrap: wrap;
     }
 
     .btn {
       appearance: none;
-      border: 1px solid rgba(103, 72, 61, 0.12);
-      background: rgba(255,255,255,0.34);
-      color: #463732;
+      border: 1px solid rgba(73, 55, 45, 0.13);
+      background: rgba(255,255,255,0.45);
+      color: #3d312c;
       font-family: "Inter", sans-serif;
       font-size: 14px;
       font-weight: 500;
-      letter-spacing: 0.02em;
       border-radius: 999px;
       padding: 14px 22px;
       cursor: pointer;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      box-shadow: 0 10px 30px rgba(90, 65, 54, 0.08);
-      transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+      box-shadow: 0 12px 28px rgba(47, 37, 33, 0.08);
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+      text-decoration: none;
     }
 
     .btn:hover {
       transform: translateY(-1px);
-      background: rgba(255,255,255,0.48);
-      border-color: rgba(103, 72, 61, 0.18);
+      background: rgba(255,255,255,0.64);
+      border-color: rgba(73, 55, 45, 0.2);
     }
 
-    .btn:active {
-      transform: translateY(0);
-    }
-
-    .btn.primary {
-      background: rgba(255, 248, 243, 0.74);
-    }
-
-    .btn .hint {
-      opacity: 0.7;
-      margin-left: 6px;
-    }
+    .btn.primary { background: rgba(255, 252, 248, 0.78); }
 
     .hero-divider {
-      width: 120px;
+      width: 140px;
       height: 1px;
       margin: 34px auto 0;
-      background: linear-gradient(90deg, transparent, rgba(80, 58, 48, 0.25), transparent);
+      background: linear-gradient(90deg, transparent, rgba(73, 55, 45, .35), transparent);
     }
 
-    .hero-note {
-      margin-top: 18px;
-      font-family: "Inter", sans-serif;
-      font-size: 12px;
+    .hero-meta {
+      margin-top: 16px;
       color: var(--muted);
-      letter-spacing: 0.04em;
-      opacity: 0.78;
+      font-size: 12px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
     }
 
-    .content-section {
-      padding: 20px 16px 120px;
+    .page {
+      padding: 10px 16px 120px;
     }
 
     .paper {
       max-width: var(--content-max);
       margin: 0 auto;
       background: var(--paper);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--paper-border);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: clamp(22px, 4vw, 56px);
-      position: relative;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       overflow: hidden;
+      position: relative;
     }
 
     .paper::before {
       content: "";
       position: absolute;
       inset: 0;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.22), transparent 28%),
-        radial-gradient(circle at top right, rgba(255,255,255,0.12), transparent 24%);
       pointer-events: none;
+      background: linear-gradient(180deg, rgba(255,255,255,0.28), transparent 24%);
     }
 
-    .intro-note {
-      position: relative;
+    .top-note {
+      padding: 22px 28px;
+      border-bottom: 1px solid var(--line);
       font-family: "Inter", sans-serif;
-      font-size: 13px;
-      color: var(--muted);
+      font-size: 12px;
       line-height: 1.8;
-      margin-bottom: 28px;
-      padding-bottom: 18px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .toc {
+      padding: 18px 28px 8px;
       border-bottom: 1px solid var(--line);
     }
 
-    .section-title {
-      margin: 42px 0 20px;
+    .toc-title {
+      margin: 0 0 12px;
       font-family: "Inter", sans-serif;
-      font-size: 12px;
-      letter-spacing: 0.18em;
+      font-size: 11px;
+      letter-spacing: .18em;
       text-transform: uppercase;
       color: var(--accent);
-      opacity: 0.88;
     }
 
-    .content,
-    .ending {
-      position: relative;
+    .toc-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
-    .content p,
-    .ending p {
-      margin: 0 0 1.24em;
-      font-size: clamp(22px, 2.45vw, 31px);
-      line-height: 1.72;
-      letter-spacing: 0.01em;
-      opacity: 0;
-      transform: translateY(22px);
-      transition: opacity 0.9s ease, transform 0.9s ease;
-    }
-
-    .content p.visible,
-    .ending p.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .content p.lead,
-    .ending p.lead {
-      font-size: clamp(28px, 3vw, 38px);
-      line-height: 1.55;
-      color: #392d28;
-    }
-
-    .content p.center,
-    .ending p.center {
-      text-align: center;
-      color: var(--accent);
-      font-style: italic;
-      margin: 1.8em 0;
-      line-height: 1.5;
-    }
-
-    .ending-wrap {
-      margin-top: 36px;
-      padding: clamp(20px, 4vw, 34px);
-      background: var(--paper-strong);
-      border: 1px solid rgba(130, 98, 84, 0.12);
-      border-radius: 24px;
-      box-shadow: var(--shadow-soft);
-      position: relative;
-    }
-
-    .ending-wrap::before {
-      content: "";
-      position: absolute;
-      left: 24px;
-      right: 24px;
-      top: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(159,111,98,0.30), transparent);
-    }
-
-    .final-mark {
-      margin: 28px auto 6px;
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      color: var(--accent-soft);
-      border: 1px solid rgba(159,111,98,0.18);
-      background: rgba(255,255,255,0.18);
-      font-size: 24px;
-      line-height: 1;
-    }
-
-    .signature {
-      margin-top: 40px;
-      padding-top: 24px;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      text-align: center;
-    }
-
-    .signature .name {
-      font-size: 28px;
-      line-height: 1.2;
-    }
-
-    .signature .role {
-      margin-top: 6px;
+    .toc-links a {
+      text-decoration: none;
+      color: #4a3c35;
       font-family: "Inter", sans-serif;
+      font-size: 12px;
+      border: 1px solid rgba(73,55,45,.10);
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.34);
+    }
+
+    .chapter {
+      padding: 34px 28px 4px;
+    }
+
+    .chapter + .chapter {
+      border-top: 1px solid var(--line);
+    }
+
+    .chapter-label {
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .chapter h2 {
+      margin: 0 0 16px;
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1.05;
+      font-weight: 600;
+    }
+
+    .meta {
+      margin: 0 0 26px;
+      color: var(--muted);
       font-size: 13px;
       line-height: 1.7;
     }
 
-    .audio-chip {
-      position: fixed;
-      right: 18px;
-      bottom: 18px;
-      z-index: 6;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 14px;
-      border-radius: 999px;
-      background: rgba(255, 249, 244, 0.68);
-      border: 1px solid rgba(120, 95, 82, 0.12);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      box-shadow: 0 10px 30px rgba(87, 58, 46, 0.10);
-      font-family: "Inter", sans-serif;
-      color: #4c3b35;
+    p {
+      margin: 0 0 1.2em;
+      font-size: clamp(24px, 2.5vw, 31px);
+      line-height: 1.68;
+      letter-spacing: .005em;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .7s ease, transform .7s ease;
     }
 
-    .audio-btn {
-      appearance: none;
-      border: none;
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      cursor: pointer;
-      background: rgba(160, 109, 98, 0.10);
-      color: #6b4f45;
-      font-size: 14px;
-      display: grid;
-      place-items: center;
-      transition: background 0.25s ease, transform 0.25s ease;
+    p.visible, blockquote.visible, .reflection.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    .audio-btn:hover {
-      background: rgba(160, 109, 98, 0.18);
-      transform: scale(1.04);
+    .lead {
+      font-size: clamp(29px, 3.1vw, 40px);
+      line-height: 1.5;
+      color: #2b211d;
     }
 
-    .audio-meta {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.2;
+    .center {
+      text-align: center;
+      color: var(--accent);
+      font-style: italic;
+      margin: 1.7em 0;
+      line-height: 1.46;
     }
 
-    .audio-title {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.03em;
+    blockquote,
+    .reflection {
+      margin: 28px 0 34px;
+      padding: 22px 22px 18px 24px;
+      border-left: 2px solid rgba(127, 90, 74, 0.35);
+      background: rgba(255,255,255,0.28);
+      border-radius: 0 18px 18px 0;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .7s ease, transform .7s ease;
     }
 
-    .audio-state {
+    .quote-label {
+      margin-bottom: 8px;
       font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent-soft);
+    }
+
+    blockquote p,
+    .reflection p {
+      margin-bottom: .8em;
+      font-size: clamp(22px, 2.3vw, 28px);
+      line-height: 1.62;
+      opacity: 1;
+      transform: none;
+    }
+
+    .closing {
+      margin: 26px 0 10px;
+      padding: 26px 22px 10px;
+      background: var(--paper-strong);
+      border: 1px solid rgba(73,55,45,.10);
+      border-radius: 22px;
+      box-shadow: 0 12px 30px rgba(47, 37, 33, 0.06);
+    }
+
+    .signature {
+      padding: 18px 28px 32px;
+      text-align: center;
       color: var(--muted);
-      margin-top: 2px;
+      border-top: 1px solid var(--line);
     }
 
-    .footer-space {
-      height: 100px;
+    .signature .name {
+      font-size: 30px;
+      line-height: 1.2;
+      color: #3a2f2a;
     }
 
-    @media (max-width: 900px) {
-      .content p,
-      .ending p {
-        font-size: clamp(21px, 5vw, 28px);
-        line-height: 1.68;
-      }
-
-      .content p.lead,
-      .ending p.lead {
-        font-size: clamp(26px, 6vw, 34px);
-      }
+    .footer-meta {
+      margin-top: 6px;
+      font-size: 12px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
     }
 
-    @media (max-width: 640px) {
-      :root {
-        --radius: 22px;
-      }
-
-      .hero {
-        min-height: 92svh;
-        padding: 18px 14px 34px;
-      }
-
-      .hero-inner {
-        padding: 28px 8px 14px;
-      }
-
-      h1 {
-        font-size: clamp(38px, 12vw, 58px);
-        line-height: 0.98;
-      }
-
-      .hero-subtitle {
-        font-size: clamp(17px, 5vw, 21px);
-        line-height: 1.6;
-      }
-
-      .hero-actions {
-        margin-top: 28px;
-        gap: 10px;
-      }
-
-      .btn {
-        width: 100%;
-        max-width: 320px;
-        justify-content: center;
-        padding: 14px 18px;
-      }
-
-      .content-section {
-        padding: 8px 10px 100px;
-      }
-
-      .paper {
-        padding: 18px 16px 28px;
-      }
-
-      .intro-note {
-        font-size: 12px;
-      }
-
-      .section-title {
-        margin-top: 30px;
-      }
-
-      .content p,
-      .ending p {
-        font-size: clamp(21px, 6.3vw, 25px);
-        line-height: 1.62;
-        margin-bottom: 1.08em;
-      }
-
-      .content p.lead,
-      .ending p.lead {
-        font-size: clamp(26px, 7.8vw, 31px);
-        line-height: 1.44;
-      }
-
-      .ending-wrap {
-        padding: 18px 16px 20px;
-        border-radius: 18px;
-      }
-
-      .branch.left,
-      .branch.right {
-        width: 170px;
-        height: 280px;
-        opacity: 0.10;
-      }
-
-      .audio-chip {
-        right: 10px;
-        bottom: 10px;
-        left: 10px;
-        justify-content: center;
-      }
+    @media (max-width: 720px) {
+      :root { --radius: 22px; }
+      .hero { padding: 24px 14px 44px; min-height: 92svh; }
+      .hero-inner { padding: 18px 8px; }
+      .page { padding: 8px 10px 80px; }
+      .paper { border-radius: 22px; }
+      .top-note, .toc, .chapter, .signature { padding-left: 16px; padding-right: 16px; }
+      .chapter { padding-top: 26px; }
+      p { font-size: clamp(22px, 6vw, 26px); line-height: 1.6; }
+      .lead { font-size: clamp(27px, 8vw, 32px); }
+      blockquote p, .reflection p { font-size: clamp(21px, 5.5vw, 24px); }
+      .toc-links { gap: 7px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-
-      .petal,
-      .content p,
-      .ending p,
-      .btn {
-        animation: none !important;
-        transition: none !important;
-      }
-
-      .content p,
-      .ending p {
-        opacity: 1;
-        transform: none;
-      }
+      html { scroll-behavior: auto; }
+      p, blockquote, .reflection, .btn { transition: none !important; }
+      p, blockquote, .reflection { opacity: 1 !important; transform: none !important; }
     }
   </style>
 </head>
 <body>
-  <div class="blossom one"></div>
-  <div class="blossom two"></div>
-
-  <div class="petals" id="petals"></div>
-
-  <svg class="branch left" viewBox="0 0 260 420" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M18 20C80 80 96 110 122 172C138 210 160 262 236 340" stroke="#6f554b" stroke-width="2.2" stroke-linecap="round"/>
-    <path d="M98 140C78 128 52 126 30 134" stroke="#6f554b" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M122 174C102 170 84 176 64 190" stroke="#6f554b" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M152 228C136 220 116 220 96 230" stroke="#6f554b" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M186 278C170 270 150 270 132 280" stroke="#6f554b" stroke-width="1.5" stroke-linecap="round"/>
-    <circle cx="92" cy="139" r="7" fill="#c88f8d"/>
-    <circle cx="121" cy="173" r="8" fill="#ddb0a4"/>
-    <circle cx="151" cy="227" r="7" fill="#d79b93"/>
-    <circle cx="184" cy="278" r="8" fill="#e7bf9a"/>
-    <circle cx="58" cy="132" r="5" fill="#e2b3ac"/>
-  </svg>
-
-  <svg class="branch right" viewBox="0 0 260 420" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M18 20C80 80 96 110 122 172C138 210 160 262 236 340" stroke="#6f554b" stroke-width="2.2" stroke-linecap="round"/>
-    <path d="M98 140C78 128 52 126 30 134" stroke="#6f554b" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M122 174C102 170 84 176 64 190" stroke="#6f554b" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M152 228C136 220 116 220 96 230" stroke="#6f554b" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M186 278C170 270 150 270 132 280" stroke="#6f554b" stroke-width="1.5" stroke-linecap="round"/>
-    <circle cx="92" cy="139" r="7" fill="#c88f8d"/>
-    <circle cx="121" cy="173" r="8" fill="#ddb0a4"/>
-    <circle cx="151" cy="227" r="7" fill="#d79b93"/>
-    <circle cx="184" cy="278" r="8" fill="#e7bf9a"/>
-    <circle cx="58" cy="132" r="5" fill="#e2b3ac"/>
-  </svg>
-
+  <div class="grain"></div>
   <main class="wrap">
     <section class="hero">
       <div class="hero-inner">
-        <div class="eyebrow">личный текст / воспоминания</div>
+        <div class="eyebrow">личный текст / веб-версия</div>
         <h1>Мемуары<br>или биография</h1>
-        <p class="hero-subtitle">
-          Тихая длинная страница о памяти, поражениях, попытках, самообмане
-          и том моменте, когда человек впервые перестаёт отворачиваться от самого себя.
-        </p>
-
+        <div class="hero-author">Олег Ван</div>
+        <p class="hero-subtitle">Текст, начатый 28 января 2020 года, когда мне было двадцать пять. Тогда я сел вспоминать свою жизнь не ради литературы, а потому что впервые по-настоящему понял: я слишком долго врал себе о том, кто я такой.</p>
+        <p class="hero-note">Это не история успеха. Это попытка посмотреть на себя без оправданий: через детство, спорт, отца, армию, деньги, страх, смерть и ту силу, которую я то ли носил в себе, то ли всё это время боялся применить.</p>
         <div class="hero-actions">
-          <button class="btn primary" id="startReading">Начать чтение <span class="hint">↓</span></button>
-          <button class="btn" id="toggleAmbient">Атмосфера: выкл</button>
+          <a class="btn primary" href="#memoirs">Начать чтение</a>
+          <a class="btn" href="#philosophy">К размышлениям о жизни и смерти</a>
         </div>
-
         <div class="hero-divider"></div>
-        <div class="hero-note">читать медленно • лучше в тишине</div>
+        <div class="hero-meta">читать медленно • лучше в тишине</div>
       </div>
     </section>
 
-    <section class="content-section" id="reading">
+    <section class="page" id="memoirs">
       <div class="paper">
-        <div class="intro-note">
-          Оценки могут многое сказать об учёбе, но почти ничего — о душе. Главное — остаться хорошим человеком.
+        <div class="top-note">
+          <div>Основа этого текста родилась в 2020 году. Эта версия — литературно собранная веб-редакция, где сохранены даты, факты и главное внутреннее напряжение.</div>
+          <div>25 апреля 1994 → 28 января 2020 → дальше уже не воспоминания, а суд над собой.</div>
         </div>
 
-        <div class="section-title">Начало</div>
+        <nav class="toc">
+          <div class="toc-title">Разделы</div>
+          <div class="toc-links">
+            <a href="#beginning">Начало</a>
+            <a href="#father">Отец</a>
+            <a href="#sport">Спорт</a>
+            <a href="#school">Школа и повар</a>
+            <a href="#army">Армия</a>
+            <a href="#death">Смерть и деньги</a>
+            <a href="#philosophy">Жизнь и смерть</a>
+            <a href="#final">Продолжение</a>
+          </div>
+        </nav>
 
-        <article class="content">
-          <p class="lead">Когда-то я просто хотел выписать на бумагу свои плюсы и минусы, страхи и переживания — коротко, по пунктам, в столбик. Но в какой-то момент увлёкся, и вместо списка получился этот текст: рваный, неровный, местами злой, местами смешной, а по сути — такой же, как и моя жизнь в тот момент.</p>
-
+        <section class="chapter" id="beginning">
+          <div class="chapter-label">Глава первая</div>
+          <h2>Начало</h2>
+          <p class="lead">Мемуары или биография — мне всё равно, как это назвать. Когда-то я просто хотел выписать на бумагу свои плюсы и минусы, страхи и переживания, коротко, по пунктам, в столбик. Но в какой-то момент увлёкся, и вместо списка получился этот текст: рваный, неровный, местами злой, местами смешной, а по сути — такой же, как и моя жизнь в тот момент.</p>
           <p>Возможно, тебе будет скучно это читать. Мы ведь даже не знакомы. Тем, кто знает меня лично, может быть, станет интересно. Кто-то, возможно, посмеётся ещё сильнее. Но этот рассказ вообще-то не для них. И не для тебя. Изначально он был нужен только мне.</p>
-
           <p>Я написал его в тот момент, когда меня довольно жёстко вернули в реальность. Когда оказалось, что всё моё представление о себе — не совсем правда. Или совсем не правда. И вместо того чтобы сдаться, я начал вспоминать свою жизнь: с детства, со спорта, со школы, с первых попыток стать кем-то, добиться чего-то, доказать хотя бы самому себе, что я не пустое место.</p>
-
-          <p class="center">Это не история успеха. Скорее наоборот.</p>
-
+          <p class="center">Так что это не история успеха. Скорее наоборот.</p>
           <p>Здесь будет много поражений, много самоиронии, немного злости, немного стыда и, надеюсь, хоть капля честности. Я вообще человек довольно серьёзный, но и шутить про всякую ерунду никогда не забывал, так что воспринимать всё это можно по-разному.</p>
-
-          <p>В общем, начинаю рассказ. Приготовьтесь скучать.</p>
-
           <p>Детский сад я почти не помню. Из воспоминаний — разве что разбитый нос: в меня кто-то кинул камень. На этом, пожалуй, всё.</p>
-
-          <p>Родители развелись, когда мне было три года. Отец был не самым лучшим примером для подражания. Я не хочу говорить о нём только плохо, но факт остаётся фактом: он избивал мать. Поэтому они и разошлись.</p>
-
-          <p>Воспитывали меня в основном мама, бабушка, дед и мой на тот момент молодой дядя. Отец тоже иногда появлялся в моей жизни, но в целом моё детство держалось не на нём.</p>
-
-          <p>Эти записи — если уж совсем честно — вряд ли кому-то нужны. Но раз уж я начал, пусть это будет рассказ о моих победах и поражениях. Хотя поражений я, кажется, помню куда больше.</p>
-
-          <p>На момент, когда я сел всё это писать, мне было двадцать пять. И тогда мне очень хотелось проснуться и узнать, что мне не двадцать пять, а хотя бы девятнадцать. Что ещё можно что-то переиграть.</p>
-
-          <p>Писать я начал в тот момент, когда мои розовые очки в очередной раз разбились о реальность. О себя самого. О то, кем я на самом деле оказался.</p>
-
-          <p>До этого мне казалось, что я уже что-то понял в жизни. Что у меня есть опыт, характер, какие-то навыки, внутренняя сила. Но один простой вопрос всё разрушил: «Назови свои победы».</p>
-
-          <p>И вот тут оказалось, что сказать мне почти нечего.</p>
-
-          <p>После этого разговора я почувствовал себя раздавленным. Не в красивом литературном смысле, а по-настоящему. И единственное, что пришло мне в голову, — начать вспоминать свою жизнь с самого начала.</p>
-
-          <p>Если смотреть на мою жизнь в детстве, то, наверное, главное, что я помню, — это не победы, а недоведённые до конца попытки.</p>
-
-          <p>Первым, кажется, была лёгкая атлетика. И до сих пор это одна из самых обидных историй в моей жизни. Как оказалось, у меня был талант. Настоящий. Тренер почти сразу перевела меня во взрослую группу и говорила моей семье, что из меня может выйти большой спортсмен.</p>
-
-          <p>Но маму напугали рассказами о том, что спорт ломает здоровье, и она забрала меня из секции. Я не могу на неё злиться. Она правда хотела как лучше. Но, возможно, именно тогда из моей жизни исчез человек, который мог дать мне путь.</p>
-
-          <p>Потом был бокс, кикбоксинг, борьба, соревнования и поражения. Быстрые, глупые, детские, но почему-то запомнившиеся на годы. Кажется, мне всё время не хватало рядом человека, который бы сказал: не вышло — ничего, пошли дальше.</p>
-
-          <p>Потом был тайский бокс — единственное, чем я занимался по-настоящему долго и с интересом. Но и там всё оборвалось, не успев стать чем-то большим.</p>
-
-          <p>По школе мне тоже особенно нечем хвастаться. Учился я ужасно. Не был преступником, но вёл себя отвратительно. И всё же даже сейчас мне кажется, что дело было не только во мне. Меня бесила сама система, в которой не было места ни живому интересу, ни характеру.</p>
-
-          <p>При всём этом я вырос без наркотиков, без тяжёлого алкоголя и, как ни странно, достаточно здоровым и творческим. И этому я действительно рад.</p>
-
-          <p>Во мне всегда было ощущение, будто я чем-то отличаюсь от других. Не в смысле «я особенный», а в смысле: во мне как будто была какая-то сила, которую я никак не мог применить.</p>
-
-          <p>Когда пришло время выбирать профессию, я пошёл учиться на повара. И, конечно, снова не начал нормально учиться. Но готовить у меня получалось. На практике я был гораздо лучше, чем в теории. Потому что там было место для творчества.</p>
-
-          <p>Позже это подтвердилось: один хороший шеф заметил меня и взял к себе. Мне нравилась эта работа. Но из-за моего характера и вечного внутреннего сопротивления всё снова пошло не так.</p>
-
-          <p>И так постепенно начала складываться моя взрослая жизнь — из попыток, срывов, упрямства, надежд, стыда, амбиций и постоянного ощущения, что я мог бы стать кем-то большим, если бы в какой-то момент не свернул не туда.</p>
-
-          <p class="center">Но, возможно, именно из этого всё и состоит.</p>
-        </article>
-
-        <div class="section-title">Продолжение</div>
-
-        <section class="ending-wrap">
-          <article class="ending">
-            <p class="lead">Я остановился тогда не потому, что мне нечего было сказать. А потому что стало слишком честно.</p>
-
-            <p>Когда ты долго врёшь себе, ты привыкаешь к этому состоянию. Это как жить в комнате с приглушённым светом. Ты уже не замечаешь, что почти ничего не видно. Тебе нормально. Даже уютно. А потом кто-то резко включает свет, и ты видишь всё: пыль, грязь, беспорядок. И самое неприятное — ты понимаешь, что всё это время это было здесь. Просто ты не смотрел.</p>
-
-            <p>В 2020 году мне казалось, что я дошёл до предела. Что хуже уже не будет. Что вот это ощущение пустоты, собственной несостоятельности, внутреннего шума — это и есть дно. Я ошибался. Это было не дно. Это было знакомство с реальностью.</p>
-
-            <p class="center">Реальность оказалась простой и очень неприятной: я не тот, кем себя считал.</p>
-
-            <p>Не сильный. Не собранный. Не особенный.</p>
-
-            <p>Просто человек, который много раз начинал и почти никогда не доходил до конца.</p>
-
-            <p>И если убрать весь лишний шум, оправдания, воспоминания, обстоятельства — остаётся одна линия, которая проходит через всю мою жизнь. Я пробовал. У меня даже иногда получалось. Но в какой-то момент я сдавался. Иногда из страха, иногда из-за лени, иногда просто потому, что становилось тяжело. И каждый раз я находил этому объяснение. Очень убедительное. Настолько убедительное, что сам в него верил.</p>
-
-            <p>Самое страшное в этом не сами поражения. Самое страшное — привычка к ним.</p>
-
-            <p>Ты начинаешь жить так, будто это нормально. Будто так у всех. Будто ты просто «такой человек». И чем дольше ты в этом находишься, тем сложнее признать, что проблема не в мире, не в людях, не в обстоятельствах. Проблема в том, что ты не дожимаешь.</p>
-
-            <p>Мне долго хотелось найти кого-то виноватого. В детстве — взрослых, которые не направили. В юности — систему, которая не научила. Позже — обстоятельства, которые «не дали шанса».</p>
-
-            <p>Но если быть честным до конца, всё это — слабые оправдания. Да, у меня не было идеального старта. Да, рядом не оказалось человека, который вовремя сказал бы правильные слова. Но в какой-то момент ты перестаёшь быть ребёнком. И всё, что дальше происходит, уже на тебе.</p>
-
-            <p>Это тяжело принять. Потому что вместе с этим исчезает возможность себя жалеть.</p>
-
-            <p>Я помню, как тогда пытался найти хоть одну нормальную победу. Хоть что-то, что можно было бы назвать результатом. Не процессом, не попыткой, не «почти получилось», а именно результатом. И ничего не находил. Это давило сильнее всего.</p>
-
-            <p>Но сейчас, спустя время, я смотрю на это иначе.</p>
-
-            <p>Да, у меня не было больших побед. Зато у меня было кое-что другое.</p>
-
-            <p class="center">Я не остановился.</p>
-
-            <p>Как бы это ни звучало странно после всего, что написано выше, но это правда. Я не исчез. Я не выбрал самый простой путь. Я не ушёл туда, где можно забыться и больше не думать. Я продолжал что-то делать. Иногда криво, иногда бессмысленно, иногда через силу. Но продолжал.</p>
-
-            <p>И, возможно, именно это и есть та точка, с которой всё начинается.</p>
-
-            <p>Не мотивация. Не вдохновение. Не «новая жизнь с понедельника».</p>
-
-            <p>А простое решение: не сдаваться в этот раз.</p>
-
-            <p>Не завтра. Не когда станет легче. А сейчас.</p>
-
-            <p>Я долго ждал, что однажды появится чувство, которое всё изменит. Что я проснусь другим человеком. Более собранным, более сильным, более дисциплинированным. Этого не произошло.</p>
-
-            <p>Зато произошло другое.</p>
-
-            <p>Я начал делать, даже когда не хочется.</p>
-
-            <p>Без настроения. Без веры в результат. Без уверенности, что это вообще к чему-то приведёт.</p>
-
-            <p>И в какой-то момент я понял простую вещь: жизнь меняется не тогда, когда ты всё понял, а тогда, когда ты начал повторять правильные действия.</p>
-
-            <p>Скучные. Обычные. Каждый день.</p>
-
-            <p>В этом нет ничего красивого. Это не история, которую хочется рассказывать. Это не то, что вызывает восхищение. Но именно из этого складывается всё остальное.</p>
-
-            <p>Если честно, я до сих пор не могу сказать, что стал тем, кем хотел быть. Я всё ещё часто злюсь. Всё ещё иногда откатываюсь назад. Всё ещё ловлю себя на старых привычках.</p>
-
-            <p>Но есть разница, которую я чувствую.</p>
-
-            <p>Раньше я убегал. Сейчас я остаюсь.</p>
-
-            <p>Раньше я искал оправдания. Сейчас я ищу решение.</p>
-
-            <p>Раньше я надеялся, что кто-то поможет. Сейчас я понимаю, что никто не придёт.</p>
-
-            <p>И в этом нет трагедии. В этом есть свобода.</p>
-
-            <p>Потому что если никто не придёт, значит всё, что будет дальше, зависит от меня.</p>
-
-            <p>Не от удачи. Не от обстоятельств. Не от того, повезло или нет.</p>
-
-            <p>А от того, выдержу ли я.</p>
-
-            <p>Вот и всё.</p>
-
-            <p>Если попытаться честно ответить на вопрос, о чём эта история, то это не про поражения и не про победы.</p>
-
-            <p class="center">Это про момент, когда человек впервые перестаёт врать себе.</p>
-
-            <p>И если ему хватает сил не отвернуться в этот момент, у него появляется шанс.</p>
-
-            <p>Не гарантия. Не быстрый результат.</p>
-
-            <p>Но шанс.</p>
-
-            <p class="center">И, возможно, этого достаточно.</p>
-          </article>
+          <p>Родители развелись, когда мне было три года. Отец был не самым лучшим примером для подражания. Я не хочу говорить о нём только плохо, но факт остаётся фактом: он избивал мать. Поэтому они и разошлись. Сам я этого, конечно, не помню, но мне рассказывали, что однажды я громко сказал на улице что-то вроде: «Ура, он больше не будет тебя бить». Матери было стыдно, потому что это услышали прохожие.</p>
+          <p>Воспитывали меня в основном мама, бабушка, дед и молодой тогда дядя. Отец тоже иногда появлялся в моей жизни, но в целом моё детство держалось не на нём.</p>
+          <p>На момент, когда я сел всё это писать, мне было двадцать пять. Я родился 25 апреля 1994 года. И, если честно, тогда мне очень хотелось, чтобы это оказалось ошибкой. Хотелось проснуться и узнать, что мне не двадцать пять, а хотя бы девятнадцать. Что ещё можно что-то переиграть.</p>
+          <p>Писать я начал 28 января 2020 года. Накануне мой мир в очередной раз перевернулся. Точнее, разбились мои розовые очки — о реальность, о себя самого, о то, кем я на самом деле оказался.</p>
+          <p>До этого момента мне казалось, что я уже что-то понял в жизни. Что у меня есть опыт, характер, какие-то навыки, какая-то внутренняя сила. Но в один разговор всё это рассыпалось. В двадцать пять лет я вдруг почувствовал себя полным нулём. Человеком, который вроде бы что-то знает, что-то умеет, но всё это почему-то ничего не стоит.</p>
+          <blockquote>
+            <div class="quote-label">точка удара</div>
+            <p>В какой-то момент мне задали очень простой вопрос: «Назови свои победы».</p>
+            <p>И вот тут началось самое неприятное. Я пытался ответить, вспоминал, чего вообще добился в жизни, пытался сформулировать хоть что-то внятное. Но чем дольше говорил, тем яснее становилось: мне нечего предъявить. Или я просто не умею это увидеть. Человеку напротив всё стало понятно раньше, чем мне самому. А до меня дошло чуть позже — как будто по мне проехался моральный поезд, и под этот поезд я лёг добровольно.</p>
+          </blockquote>
+          <p>После этого разговора я почувствовал себя раздавленным. Не в красивом литературном смысле, а по-настоящему: уничтоженным, униженным, пустым. И единственное, что пришло мне в голову, — начать вспоминать свою жизнь с самого начала. Выписать всё: чем я занимался, что у меня получалось, что я бросал, где облажался, где испугался, где меня не поддержали, а где я сам всё испортил.</p>
+          <p>Тогда я ещё не понимал, что пишу не только про прошлое. Мне казалось, что я просто перебираю детство, спорт, школу, армию, работу, женщин, деньги, отца. На деле же я пытался найти одну вещь: в каком именно месте моя жизнь начала уходить не туда. И чем дальше я вспоминал, тем яснее становилось, что никакой одной катастрофы не было. Всё ломалось понемногу. Иногда из-за других. Но чаще — из-за меня.</p>
         </section>
 
-        <div class="final-mark">◦</div>
+        <section class="chapter" id="father">
+          <div class="chapter-label">Глава вторая</div>
+          <h2>Отец и пустое место, которое остаётся после холода</h2>
+          <p class="lead">Про отца мне трудно говорить ровно. Не потому что я хочу облить его грязью, а потому что всё там было слишком обычно для чужих глаз и слишком болезненно для моих.</p>
+          <p>Он не был для меня той фигурой, рядом с которой ребёнок расправляет плечи. Не был человеком, после разговора с которым внутри становится спокойнее. По крайней мере мне так не казалось. Я не помню от него настоящего тепла, не помню ощущения, что рядом кто-то по-настоящему за меня. Зато грубость помню. Холод помню. Это внутреннее расстояние, которое невозможно толком объяснить словами, тоже помню.</p>
+          <p>Самое неприятное в таких вещах то, что они не ломают тебя одним ударом. Они делают своё дело медленно. Ты растёшь, живёшь, привыкаешь, даже не всегда понимаешь, чего именно тебе не хватило. А потом замечаешь, что всю жизнь ищешь мужскую опору где угодно, только не в доме: в спорте, в жёсткости, в упрямстве, в чужих фразах, в фильмах, в желании когда-нибудь стать кем-то, кого будут уважать.</p>
+          <p>Когда мальчику не хватает нормальной мужской поддержки, в нём часто остаётся странная смесь. С одной стороны, ему хочется признания сильной фигуры. С другой — он заранее не доверяет любой силе, потому что привык к грубости вместо опоры. Возможно, отсюда потом и растут споры, вспыльчивость, желание что-то доказывать, внутренний протест против любого авторитета. Ты вроде бы тянешься к силе, но сам же от неё отшатываешься.</p>
+          <p>Я не хочу делать из себя жертву. Это было бы слишком удобно. Но и врать себе тоже больше не хочется. Отцовский холод — это не мелочь, не одна неловкая детская обида и не повод списать всё на прошлое. Это одна из тех конструкций, на которых потом вырастает вся взрослая жизнь. И если в основании было мало тепла, мало поддержки и много грубости, удивляться внутренним перекосам потом уже странно.</p>
+          <p class="center">Отец был рядом не как опора, а как тяжёлый факт.</p>
+          <p>Наверное, именно поэтому позже мне так часто казалось, что сильным можно стать только через жёсткость. Что мужчина — это обязательно кто-то холодный, резкий, недоступный. И только сильно позже до меня начало доходить, что грубость вообще не равна силе. Сила — это когда ты можешь держать. Когда рядом с тобой не страшно. Когда ты не ломаешь слабого, а делаешь его крепче. Но такой пример мне пришлось собирать по кускам уже самому.</p>
+        </section>
+
+        <section class="chapter" id="sport">
+          <div class="chapter-label">Глава третья</div>
+          <h2>Спорт, страх и недоведённые попытки</h2>
+          <p class="lead">Если смотреть на мою жизнь в детстве, то, наверное, главное, что я помню, — это не победы, а недоведённые до конца попытки.</p>
+          <p>Меня никогда особенно не мотивировала идея стать лучшим. Меня не травили в школе так, чтобы это стало топливом на всю жизнь. Не было какой-то великой детской обиды, которая превратила бы меня в бойца. Да, мерзкие эпизоды случались. Помню, как один ублюдок плевал на мой портфель, а мой друг смеялся рядом. Самое смешное, что портфель в этот момент висел у меня на плечах, а я даже не сразу понял, что происходит. Но больших, формирующих унижений я всё же не помню.</p>
+          <p>Если делить мою жизнь на этапы, то мне проще разделить её на «до армии» и «после армии». До армии в моей жизни было много спорта. Не то чтобы я занимался чем-то совсем уж серьёзно, но ходил много куда, многое пробовал и почти везде не доходил до результата. И сейчас, когда я вспоминаю это уже взрослым, мне кажется, что одной из главных причин был страх. Детский, тупой, необъяснимый страх. А ещё — отсутствие рядом человека, который бы вовремя сказал: продолжай, не получилось — ничего, пошли дальше.</p>
+          <p>Первым, кажется, была лёгкая атлетика. Точный возраст я уже не вспомню — был совсем мелкий. И вот тут начинается история, которая до сих пор кажется мне одной из самых обидных во всей моей жизни. Как оказалось, у меня был талант. Настоящий, не придуманный. Тренер из детской группы почти сразу перевела меня во взрослую. Уже позже, много лет спустя, я узнал, что она говорила моей семье примерно так: «Я воспитала нескольких олимпийских чемпионов. Отдайте мне его — я сделаю из него великого спортсмена».</p>
+          <p>Мне до сих пор больно это вспоминать. Маму тогда напугали рассказами о том, что все спортсмены потом мучаются с суставами, со здоровьем и вообще ломают себе жизнь. И она забрала меня из секции. Я не могу на неё злиться. Она правда хотела как лучше. Но факт остаётся фактом: возможно, именно тогда из моей жизни исчез человек, который мог дать мне путь. Тот самый путь, которого у меня потом долго не было.</p>
+          <p>После этого был бокс — или, может, он был ещё раньше, уже не помню. По словам мамы, я называл там всех тупыми, потому что не понимал, почему меня не учат драться, а заставляют делать какую-то скучную физуху. Потом был кикбоксинг. Потом — греко-римская борьба. Там я дошёл до своих первых соревнований. И да, конечно, проиграл. Быстро, без шансов, но хотя бы стойко. Самое яркое воспоминание не в самом поражении, а в том, что почти все дети после проигрыша плакали навзрыд, а я — нет. Ко мне подошёл какой-то мужик, может, тренер, и сказал: «Молодец. Хотя бы не плачешь, как остальные».</p>
+          <p>Ирония в том, что плакать мне хотелось не меньше, чем им.</p>
+          <p>Наверное, именно тогда у меня впервые щёлкнуло что-то внутри. Появилось правило, по которому я потом жил много лет: смотри на других и не делай так, если это выглядит позорно. Не лучший жизненный принцип, но какой появился.</p>
+          <p>После соревнований я шёл куда-то с мамой — наверное, домой. Ничего особенного из того дня не помню. А значит, скорее всего, кроме банального «не переживай», мне ничего не сказали. Не было слов, которые могли бы перевернуть что-то в голове у маленького пацана и заставить его идти дальше. В эту секцию я больше не вернулся.</p>
+          <p>Потом был тайский бокс — пожалуй, единственное из всего спорта, чем я занимался по-настоящему долго и с интересом. Там я уже не просто ходил на тренировки, а смотрел на тех, кто лучше, и пытался повторять: движения рук, ног, манеру работы. Мне хотелось стать лучше хотя бы через копирование сильных.</p>
+          <p>Я дошёл до соревнований. В первый день выступить не получилось, нас перенесли на второй. На второй день я не поехал. Позже оказалось, что должен был драться с парнем из своей же секции, и он просто привёз мне грамоту за второе место. Как будто победа, но на самом деле — очередная пустота. После этого я и туда ходить перестал.</p>
+          <p class="center">В детстве у меня было много попыток, но почти ни одна не была доведена до конца.</p>
+          <p>И я очень сомневаюсь, что дело было только во мне. Ребёнку нужен кто-то рядом, кто скажет: не вышло — ничего, вставай, пойдём дальше. У меня, кажется, такого человека не было.</p>
+        </section>
+
+        <section class="chapter" id="school">
+          <div class="chapter-label">Глава четвёртая</div>
+          <h2>Школа, повар и первое чувство таланта</h2>
+          <p class="lead">По школе мне тоже особенно нечем хвастаться. Учился я ужасно. Не был каким-то мелким преступником, но вёл себя достаточно отвратительно.</p>
+          <p>И всё же даже сейчас мне кажется, что дело было не только в моей лени. Меня искренне бесила сама система обучения — тупая, жёсткая, где нужно сделать либо «правильно», либо никак. Никакого пространства для интереса, для живого ума, для характера.</p>
+          <p>При всём этом я вырос без алкоголя, без наркотиков и, как ни странно, достаточно здоровым и творческим. И этому я действительно рад. Во мне всегда было странное ощущение, будто я чем-то отличаюсь от других. Не в смысле «я особенный», а скорее в смысле: во мне будто есть какая-то сила, которая пока никуда не приложена. Только я совершенно не понимал, что с ней делать.</p>
+          <p>В какой-то момент мама сказала: пора выбирать профессию. Тогда я любил готовить. Видимо, это досталось мне от отца. Я поступил в колледж на повара — и, конечно, снова не начал нормально учиться. Сейчас мне самому трудно понять почему.</p>
+          <p>Но готовить у меня получалось. На практике я показывал хорошие результаты. Наверное, потому что именно там было место для творчества. Там я мог проявить себя и не чувствовать, что меня за это сейчас одёрнут или пошлют подальше. Позже оказалось, что у меня действительно был к этому дар: один хороший шеф-повар заметил меня и взял к себе.</p>
+          <p>Мне это нравилось. Было интересно. Но из-за моего поганого характера всё снова пошло не так. Я спорил, что-то доказывал, конфликтовал, и в итоге закончил с третьим разрядом. Не провал, но и не победа. И всё равно даже сейчас во мне сидит одна и та же мысль: я же был ребёнком. Где были взрослые, которые должны объяснять, направлять, учить, а не только отчитывать?</p>
+          <p>Примерно в 2013 году я уже начинал понимать, какую музыку люблю, просто не знал названий. Я мог объяснить это только так: люблю ту музыку, которая играет в конце американских фильмов, и ту, где есть долгое гитарное соло. Потом понял, что меня тянуло к блюзу, року, к истории, к Америке, ко всему, где есть характер, надрыв и свобода. Сейчас я вижу, что это тоже было не случайно. Человек всегда тянется туда, где чувствует язык своей внутренней боли.</p>
+        </section>
+
+        <section class="chapter" id="army">
+          <div class="chapter-label">Глава пятая</div>
+          <h2>Армия и взрослая пустота</h2>
+          <p class="lead">2013–2014 год стал для меня армейским. Туда я попал не расти, а скорее деградировать.</p>
+          <p>Там о творчестве и любви я уже не думал. В памяти с того времени до сих пор есть провалы. Мне не хочется делать вид, будто я прошёл войну. Я не был в горячих точках, не видел настоящих боёв, не терял друзей под пулями. Но армия всё равно оставляет свой след. Особенно когда попадаешь туда не по внутренней зрелости, а как сырой человек, который и без того ещё не собран.</p>
+          <p>Я служил в Кантемировской дивизии. Вся дивизия выступает на параде 9 Мая на Красной площади. Как и другие, я тоже должен был быть там после бесконечных тренировок на плацу, которые ненавидели буквально все. Потом меня и ещё несколько человек забрали в танковый биатлон. И, как это часто бывало в моей жизни, в итоге я не оказался нигде. На 9 Мая я смотрел, как мои пацаны шагают в прямом эфире, а в танковый биатлон пришёл приказ брать только контрактников.</p>
+          <p>Это вроде мелочь, но в моей жизни таких мелочей было слишком много. Снова почти получилось, снова уже рядом, снова можно было сказать: ну вот, хоть где-то. И снова мимо. Не катастрофа. Просто ещё один штрих к общей картине.</p>
+        </section>
+
+        <section class="chapter" id="death">
+          <div class="chapter-label">Глава шестая</div>
+          <h2>Смерть отца, наследство и то, как деньги срывают голову</h2>
+          <p class="lead">После смерти отца мне досталось то, чего я не заработал сам, — наследство. И это, как ни стыдно признавать, сильно ударило мне в голову.</p>
+          <p>К тому моменту мне был двадцать один год, плюс-минус. Я был не тупой, но слишком молодой мозгами. Он копил на квартиру, оставил наличкой около шестисот тысяч. На похороны пришлось тратить его же деньги. Тогда мне казалось, что я держусь. Что я переношу всё стойко. Гораздо позже я понял, что это был обычный самообман. Я не держался. Я убегал от произошедшего, как мог.</p>
+          <p>Самое мерзкое для меня до сих пор даже не в том, что я ошибался. А в том, как именно я ошибался. Вместо того чтобы по-настоящему подумать о семье, о матери, о будущем, о том, как сделать хоть что-то правильно, мне снесло голову. Я пытался жить так, будто всё ещё можно решить понтами, покупками, идеями о бизнесе, красивой картинкой самого себя. Я тратил деньги и врал. Сначала другим. Потом себе.</p>
+          <p>Потом была комната в общаге и небольшой участок. Потом — продажа комнаты. И вместо того чтобы сделать что-то разумное для матери, которая мучилась по съёмным квартирам, я покупал себе айфон, потом айфон Х, макбук, что-то ещё, что в тот момент казалось важным. Сейчас это вспоминать неприятно до отвращения. Потому что в этой части истории уже почти нечем оправдываться. Здесь нет красивой беды. Здесь есть молодой парень, которому деньги ударили в голову, и который сам себе делал хуже.</p>
+          <blockquote>
+            <div class="quote-label">стыд</div>
+            <p>Мне казалось, что я всё делаю правильно. На деле я только усугубил собственную жизнь. А когда деньги закончились и пришлось вернуться к прежним правилам, я понял, насколько тяжело морально заново учиться жить в бедности, но уже после иллюзии лёгких возможностей.</p>
+          </blockquote>
+          <p>Я хотел лучшего. Правда хотел. Хотел сделать бизнес, хотел вытащить себя и мать в какую-то финансовую безопасность, хотел стать человеком, который не живёт в постоянном стыде и нехватке. Но хотеть мало. Без зрелости, дисциплины и способности тормозить себя это всё превращается в дорогую глупость.</p>
+          <p>Потом была работа менеджером, вера в «Бизнес Молодость», слёзы в темноте под ролики про успех, попытка зацепиться хоть за какую-то систему и вылезти из нищеты. В какой-то момент я даже открыл точку сладкой ваты. Сейчас всё это уже не выглядит как история о предпринимательстве. Это была история о человеке, который очень хотел стать кем-то большим, но всё ещё не умел управлять ни собой, ни деньгами, ни собственным эго.</p>
+        </section>
+
+        <section class="chapter" id="philosophy">
+          <div class="chapter-label">Глава седьмая</div>
+          <h2>Жизнь, смерть и тот голос, который тащит вниз</h2>
+          <div class="reflection">
+            <div class="quote-label">размышление</div>
+            <p>Смерть очень быстро ставит человека на место. Пока она где-то далеко, можно строить из себя кого угодно: умного, сильного, перспективного, особенного. Но когда умирает отец, даже если отношения были не такими, какими должны были быть, внутри всё равно что-то сдвигается. Не обязательно сразу. Иногда наоборот — сначала кажется, что ты держишься, что всё под контролем. А потом проходит год, другой, и до тебя медленно доходит простая вещь: смерть не просто забрала человека. Она показала тебе, что и ты сам не вечный, что времени не бесконечно, что нельзя вечно жить как незаконченный черновик.</p>
+            <p>Наверное, одна из самых страшных сторон смерти именно в этом. Не в холоде, не в похоронах, не в трауре, а в том, что после неё уже труднее врать себе, будто у тебя впереди сколько угодно попыток.</p>
+          </div>
+          <p>Чем старше я становился, тем меньше верил в простые ответы. В детстве кажется, что мир поделен понятно: хорошие, плохие, сильные, слабые, победители, неудачники, бог, дьявол, свет, тьма. Потом живёшь чуть дольше и понимаешь, что всё самое страшное происходит не снаружи, а внутри человека.</p>
+          <p>В какой-то момент я начал думать, что дьявол — это не рогатая тварь из сказок и не удобный образ для умных разговоров. Дьявол — это та часть тебя, которая всё прекрасно понимает и всё равно выбирает слабость. Которая знает, как правильно, и всё равно тянет тебя вниз. Которая шепчет не «сделай зло», а гораздо тише и опаснее: да ладно, потом; да ладно, не сейчас; да ладно, ты и так нормальный. И самое мерзкое в этом то, что голос этот звучит как твой собственный.</p>
+          <p class="center">Самые страшные силы в человеке редко кричат. Чаще они просто разрешают ему сдаться.</p>
+          <p>А если говорить о боге, то с возрастом мне всё меньше хочется спорить о нём как о теории и всё больше хочется думать о нём как о пределе, до которого человек должен хотя бы пытаться дотянуться. Не в смысле святости и правильных слов. А в смысле внутреннего суда. Потому что, если убрать красивые разговоры, остаётся один вопрос: кем ты становишься, когда никто не смотрит? Из чего ты сделан на самом деле? Из воли или из оправданий? Из любви или из страха? Из поступков или из образа самого себя?</p>
+          <p>Наверное, взросление для меня и началось в тот момент, когда я понял, что рай и ад человек чаще всего носит в себе ещё при жизни. И каждый день понемногу строит либо одно, либо другое. Когда терпишь, работаешь, сдерживаешь себя, отвечаешь за близких, не врёшь себе и не убегаешь — строишь одно. Когда кормишь лень, гордыню, трусость, эго, оправдания и внутреннюю слабость — строишь другое.</p>
+          <p>И, возможно, вся моя жизнь до определённого момента и была именно этим: не красивой трагедией, не особыми обстоятельствами, не роком, а долгим строительством собственного внутреннего ада из мелких слабостей, которым я слишком долго позволял быть важнее характера.</p>
+        </section>
+
+        <section class="chapter" id="final">
+          <div class="chapter-label">Глава восьмая</div>
+          <h2>Продолжение</h2>
+          <div class="closing">
+            <p class="lead">Я остановился тогда не потому, что мне нечего было сказать. А потому что стало слишком честно.</p>
+            <p>Когда ты долго врёшь себе, ты привыкаешь к этому состоянию. Это как жить в комнате с приглушённым светом. Ты уже не замечаешь, что почти ничего не видно. Тебе нормально. Даже уютно. А потом кто-то резко включает свет, и ты видишь всё: пыль, грязь, беспорядок. И самое неприятное — ты понимаешь, что всё это время это было здесь. Просто ты не смотрел.</p>
+            <p>В 2020 году мне казалось, что я дошёл до предела. Что хуже уже не будет. Что вот это ощущение пустоты, собственной несостоятельности, внутреннего шума — это и есть дно. Я ошибался. Это было не дно. Это было знакомство с реальностью.</p>
+            <p class="center">Реальность оказалась простой и очень неприятной: я не тот, кем себя считал.</p>
+            <p>Не сильный. Не собранный. Не особенный. Просто человек, который много раз начинал и почти никогда не доходил до конца.</p>
+            <p>Если убрать весь лишний шум, оправдания, воспоминания и обстоятельства, остаётся одна линия, которая проходит через всю мою жизнь. Я пробовал. У меня даже иногда получалось. Но в какой-то момент я сдавался. Иногда из страха, иногда из-за лени, иногда просто потому, что становилось тяжело. И каждый раз находил этому объяснение. Очень убедительное. Настолько убедительное, что сам в него верил.</p>
+            <p>Самое страшное в этом не сами поражения. Самое страшное — привычка к ним. Ты начинаешь жить так, будто это нормально. Будто так у всех. Будто ты просто такой человек. И чем дольше ты в этом находишься, тем сложнее признать, что проблема не в мире, не в людях, не в обстоятельствах. Проблема в том, что ты не дожимаешь.</p>
+            <p>Мне долго хотелось найти кого-то виноватого. В детстве — взрослых, которые не направили. В юности — систему, которая не научила. Позже — обстоятельства, которые «не дали шанса». Но если быть честным до конца, всё это слабые оправдания. Да, у меня не было идеального старта. Да, рядом не оказалось человека, который вовремя сказал бы правильные слова. Но в какой-то момент ты перестаёшь быть ребёнком. И всё, что дальше происходит, уже на тебе.</p>
+            <p>Это тяжело принять. Потому что вместе с этим исчезает возможность себя жалеть.</p>
+            <p>Я помню, как тогда пытался найти хоть одну нормальную победу. Хоть что-то, что можно было бы назвать результатом. Не процессом, не попыткой, не «почти получилось», а именно результатом. И ничего не находил. Это давило сильнее всего.</p>
+            <p>Но сейчас, спустя время, я смотрю на это иначе. Да, у меня не было больших побед. Зато у меня было кое-что другое.</p>
+            <p class="center">Я не остановился.</p>
+            <p>Как бы это ни звучало странно после всего, что написано выше, но это правда. Я не исчез. Я не выбрал самый простой путь. Я не ушёл туда, где можно забыться и больше не думать. Я продолжал что-то делать. Иногда криво, иногда бессмысленно, иногда через силу. Но продолжал.</p>
+            <p>И, возможно, именно это и есть та точка, с которой всё начинается. Не мотивация. Не вдохновение. Не новая жизнь с понедельника. А простое решение: не сдаваться в этот раз. Не завтра. Не когда станет легче. А сейчас.</p>
+            <p>Я долго ждал, что однажды появится чувство, которое всё изменит. Что я проснусь другим человеком — более собранным, более сильным, более дисциплинированным. Этого не произошло. Зато произошло другое. Я начал делать, даже когда не хочется. Без настроения. Без веры в результат. Без уверенности, что это вообще к чему-то приведёт.</p>
+            <p>И в какой-то момент я понял простую вещь: жизнь меняется не тогда, когда ты всё понял, а тогда, когда ты начал повторять правильные действия. Скучные. Обычные. Каждый день.</p>
+            <p>Если честно, я до сих пор не могу сказать, что стал тем, кем хотел быть. Я всё ещё часто злюсь. Всё ещё иногда откатываюсь назад. Всё ещё ловлю себя на старых привычках. Но есть разница, которую я чувствую. Раньше я убегал. Сейчас я остаюсь. Раньше я искал оправдания. Сейчас я ищу решение. Раньше я надеялся, что кто-то поможет. Сейчас я понимаю, что никто не придёт.</p>
+            <p>И в этом нет трагедии. В этом есть свобода. Потому что если никто не придёт, значит всё, что будет дальше, зависит от меня. Не от удачи. Не от обстоятельств. Не от того, повезло или нет. А от того, выдержу ли я.</p>
+            <p>Если попытаться честно ответить на вопрос, о чём эта история, то это не про поражения и не про победы. Это про момент, когда человек впервые перестаёт врать себе. И если ему хватает сил не отвернуться в этот момент, у него появляется шанс. Не гарантия. Не быстрый результат. Но шанс. И, возможно, этого достаточно.</p>
+          </div>
+        </section>
 
         <div class="signature">
           <div class="name">Олег Ван</div>
-          <div class="role">Личная страница воспоминаний</div>
+          <div class="footer-meta">Личная веб-версия мемуаров</div>
         </div>
       </div>
-
-      <div class="footer-space"></div>
     </section>
   </main>
 
-  <div class="audio-chip" aria-live="polite">
-    <button class="audio-btn" id="audioBtn" aria-label="Переключить атмосферный звук">◌</button>
-    <div class="audio-meta">
-      <div class="audio-title">Атмосфера</div>
-      <div class="audio-state" id="audioState">выключено</div>
-    </div>
-  </div>
-
   <script>
-    // Плавный скролл
-    const startReadingBtn = document.getElementById('startReading');
-    const readingSection = document.getElementById('reading');
-
-    startReadingBtn.addEventListener('click', () => {
-      readingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-
-    // Появление абзацев
-    const paragraphs = document.querySelectorAll('.content p, .ending p');
+    const items = document.querySelectorAll('p, blockquote, .reflection');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('visible');
       });
-    }, { threshold: 0.12 });
-
-    paragraphs.forEach(p => observer.observe(p));
-
-    // Лепестки
-    const petalsContainer = document.getElementById('petals');
-    const PETAL_COUNT = window.innerWidth < 640 ? 12 : 20;
-
-    for (let i = 0; i < PETAL_COUNT; i++) {
-      const petal = document.createElement('span');
-      petal.className = 'petal';
-
-      const left = Math.random() * 100;
-      const duration = 12 + Math.random() * 14;
-      const delay = Math.random() * 12;
-      const drift = (Math.random() * 160 - 80) + 'px';
-      const size = 8 + Math.random() * 10;
-      const opacity = 0.22 + Math.random() * 0.35;
-
-      petal.style.left = left + 'vw';
-      petal.style.animationDuration = duration + 's';
-      petal.style.animationDelay = delay + 's';
-      petal.style.setProperty('--drift', drift);
-      petal.style.width = size + 'px';
-      petal.style.height = Math.max(6, size * 0.72) + 'px';
-      petal.style.opacity = opacity;
-
-      petalsContainer.appendChild(petal);
-    }
-
-    // Атмосферный аудио-режим через Web Audio API
-    const audioBtn = document.getElementById('audioBtn');
-    const toggleAmbientBtn = document.getElementById('toggleAmbient');
-    const audioState = document.getElementById('audioState');
-
-    let audioCtx = null;
-    let masterGain = null;
-    let noiseSource = null;
-    let lowpass = null;
-    let isPlaying = false;
-
-    function createNoiseBuffer(context) {
-      const bufferSize = context.sampleRate * 2;
-      const buffer = context.createBuffer(1, bufferSize, context.sampleRate);
-      const data = buffer.getChannelData(0);
-
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = (Math.random() * 2 - 1) * 0.35;
-      }
-
-      return buffer;
-    }
-
-    function startAmbient() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        masterGain = audioCtx.createGain();
-        masterGain.gain.value = 0.0;
-
-        lowpass = audioCtx.createBiquadFilter();
-        lowpass.type = 'lowpass';
-        lowpass.frequency.value = 900;
-        lowpass.Q.value = 0.2;
-
-        const highpass = audioCtx.createBiquadFilter();
-        highpass.type = 'highpass';
-        highpass.frequency.value = 120;
-
-        noiseSource = audioCtx.createBufferSource();
-        noiseSource.buffer = createNoiseBuffer(audioCtx);
-        noiseSource.loop = true;
-
-        // Очень мягкий "воздушный" фон
-        noiseSource.connect(lowpass);
-        lowpass.connect(highpass);
-        highpass.connect(masterGain);
-        masterGain.connect(audioCtx.destination);
-
-        noiseSource.start();
-      }
-
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-
-      masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
-      masterGain.gain.linearRampToValueAtTime(0.018, audioCtx.currentTime + 1.8);
-
-      isPlaying = true;
-      audioState.textContent = 'включено';
-      audioBtn.textContent = '●';
-      toggleAmbientBtn.textContent = 'Атмосфера: вкл';
-    }
-
-    function stopAmbient() {
-      if (!audioCtx || !masterGain) return;
-
-      masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
-      masterGain.gain.linearRampToValueAtTime(0.0, audioCtx.currentTime + 1.4);
-
-      isPlaying = false;
-      audioState.textContent = 'выключено';
-      audioBtn.textContent = '◌';
-      toggleAmbientBtn.textContent = 'Атмосфера: выкл';
-    }
-
-    function toggleAmbient() {
-      if (!isPlaying) {
-        startAmbient();
-      } else {
-        stopAmbient();
-      }
-    }
-
-    audioBtn.addEventListener('click', toggleAmbient);
-    toggleAmbientBtn.addEventListener('click', toggleAmbient);
+    }, { threshold: 0.08 });
+    items.forEach(item => observer.observe(item));
   </script>
 </body>
 </html>
