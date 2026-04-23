@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -25,7 +26,9 @@
       --mono: "JetBrains Mono", "SFMono-Regular", ui-monospace, Menlo, Monaco, Consolas, monospace;
       --sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       min-height: 100vh;
@@ -36,71 +39,348 @@
       font-family: var(--sans);
       padding: 24px;
     }
+
     .app { width: min(1400px,100%); margin: 0 auto; display: grid; gap: 20px; }
-    .top-bar,.panel,.log-panel,.summary-bar {
+
+    .top-bar, .panel, .log-panel, .summary-bar {
       background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       backdrop-filter: blur(12px);
     }
+
     .top-bar {
-      display: flex; justify-content: space-between; align-items: center; gap: 16px;
-      padding: 16px 18px; font-family: var(--mono); font-size: 12px;
-      letter-spacing: .08em; text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 18px;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
     }
-    .top-bar__title { font-weight: 800; color: var(--accent); text-align: center; letter-spacing: .18em; }
+
+    .top-bar__title {
+      font-weight: 800;
+      color: var(--accent);
+      text-align: center;
+      letter-spacing: .18em;
+    }
+
     .top-bar__muted { color: var(--text-dim); white-space: nowrap; }
-    .summary-bar { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; padding: 14px; }
-    .summary-item { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; min-height: 78px; }
-    .summary-item__label { display: block; font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
-    .summary-item__value { font-family: var(--mono); font-size: 15px; color: var(--accent); word-break: break-word; }
-    .workspace { display: grid; grid-template-columns: 1.08fr 1fr; gap: 20px; }
-    .panel { display: flex; flex-direction: column; min-height: 540px; overflow: hidden; }
-    .panel__header {
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      padding: 14px 18px; border-bottom: 1px solid var(--border); background: rgba(255,255,255,.02);
+
+    .summary-bar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 12px;
+      padding: 14px;
     }
+
+    .summary-item {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      min-height: 78px;
+    }
+
+    .summary-item__label {
+      display: block;
+      font-size: 11px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 8px;
+    }
+
+    .summary-item__value {
+      font-family: var(--mono);
+      font-size: 15px;
+      color: var(--accent);
+      word-break: break-word;
+    }
+
+    .workspace { display: grid; grid-template-columns: 1.08fr 1fr; gap: 20px; }
+
+    .panel {
+      display: flex;
+      flex-direction: column;
+      min-height: 540px;
+      overflow: hidden;
+    }
+
+    .panel__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,.02);
+    }
+
     .panel__title-wrap { display: flex; align-items: center; gap: 14px; min-width: 0; }
     .dots { display: flex; gap: 8px; flex-shrink: 0; }
-    .dot { width: 11px; height: 11px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(255,255,255,.15); }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.15);
+    }
+
     .dot--red { background: #ff5f57; }
     .dot--yellow { background: #febc2e; }
     .dot--green { background: #28c840; }
-    .panel__title { font-family: var(--mono); color: var(--text-dim); font-size: 12px; text-transform: uppercase; letter-spacing: .1em; }
+
+    .panel__title {
+      font-family: var(--mono);
+      color: var(--text-dim);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+
     .panel__status { font-size: 12px; color: var(--text-dim); white-space: nowrap; }
     .panel__body { display: grid; gap: 14px; padding: 18px; flex: 1; min-height: 0; }
-    .field-label { display: flex; justify-content: space-between; gap: 10px; align-items: center; font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .08em; }
-    .hint { font-size: 11px; color: var(--text-dim); text-transform: none; letter-spacing: normal; }
-    textarea,.preview,.log-list { width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); outline: none; }
-    textarea { min-height: 280px; resize: vertical; padding: 14px; font: 13px/1.5 var(--mono); transition: border-color .2s ease, box-shadow .2s ease; }
-    textarea:focus,button:focus-visible { border-color: var(--border-strong); box-shadow: 0 0 0 4px rgba(255,255,255,.04); }
-    .panel__footer { display: flex; flex-wrap: wrap; gap: 10px; padding: 16px 18px 18px; border-top: 1px solid var(--border); background: rgba(255,255,255,.015); }
+
+    .field-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: var(--text-dim);
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    textarea, .preview, .log-list {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+    }
+
+    textarea {
+      min-height: 280px;
+      resize: vertical;
+      padding: 14px;
+      font: 13px/1.5 var(--mono);
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    textarea:focus, button:focus-visible {
+      border-color: var(--border-strong);
+      box-shadow: 0 0 0 4px rgba(255,255,255,.04);
+    }
+
+    .panel__footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 16px 18px 18px;
+      border-top: 1px solid var(--border);
+      background: rgba(255,255,255,.015);
+    }
+
     .btn {
-      appearance: none; border: 1px solid var(--border); background: var(--surface-2); color: var(--text);
-      border-radius: 12px; padding: 11px 14px; font: 600 12px/1 var(--mono);
-      text-transform: uppercase; letter-spacing: .06em; cursor: pointer;
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 11px 14px;
+      font: 600 12px/1 var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      cursor: pointer;
       transition: transform .15s ease, border-color .2s ease, background .2s ease, opacity .2s ease;
     }
+
     .btn:hover { border-color: var(--border-strong); background: var(--surface-3); transform: translateY(-1px); }
     .btn:disabled { cursor: not-allowed; opacity: .55; transform: none; }
     .btn--primary { background: linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,.04)); color: #fff; }
     .btn--danger { color: #fecaca; }
     .btn--success { color: #bbf7d0; }
     .btn--ghost { background: transparent; }
+
     .output-block { display: grid; gap: 12px; min-height: 0; }
-    .preview { min-height: 222px; padding: 14px; overflow: auto; background: linear-gradient(180deg, rgba(255,255,255,.01), rgba(255,255,255,.02)); }
+
+    .preview {
+      min-height: 222px;
+      padding: 14px;
+      overflow: auto;
+      background: linear-gradient(180deg, rgba(255,255,255,.01), rgba(255,255,255,.02));
+    }
+
     .preview-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
-    .preview-card { padding: 12px; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--border); }
-    .preview-card__label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
-    .preview-card__value { font: 13px/1.5 var(--mono); color: var(--accent); white-space: pre-wrap; word-break: break-word; }
+
+    .preview-card {
+      padding: 12px;
+      border-radius: 12px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      transition: border-color .2s ease, background .2s ease;
+    }
+
+    .preview-card[data-state="missing"] {
+      border-color: rgba(245, 158, 11, .35);
+      background: linear-gradient(180deg, rgba(245, 158, 11, .08), rgba(23, 23, 31, 1));
+    }
+
+    .preview-card[data-required="true"][data-state="missing"] {
+      border-color: rgba(239, 68, 68, .4);
+      background: linear-gradient(180deg, rgba(239, 68, 68, .09), rgba(23, 23, 31, 1));
+    }
+
+    .preview-card__label {
+      font-size: 11px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 8px;
+    }
+
+    .preview-card__value {
+      font: 13px/1.5 var(--mono);
+      color: var(--accent);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .preview-card__meta {
+      margin-top: 10px;
+      font: 11px/1.4 var(--mono);
+      color: var(--text-dim);
+    }
+
     .output-textarea { min-height: 130px; }
     .inline-tools { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-    .stat-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-dim); font: 12px var(--mono); }
+
+    .stat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font: 12px var(--mono);
+    }
+
     .log-panel { padding: 16px; }
     .log-panel__header { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 12px; }
     .log-panel__title { font: 700 12px var(--mono); color: var(--text-dim); text-transform: uppercase; letter-spacing: .08em; }
-    .log-list { list-style: none; margin: 0; padding: 12px; min-height: 132px; max-height: 220px; overflow: auto; font: 12px/1.55 var(--mono); }
+
+    .queue-panel {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .queue-panel__header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .queue-tools {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .queue-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .queue-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      background: var(--surface-2);
+      display: grid;
+      gap: 10px;
+    }
+
+    .queue-item__top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .queue-item__meta {
+      display: grid;
+      gap: 4px;
+    }
+
+    .queue-item__title {
+      font: 700 12px var(--mono);
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .queue-item__subtitle {
+      font: 12px/1.5 var(--mono);
+      color: var(--text-dim);
+      word-break: break-word;
+    }
+
+    .queue-item__tsv {
+      font: 12px/1.6 var(--mono);
+      color: var(--text);
+      padding: 10px;
+      border-radius: 10px;
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,.05);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .queue-item__actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .queue-empty {
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      color: var(--text-dim);
+      font: 12px/1.6 var(--mono);
+      background: rgba(255,255,255,.01);
+    }
+
+    .log-list {
+      list-style: none;
+      margin: 0;
+      padding: 12px;
+      min-height: 132px;
+      max-height: 220px;
+      overflow: auto;
+      font: 12px/1.55 var(--mono);
+    }
+
     .log-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.04); color: var(--text-dim); }
     .log-item:last-child { border-bottom: none; }
     .log-item__time { color: #71717a; flex-shrink: 0; }
@@ -108,17 +388,40 @@
     .log-item[data-level="warning"] .log-item__message { color: #fde68a; }
     .log-item[data-level="error"] .log-item__message { color: #fecaca; }
     .log-item[data-level="info"] .log-item__message { color: var(--text); }
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-    @media (max-width: 1080px) { .workspace { grid-template-columns: 1fr; } .summary-bar { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 1080px) {
+      .workspace { grid-template-columns: 1fr; }
+      .summary-bar { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+
     @media (max-width: 720px) {
       body { padding: 14px; }
       .top-bar { flex-direction: column; align-items: flex-start; }
-      .summary-bar,.preview-grid { grid-template-columns: 1fr; }
+      .summary-bar, .preview-grid { grid-template-columns: 1fr; }
       .panel { min-height: auto; }
       .panel__header { flex-direction: column; align-items: flex-start; }
       textarea { min-height: 240px; }
     }
-    @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -148,11 +451,11 @@
         <div class="panel__body">
           <label class="field-label" for="input"><span>Исходные данные</span><span class="hint">Ctrl/⌘ + Enter — запустить анализ</span></label>
           <textarea id="input" spellcheck="false" autocomplete="off" placeholder="Вставьте данные: карточка, история, цена, локация, BOX/CON и прочее..."></textarea>
-          <div class="hint">Парсер теперь заточен под реальную структуру блока: Идентификатор товара → ВБ стикер → статус-код → Предмет → цена → МХ → BOX.</div>
+          <div class="hint">Можно вставлять данные по частям и в любом порядке: карточка, история, цена. Обязательные поля: ID, стикер, статус, предмет, цена, МХ. BOX остаётся опциональным.</div>
         </div>
         <div class="panel__footer">
           <button class="btn btn--primary" id="analyzeBtn" type="button">Run Analysis</button>
-          <button class="btn btn--ghost" id="pasteBtn" type="button">Paste</button>
+          <button class="btn btn--ghost" id="pasteBtn" type="button">Paste Append</button>
           <button class="btn btn--danger" id="clearInputBtn" type="button">Clear Input</button>
           <button class="btn btn--ghost" id="loadDemoBtn" type="button">Load Demo</button>
         </div>
@@ -169,7 +472,8 @@
         <div class="panel__body output-block">
           <div class="inline-tools">
             <span class="stat-badge">Формат: TSV</span>
-            <span class="stat-badge" id="badgeCompleteness">Заполнено: 0/7</span>
+            <span class="stat-badge" id="badgeCompleteness">Обязательные: 0/6</span>
+            <span class="stat-badge" id="badgeOptional">BOX: empty</span>
           </div>
           <div class="preview" aria-live="polite"><div class="preview-grid" id="previewGrid"></div></div>
           <label class="field-label" for="output"><span>Итоговая строка</span><span class="hint">7 полей, BOX может быть пустым</span></label>
@@ -178,10 +482,24 @@
         <div class="panel__footer">
           <button class="btn btn--success" id="copyTsvBtn" type="button">Copy TSV</button>
           <button class="btn btn--ghost" id="copyJsonBtn" type="button">Copy JSON</button>
+          <button class="btn btn--success" id="saveResultBtn" type="button">Save To Queue</button>
           <button class="btn btn--ghost" id="downloadBtn" type="button">Download TXT</button>
           <button class="btn btn--danger" id="resetOutputBtn" type="button">Reset Output</button>
         </div>
       </section>
+    </section>
+
+    <section class="log-panel queue-panel" aria-labelledby="queue-title">
+      <div class="queue-panel__header">
+        <div class="log-panel__title" id="queue-title">Result Queue</div>
+        <div class="queue-tools">
+          <span class="stat-badge" id="queueCountBadge">Строк в очереди: 0</span>
+          <button class="btn btn--success" id="copyQueueBtn" type="button">Copy Queue TSV</button>
+          <button class="btn btn--ghost" id="downloadQueueBtn" type="button">Download Queue</button>
+          <button class="btn btn--danger" id="clearQueueBtn" type="button">Clear Queue</button>
+        </div>
+      </div>
+      <div class="queue-list" id="queueList"></div>
     </section>
 
     <section class="log-panel" aria-labelledby="log-title">
@@ -198,7 +516,15 @@
     (() => {
       'use strict';
 
+      const STORAGE_KEYS = {
+        input: 'ultimate6pro:input',
+        output: 'ultimate6pro:output',
+        parsed: 'ultimate6pro:parsed',
+        queue: 'ultimate6pro:queue'
+      };
+
       const FIELD_ORDER = ['id', 'sticker', 'status', 'name', 'price', 'location', 'box'];
+      const REQUIRED_FIELDS = ['id', 'sticker', 'status', 'name', 'price', 'location'];
       const FIELD_LABELS = {
         id: 'Identifier',
         sticker: 'WB Sticker',
@@ -226,12 +552,13 @@
 В продаже
 456 ₽
 Нет
-44363836336	WLN	Инвентаризация раскладки	
+44363836336	WLN	Инвентаризация раскладки
 Владимир Б3
 ID: 7353
 ВЛАД3.03.15.81.03.01	BOX	296777288`;
 
-      const state = { lastParsed: null, logsLimit: 80 };
+      const state = { lastParsed: null, queue: [], logsLimit: 80 };
+
       const elements = {
         datetime: document.getElementById('datetime'),
         input: document.getElementById('input'),
@@ -240,6 +567,7 @@ ID: 7353
         parseState: document.getElementById('parseState'),
         inputMeta: document.getElementById('input-meta'),
         badgeCompleteness: document.getElementById('badgeCompleteness'),
+        badgeOptional: document.getElementById('badgeOptional'),
         summaryId: document.getElementById('summary-id'),
         summaryStatus: document.getElementById('summary-status'),
         summaryPrice: document.getElementById('summary-price'),
@@ -252,19 +580,33 @@ ID: 7353
         loadDemoBtn: document.getElementById('loadDemoBtn'),
         copyTsvBtn: document.getElementById('copyTsvBtn'),
         copyJsonBtn: document.getElementById('copyJsonBtn'),
+        saveResultBtn: document.getElementById('saveResultBtn'),
         downloadBtn: document.getElementById('downloadBtn'),
         resetOutputBtn: document.getElementById('resetOutputBtn'),
+        queueList: document.getElementById('queueList'),
+        queueCountBadge: document.getElementById('queueCountBadge'),
+        copyQueueBtn: document.getElementById('copyQueueBtn'),
+        downloadQueueBtn: document.getElementById('downloadQueueBtn'),
+        clearQueueBtn: document.getElementById('clearQueueBtn'),
         clearLogBtn: document.getElementById('clearLogBtn')
       };
 
       function init() {
         bindEvents();
+        restorePersistedState();
         updateClock();
         setInterval(updateClock, 1000);
         updateInputMeta();
-        renderPreview(createEmptyResult());
-        updateSummary(createEmptyResult());
-        updateCompleteness(0);
+        renderQueue();
+        updateActionState();
+
+        if (!state.lastParsed) {
+          const empty = createEmptyResult();
+          renderPreview(empty);
+          updateSummary(empty);
+          updateCompleteness(empty);
+        }
+
         writeLog('SYSTEM_READY: WB PARSER PROFILE LOADED', 'success');
       }
 
@@ -275,11 +617,20 @@ ID: 7353
         elements.loadDemoBtn.addEventListener('click', loadDemo);
         elements.copyTsvBtn.addEventListener('click', () => copyOutput('tsv'));
         elements.copyJsonBtn.addEventListener('click', () => copyOutput('json'));
+        elements.saveResultBtn.addEventListener('click', saveCurrentResultToQueue);
         elements.downloadBtn.addEventListener('click', downloadOutput);
         elements.resetOutputBtn.addEventListener('click', resetOutput);
+        elements.copyQueueBtn.addEventListener('click', copyQueue);
+        elements.downloadQueueBtn.addEventListener('click', downloadQueue);
+        elements.clearQueueBtn.addEventListener('click', clearQueue);
         elements.clearLogBtn.addEventListener('click', clearLog);
-        elements.input.addEventListener('input', updateInputMeta);
+        elements.input.addEventListener('input', handleInputChange);
         elements.input.addEventListener('keydown', onEditorKeydown);
+      }
+
+      function handleInputChange() {
+        updateInputMeta();
+        persistState();
       }
 
       function onEditorKeydown(event) {
@@ -330,74 +681,133 @@ ID: 7353
       }
 
       function cleanName(value) {
-        return value.split('/').map(part => part.trim()).filter(Boolean)[0] || '';
+        return value
+          .replace(/\s{2,}/g, ' ')
+          .replace(/^[/\-|]+|[/\-|]+$/g, '')
+          .trim();
       }
 
       function extractIdentifier(text) {
         const labeled = extractFirstMatch(text, [
           /идентификатор\s+товара\s*(\d{10,13})/iu,
-          /(?:^|\n)\s*idентификатор\s+товара\s*(\d{10,13})/iu,
+          /(?:^|\n)\s*idентификатор\s+товара\s*(\d{10,13})/iu
         ]);
         if (labeled) return labeled;
         const numbers = extractAllLongNumbers(text);
         return numbers[0] || '';
       }
 
-      function extractSticker(text, fallbackId = '') {
+      function extractInventoryEntry(text) {
+        const match = text.match(/(?:^|\n)\s*(\d{10,13})\s+([A-ZА-ЯЁ]{2,10})\b[^\n]*\n(?:[^\n]*\n){0,3}?\s*((?:ВЛАД|ЦП|СПБ|МСК|ЕКБ)[\w\-/.]+)(?:\s+(?:BOX|CON)\s+(\d{1,12})|\n[^\n]*\b(?:BOX|CON)\b\s*(\d{1,12}))?/iu);
+        if (!match) return null;
+
+        return {
+          sticker: match[1] ? match[1].trim() : '',
+          status: match[2] ? match[2].trim().toUpperCase() : '',
+          location: match[3] ? match[3].trim().toUpperCase() : '',
+          box: (match[4] || match[5] || '').trim()
+        };
+      }
+
+      function extractSticker(text, productId = '') {
+        const inventory = extractInventoryEntry(text);
+        if (inventory && inventory.sticker && inventory.sticker !== productId) return inventory.sticker;
+
         const labeled = extractFirstMatch(text, [
           /вб\s*стикер\s*(\d{10,13})/iu,
-          /стикер\s*(\d{10,13})/iu,
+          /стикер\s*(\d{10,13})/iu
         ]);
-        if (labeled) return labeled;
-        const productId = extractIdentifier(text);
+        if (labeled && labeled !== productId) return labeled;
+
+        const nearInventory = text.match(/\b(\d{10,13})\b\s+[A-ZА-ЯЁ]{2,10}\b(?:\s+[^\n]*)?/iu);
+        if (nearInventory && nearInventory[1] && nearInventory[1] !== productId) return nearInventory[1].trim();
+
         const numbers = extractAllLongNumbers(text).filter(num => num !== productId);
-        return numbers[0] || fallbackId || productId || '';
+        return numbers[0] || '';
       }
 
       function extractStatus(text, sticker = '') {
+        const inventory = extractInventoryEntry(text);
+        if (inventory && inventory.status) return inventory.status;
+
         if (sticker) {
           const nearSticker = text.match(new RegExp(`${escapeRegExp(sticker)}\\s+([A-ZА-ЯЁ]{2,10})\\b`, 'iu'));
           if (nearSticker && nearSticker[1]) return nearSticker[1].trim().toUpperCase();
         }
+
         const inventoryLine = text.match(/\b\d{10,13}\b\s+([A-ZА-ЯЁ]{2,10})\b(?:\s+[^\n]*)?/iu);
         if (inventoryLine && inventoryLine[1]) return inventoryLine[1].trim().toUpperCase();
+
         const direct = extractFirstMatch(text, [/(?:статус|status)\s*[:\-]?\s*([A-ZА-ЯЁ_\-]{2,20})/iu]);
         if (direct) return direct.toUpperCase();
+
         return '';
       }
 
-      function extractName(text) {
-        const raw = extractFirstMatch(text, [
-          /предмет\s*\n\s*([^\n]{2,200})/iu,
-          /предмет\s*[:\-]?\s*([^\n]{2,200})/iu,
-          /товар\s*[:\-]?\s*([^\n]{2,200})/iu,
-          /название\s*[:\-]?\s*([^\n]{2,200})/iu,
+      function extractName(text, productId = '') {
+        const headingName = extractFirstMatch(text, [
+          /идентификатор\s+товара\s*\d{10,13}\s*\/\s*([^/\n][^\n]{1,200}?)\s*\/\s*вб\s*стикер/iu,
+          /идентификатор\s+товара\s*\d{10,13}\s*\/\s*([^/\n]{2,200})/iu
         ]);
-        return raw ? cleanName(raw).replace(/\s{2,}/g, ' ') : '';
+        if (headingName) return cleanName(headingName);
+
+        const lineNearId = extractFirstMatch(text, [
+          new RegExp(`${productId ? escapeRegExp(productId) : '\\d{10,13}'}\\s*\\/\\s*([^/\\n]{2,200})\\s*\\/`, 'iu')
+        ]);
+        if (lineNearId) return cleanName(lineNearId);
+
+        const raw = extractFirstMatch(text, [
+          /название\s*[:\-]?\s*([^\n]{2,200})/iu,
+          /товар\s*[:\-]?\s*([^\n]{2,200})/iu,
+          /предмет\s*\n\s*([^\n]{2,200})/iu,
+          /предмет\s*[:\-]?\s*([^\n]{2,200})/iu
+        ]);
+        return raw ? cleanName(raw.split('/').map(part => part.trim()).filter(Boolean)[0] || raw) : '';
       }
 
       function extractPrice(text) {
         const raw = extractFirstMatch(text, [
           /в\s*продаже\s*([\d\s]+)(?:₽|руб)/iu,
           /(?:цена|price)\s*[:\-]?\s*([\d\s]+)(?:₽|руб)/iu,
-          /([\d\s]+)(?:₽|руб)/iu,
+          /([\d\s]+)(?:₽|руб)/iu
         ]);
         return raw ? raw.replace(/\s+/g, '') : '';
       }
 
       function extractLocation(text) {
+        const inventory = extractInventoryEntry(text);
+        if (inventory && inventory.location) return inventory.location;
+
         return extractFirstMatch(text, [
           /((?:ВЛАД|ЦП|СПБ|МСК|ЕКБ)\d+(?:\.\d+){2,})/iu,
-          /((?:ВЛАД|ЦП|СПБ|МСК|ЕКБ)[\w\-\/.]+)/iu,
-          /(?:локация|location|склад)\s*[:\-]?\s*([^\s\n]{2,60})/iu,
+          /((?:ВЛАД|ЦП|СПБ|МСК|ЕКБ)[\w\-/.]+)/iu,
+          /(?:локация|location|склад)\s*[:\-]?\s*([^\s\n]{2,60})/iu
         ]).toUpperCase();
       }
 
       function extractBox(text) {
+        const inventory = extractInventoryEntry(text);
+        if (inventory && inventory.box) return inventory.box;
+
         return extractFirstMatch(text, [
           /\b(?:BOX|CON)\b\s*[:#\-]?\s*(\d{1,12})/iu,
-          /\b(?:box|con)\s*(\d{1,12})\b/iu,
+          /\b(?:box|con)\s*(\d{1,12})\b/iu
         ]);
+      }
+
+      function detectSources({ text, id, sticker, status, name, price, location, box }) {
+        const inventory = extractInventoryEntry(text);
+        const priceFromSaleBlock = /в\s*продаже\s*([\d\s]+)(?:₽|руб)/iu.test(text);
+
+        return {
+          id: id ? 'идентификатор товара / длинный номер' : 'не найдено',
+          sticker: sticker ? (inventory && inventory.sticker ? 'из строки истории / инвентарной строки' : 'из блока "ВБ стикер"') : 'не найдено',
+          status: status ? (inventory && inventory.status ? 'из строки истории / инвентарной строки' : 'из поля "Статус"') : 'не найдено',
+          name: name ? (text.match(/идентификатор\s+товара.*\/.*вб\s*стикер/isu) ? 'из верхней строки карточки' : 'из текстового поля товара') : 'не найдено',
+          price: price ? (priceFromSaleBlock ? 'из блока "В продаже"' : 'по символу ₽ / отдельной вставке') : 'не найдено',
+          location: location ? (inventory && inventory.location ? 'из строки истории / МХ' : 'из строки МХ / складской локации') : 'не найдено',
+          box: box ? 'из BOX / CON' : 'опционально, не найдено'
+        };
       }
 
       function parseInput(rawText) {
@@ -405,14 +815,16 @@ ID: 7353
         const id = extractIdentifier(text);
         const sticker = extractSticker(text, id);
         const status = extractStatus(text, sticker);
-        const name = extractName(text);
+        const name = extractName(text, id);
         const price = extractPrice(text);
         const location = extractLocation(text);
         const box = extractBox(text);
 
         const result = { id, sticker, status, name, price, location, box };
-        const filledCount = FIELD_ORDER.reduce((count, key) => count + Number(Boolean(result[key])), 0);
+        const sources = detectSources({ text, ...result });
+        const filledRequiredCount = REQUIRED_FIELDS.reduce((count, key) => count + Number(Boolean(result[key])), 0);
         const warnings = [];
+
         if (!id) warnings.push('Не найден идентификатор товара.');
         if (!sticker) warnings.push('Не найден ВБ стикер.');
         if (!status) warnings.push('Не найден статус-код.');
@@ -423,18 +835,21 @@ ID: 7353
         return {
           raw: text,
           result,
+          sources,
+          signature: FIELD_ORDER.map(key => result[key] || '').join('||'),
           tsv: FIELD_ORDER.map(key => result[key] || '').join('\t'),
           json: JSON.stringify(result, null, 2),
-          filledCount,
+          filledRequiredCount,
           warnings,
-          isComplete: filledCount === FIELD_ORDER.length,
+          isComplete: filledRequiredCount === REQUIRED_FIELDS.length
         };
       }
 
       function createEmptyResult() {
         return {
           result: Object.fromEntries(FIELD_ORDER.map(key => [key, ''])),
-          filledCount: 0,
+          sources: Object.fromEntries(FIELD_ORDER.map(key => [key, 'не найдено'])),
+          filledRequiredCount: 0,
           warnings: [],
           isComplete: false,
           tsv: '',
@@ -460,33 +875,49 @@ ID: 7353
           elements.output.value = parsed.tsv;
           renderPreview(parsed);
           updateSummary(parsed);
-          updateCompleteness(parsed.filledCount);
+          updateCompleteness(parsed);
+          persistState();
+          updateActionState();
 
           if (parsed.warnings.length) {
             writeLog(`ANALYSIS_DONE_WITH_WARNINGS: ${parsed.warnings.join(' | ')}`, 'warning');
-            setParseState(`Готово с предупреждениями (${parsed.filledCount}/${FIELD_ORDER.length})`);
+            setParseState(`Готово с предупреждениями (${parsed.filledRequiredCount}/${REQUIRED_FIELDS.length})`);
           } else {
-            writeLog(`ANALYSIS_SUCCESS: ${parsed.filledCount}/${FIELD_ORDER.length} FIELDS RESOLVED`, 'success');
+            writeLog(`ANALYSIS_SUCCESS: ${parsed.filledRequiredCount}/${REQUIRED_FIELDS.length} REQUIRED FIELDS RESOLVED`, 'success');
             setParseState('Анализ завершён успешно');
           }
+
           setBusy(false);
         }, 100);
       }
 
       function renderPreview(parsed) {
         const fragment = document.createDocumentFragment();
+
         FIELD_ORDER.forEach((key) => {
           const card = document.createElement('article');
+          const isRequired = REQUIRED_FIELDS.includes(key);
+          const hasValue = Boolean(parsed.result[key]);
           card.className = 'preview-card';
+          card.dataset.state = hasValue ? 'filled' : 'missing';
+          card.dataset.required = String(isRequired);
+
           const label = document.createElement('div');
           label.className = 'preview-card__label';
           label.textContent = FIELD_LABELS[key];
+
           const value = document.createElement('div');
           value.className = 'preview-card__value';
           value.textContent = parsed.result[key] || '—';
-          card.append(label, value);
+
+          const meta = document.createElement('div');
+          meta.className = 'preview-card__meta';
+          meta.textContent = parsed.sources[key] || '—';
+
+          card.append(label, value, meta);
           fragment.append(card);
         });
+
         elements.previewGrid.replaceChildren(fragment);
       }
 
@@ -497,43 +928,80 @@ ID: 7353
         elements.summaryLocation.textContent = [parsed.result.location, parsed.result.box].filter(Boolean).join(' / ') || '—';
       }
 
-      function updateCompleteness(count) { elements.badgeCompleteness.textContent = `Заполнено: ${count}/${FIELD_ORDER.length}`; }
-      function setParseState(message) { elements.parseState.textContent = message; }
-      function setBusy(isBusy) { elements.analyzeBtn.disabled = isBusy; elements.analyzeBtn.textContent = isBusy ? 'Analyzing...' : 'Run Analysis'; }
+      function updateCompleteness(parsed) {
+        elements.badgeCompleteness.textContent = `Обязательные: ${parsed.filledRequiredCount}/${REQUIRED_FIELDS.length}`;
+        elements.badgeOptional.textContent = `BOX: ${parsed.result.box ? 'filled' : 'empty'}`;
+      }
+
+      function updateActionState() {
+        const canSave = Boolean(state.lastParsed && state.lastParsed.tsv && state.lastParsed.filledRequiredCount === REQUIRED_FIELDS.length);
+        elements.saveResultBtn.disabled = !canSave;
+        elements.copyQueueBtn.disabled = state.queue.length === 0;
+        elements.downloadQueueBtn.disabled = state.queue.length === 0;
+        elements.clearQueueBtn.disabled = state.queue.length === 0;
+      }
+
+      function setParseState(message) {
+        elements.parseState.textContent = message;
+      }
+
+      function setBusy(isBusy) {
+        elements.analyzeBtn.disabled = isBusy;
+        elements.analyzeBtn.textContent = isBusy ? 'Analyzing...' : 'Run Analysis';
+      }
 
       function writeLog(message, level = 'info') {
         const item = document.createElement('li');
         item.className = 'log-item';
         item.dataset.level = level;
+
         const time = document.createElement('span');
         time.className = 'log-item__time';
-        time.textContent = new Intl.DateTimeFormat('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(new Date());
+        time.textContent = new Intl.DateTimeFormat('ru-RU', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false
+        }).format(new Date());
+
         const text = document.createElement('span');
         text.className = 'log-item__message';
         text.textContent = message;
+
         item.append(time, text);
         elements.logList.prepend(item);
-        while (elements.logList.children.length > state.logsLimit) elements.logList.removeChild(elements.logList.lastElementChild);
+
+        while (elements.logList.children.length > state.logsLimit) {
+          elements.logList.removeChild(elements.logList.lastElementChild);
+        }
+
         elements.announce.textContent = message;
       }
 
       async function handlePaste() {
-        if (!navigator.clipboard || !navigator.clipboard.readText) {
-          writeLog('CLIPBOARD_READ_UNAVAILABLE_IN_THIS_BROWSER', 'warning');
-          return;
-        }
-        try {
-          const text = await navigator.clipboard.readText();
-          if (!text.trim()) {
-            writeLog('CLIPBOARD_IS_EMPTY', 'warning');
+        if (navigator.clipboard && navigator.clipboard.readText) {
+          try {
+            const text = await navigator.clipboard.readText();
+            if (!text.trim()) {
+              writeLog('CLIPBOARD_IS_EMPTY', 'warning');
+              return;
+            }
+
+            const normalizedIncoming = text.trim();
+            const currentValue = elements.input.value.trim();
+            elements.input.value = currentValue ? `${currentValue}\n\n${normalizedIncoming}` : normalizedIncoming;
+            updateInputMeta();
+            persistState();
+            writeLog('SOURCE_INPUT_APPENDED_FROM_CLIPBOARD', 'success');
+            handleAnalyze();
             return;
+          } catch (error) {
+            writeLog(`CLIPBOARD_READ_FAILED: ${error.message}`, 'warning');
           }
-          elements.input.value = text;
-          updateInputMeta();
-          writeLog('SOURCE_INPUT_INSERTED_FROM_CLIPBOARD', 'success');
-        } catch (error) {
-          writeLog(`CLIPBOARD_READ_FAILED: ${error.message}`, 'error');
         }
+
+        elements.input.focus();
+        writeLog('CLIPBOARD_READ_UNAVAILABLE: USE CTRL/⌘+V IN INPUT FIELD', 'warning');
       }
 
       async function copyOutput(mode) {
@@ -541,17 +1009,89 @@ ID: 7353
           writeLog('NOTHING_TO_COPY: RUN ANALYSIS FIRST', 'warning');
           return;
         }
+
         const payload = mode === 'json' ? state.lastParsed.json : state.lastParsed.tsv;
         if (!payload) {
           writeLog('EMPTY_OUTPUT_CANNOT_BE_COPIED', 'warning');
           return;
         }
-        try {
-          await navigator.clipboard.writeText(payload);
-          writeLog(`${mode.toUpperCase()}_COPIED_TO_CLIPBOARD`, 'success');
-        } catch (error) {
-          writeLog(`COPY_FAILED: ${error.message}`, 'error');
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          try {
+            await navigator.clipboard.writeText(payload);
+            writeLog(`${mode.toUpperCase()}_COPIED_TO_CLIPBOARD`, 'success');
+            return;
+          } catch (error) {
+            writeLog(`CLIPBOARD_WRITE_FAILED: ${error.message}`, 'warning');
+          }
         }
+
+        const source = mode === 'json' ? state.lastParsed.json : elements.output.value;
+        if (mode === 'json') {
+          elements.output.value = source;
+        }
+
+        elements.output.removeAttribute('readonly');
+        elements.output.focus();
+        elements.output.select();
+
+        let copied = false;
+        try {
+          copied = document.execCommand('copy');
+        } catch (error) {
+          copied = false;
+        }
+
+        elements.output.setAttribute('readonly', 'readonly');
+        elements.output.setSelectionRange(0, 0);
+
+        if (mode === 'json') {
+          elements.output.value = state.lastParsed.tsv;
+        }
+
+        if (copied) {
+          writeLog(`${mode.toUpperCase()}_COPIED_WITH_FALLBACK`, 'success');
+        } else {
+          writeLog(`COPY_FALLBACK_FAILED: SELECTED ${mode.toUpperCase()} MANUALLY`, 'error');
+        }
+      }
+
+      async function copyTextPayload(payload, successMessage) {
+        if (!payload) return false;
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          try {
+            await navigator.clipboard.writeText(payload);
+            writeLog(successMessage, 'success');
+            return true;
+          } catch (error) {
+            writeLog(`CLIPBOARD_WRITE_FAILED: ${error.message}`, 'warning');
+          }
+        }
+
+        elements.output.removeAttribute('readonly');
+        elements.output.value = payload;
+        elements.output.focus();
+        elements.output.select();
+
+        let copied = false;
+        try {
+          copied = document.execCommand('copy');
+        } catch (error) {
+          copied = false;
+        }
+
+        elements.output.setAttribute('readonly', 'readonly');
+        elements.output.value = state.lastParsed ? state.lastParsed.tsv : '';
+        elements.output.setSelectionRange(0, 0);
+
+        if (copied) {
+          writeLog(`${successMessage}_FALLBACK`, 'success');
+          return true;
+        }
+
+        writeLog('COPY_FALLBACK_FAILED', 'error');
+        return false;
       }
 
       function downloadOutput() {
@@ -559,12 +1099,20 @@ ID: 7353
           writeLog('NOTHING_TO_DOWNLOAD', 'warning');
           return;
         }
+
         const blob = new Blob([state.lastParsed.tsv], { type: 'text/plain;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         const stamp = new Intl.DateTimeFormat('sv-SE', {
-          year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false
         }).format(new Date()).replace(/[ :]/g, '-');
+
         link.href = url;
         link.download = `ultimate6-output-${stamp}.txt`;
         link.click();
@@ -575,6 +1123,7 @@ ID: 7353
       function clearInput() {
         elements.input.value = '';
         updateInputMeta();
+        persistState();
         writeLog('SOURCE_INPUT_CLEARED', 'info');
         elements.input.focus();
       }
@@ -585,20 +1134,227 @@ ID: 7353
         const empty = createEmptyResult();
         renderPreview(empty);
         updateSummary(empty);
-        updateCompleteness(0);
+        updateCompleteness(empty);
         setParseState('Ожидание анализа');
+        persistState();
+        updateActionState();
         writeLog('OUTPUT_RESET_COMPLETE', 'info');
       }
 
       function loadDemo() {
         elements.input.value = DEMO_TEXT;
         updateInputMeta();
+        persistState();
         writeLog('DEMO_DATA_LOADED', 'info');
+        handleAnalyze();
       }
 
       function clearLog() {
         elements.logList.replaceChildren();
-        writeLog('LOG_CLEARED', 'info');
+        elements.announce.textContent = 'LOG_CLEARED';
+      }
+
+      function saveCurrentResultToQueue() {
+        if (!state.lastParsed || state.lastParsed.filledRequiredCount !== REQUIRED_FIELDS.length) {
+          writeLog('SAVE_BLOCKED: CURRENT RESULT IS NOT COMPLETE', 'warning');
+          return;
+        }
+
+        const exists = state.queue.some(item => item.signature === state.lastParsed.signature);
+        if (exists) {
+          writeLog('QUEUE_SKIP_DUPLICATE: SAME TSV ALREADY SAVED', 'warning');
+          return;
+        }
+
+        const entry = {
+          id: `${Date.now()}`,
+          createdAt: new Intl.DateTimeFormat('ru-RU', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+          }).format(new Date()),
+          signature: state.lastParsed.signature,
+          tsv: state.lastParsed.tsv,
+          result: { ...state.lastParsed.result }
+        };
+
+        state.queue.unshift(entry);
+        renderQueue();
+        persistState();
+        updateActionState();
+        writeLog(`QUEUE_ADD_SUCCESS: ${entry.result.id || 'NO_ID'} SAVED`, 'success');
+      }
+
+      function renderQueue() {
+        elements.queueCountBadge.textContent = `Строк в очереди: ${state.queue.length}`;
+
+        if (!state.queue.length) {
+          const empty = document.createElement('div');
+          empty.className = 'queue-empty';
+          empty.textContent = 'Очередь пуста. Собери строку, нажми "Save To Queue", потом копируй всё разом или по одной строке.';
+          elements.queueList.replaceChildren(empty);
+          updateActionState();
+          return;
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        state.queue.forEach((item, index) => {
+          const row = document.createElement('article');
+          row.className = 'queue-item';
+
+          const top = document.createElement('div');
+          top.className = 'queue-item__top';
+
+          const meta = document.createElement('div');
+          meta.className = 'queue-item__meta';
+
+          const title = document.createElement('div');
+          title.className = 'queue-item__title';
+          title.textContent = `Row ${state.queue.length - index} • ${item.createdAt}`;
+
+          const subtitle = document.createElement('div');
+          subtitle.className = 'queue-item__subtitle';
+          subtitle.textContent = [item.result.id, item.result.name, item.result.price ? `${item.result.price} ₽` : '', item.result.location].filter(Boolean).join(' • ');
+
+          meta.append(title, subtitle);
+
+          const actions = document.createElement('div');
+          actions.className = 'queue-item__actions';
+
+          const copyBtn = document.createElement('button');
+          copyBtn.className = 'btn btn--ghost';
+          copyBtn.type = 'button';
+          copyBtn.textContent = 'Copy Row';
+          copyBtn.addEventListener('click', () => {
+            copyTextPayload(item.tsv, 'QUEUE_ROW_COPIED');
+          });
+
+          const removeBtn = document.createElement('button');
+          removeBtn.className = 'btn btn--danger';
+          removeBtn.type = 'button';
+          removeBtn.textContent = 'Remove';
+          removeBtn.addEventListener('click', () => {
+            removeQueueItem(item.id);
+          });
+
+          actions.append(copyBtn, removeBtn);
+          top.append(meta, actions);
+
+          const tsv = document.createElement('div');
+          tsv.className = 'queue-item__tsv';
+          tsv.textContent = item.tsv;
+
+          row.append(top, tsv);
+          fragment.append(row);
+        });
+
+        elements.queueList.replaceChildren(fragment);
+        updateActionState();
+      }
+
+      function removeQueueItem(id) {
+        state.queue = state.queue.filter(item => item.id !== id);
+        renderQueue();
+        persistState();
+        updateActionState();
+        writeLog('QUEUE_ITEM_REMOVED', 'info');
+      }
+
+      async function copyQueue() {
+        if (!state.queue.length) {
+          writeLog('QUEUE_IS_EMPTY', 'warning');
+          return;
+        }
+
+        const payload = state.queue.slice().reverse().map(item => item.tsv).join('\n');
+        await copyTextPayload(payload, 'QUEUE_TSV_COPIED');
+      }
+
+      function downloadQueue() {
+        if (!state.queue.length) {
+          writeLog('QUEUE_IS_EMPTY', 'warning');
+          return;
+        }
+
+        const payload = state.queue.slice().reverse().map(item => item.tsv).join('\n');
+        const blob = new Blob([payload], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        const stamp = new Intl.DateTimeFormat('sv-SE', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false
+        }).format(new Date()).replace(/[ :]/g, '-');
+
+        link.href = url;
+        link.download = `ultimate6-queue-${stamp}.txt`;
+        link.click();
+        URL.revokeObjectURL(url);
+        writeLog('QUEUE_TXT_DOWNLOADED', 'success');
+      }
+
+      function clearQueue() {
+        state.queue = [];
+        renderQueue();
+        persistState();
+        updateActionState();
+        writeLog('QUEUE_CLEARED', 'info');
+      }
+
+      function persistState() {
+        try {
+          localStorage.setItem(STORAGE_KEYS.input, elements.input.value);
+          localStorage.setItem(STORAGE_KEYS.output, elements.output.value);
+          if (state.lastParsed) {
+            localStorage.setItem(STORAGE_KEYS.parsed, JSON.stringify(state.lastParsed));
+          } else {
+            localStorage.removeItem(STORAGE_KEYS.parsed);
+          }
+          localStorage.setItem(STORAGE_KEYS.queue, JSON.stringify(state.queue));
+        } catch (error) {
+          writeLog(`LOCAL_SAVE_FAILED: ${error.message}`, 'warning');
+        }
+      }
+
+      function restorePersistedState() {
+        try {
+          const savedInput = localStorage.getItem(STORAGE_KEYS.input) || '';
+          const savedOutput = localStorage.getItem(STORAGE_KEYS.output) || '';
+          const savedParsed = localStorage.getItem(STORAGE_KEYS.parsed);
+          const savedQueue = localStorage.getItem(STORAGE_KEYS.queue);
+
+          if (savedInput) elements.input.value = savedInput;
+          if (savedOutput) elements.output.value = savedOutput;
+
+          if (savedParsed) {
+            const parsed = JSON.parse(savedParsed);
+            if (parsed && parsed.result) {
+              state.lastParsed = parsed;
+              renderPreview(state.lastParsed);
+              updateSummary(state.lastParsed);
+              updateCompleteness(state.lastParsed);
+              setParseState(state.lastParsed.isComplete ? 'Восстановлено из local state' : 'Восстановлено, проверь поля');
+              writeLog('SESSION_RESTORED_FROM_LOCAL_STORAGE', 'info');
+            }
+          }
+
+          if (savedQueue) {
+            const queue = JSON.parse(savedQueue);
+            if (Array.isArray(queue)) {
+              state.queue = queue;
+            }
+          }
+        } catch (error) {
+          state.lastParsed = null;
+          state.queue = [];
+          writeLog(`LOCAL_RESTORE_FAILED: ${error.message}`, 'warning');
+        }
       }
 
       init();
