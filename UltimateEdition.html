@@ -164,7 +164,7 @@
       letter-spacing: normal;
     }
 
-    textarea, .preview, .log-list {
+    textarea, .preview, .log-list, .sheet-sync__input, .sheet-sync__select {
       width: 100%;
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
@@ -182,6 +182,11 @@
     }
 
     textarea:focus, button:focus-visible {
+      border-color: var(--border-strong);
+      box-shadow: 0 0 0 4px rgba(255,255,255,.04);
+    }
+
+    .sheet-sync__input:focus, .sheet-sync__select:focus {
       border-color: var(--border-strong);
       box-shadow: 0 0 0 4px rgba(255,255,255,.04);
     }
@@ -217,6 +222,47 @@
     .btn--ghost { background: transparent; }
 
     .output-block { display: grid; gap: 12px; min-height: 0; }
+
+    .sheet-sync {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border: 1px solid var(--border);
+    }
+
+    .sheet-sync__grid {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr) 210px;
+      gap: 10px;
+    }
+
+    .sheet-sync__field {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .sheet-sync__field-label {
+      font-size: 11px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .sheet-sync__input,
+    .sheet-sync__select {
+      min-height: 42px;
+      padding: 10px 12px;
+      font: 12px/1.4 var(--mono);
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .sheet-sync__hint {
+      font: 11px/1.5 var(--mono);
+      color: var(--text-dim);
+    }
 
     .preview {
       min-height: 180px;
@@ -417,6 +463,7 @@
       .panel__header { flex-direction: column; align-items: flex-start; }
       textarea { min-height: 180px; }
       .queue-list { max-height: none; }
+      .sheet-sync__grid { grid-template-columns: 1fr; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -459,9 +506,7 @@
         </div>
         <div class="panel__footer">
           <button class="btn btn--primary" id="analyzeBtn" type="button">Run Analysis</button>
-          <button class="btn btn--ghost" id="pasteBtn" type="button">Paste Append</button>
           <button class="btn btn--danger" id="clearInputBtn" type="button">Clear Input</button>
-          <button class="btn btn--ghost" id="loadDemoBtn" type="button">Load Demo</button>
         </div>
       </section>
 
@@ -478,6 +523,33 @@
             <span class="stat-badge">Формат: TSV</span>
             <span class="stat-badge" id="badgeCompleteness">Обязательные: 0/6</span>
             <span class="stat-badge" id="badgeOptional">BOX: empty</span>
+            <span class="stat-badge" id="sheetTargetBadge">Target: Выгрузка Б5</span>
+            <span class="stat-badge" id="sheetConnectionBadge">Sheets: not configured</span>
+          </div>
+          <div class="sheet-sync" aria-label="Google Sheets Sync">
+            <div class="field-label">
+              <span>Google Sheets Sync</span>
+              <span class="hint">Вставь Web App URL и Access Key из setup-файла один раз</span>
+            </div>
+            <div class="sheet-sync__grid">
+              <label class="sheet-sync__field">
+                <span class="sheet-sync__field-label">Target Sheet</span>
+                <select class="sheet-sync__select" id="targetSheet">
+                  <option value="Выгрузка Б3">Выгрузка Б3</option>
+                  <option value="Выгрузка Б4">Выгрузка Б4</option>
+                  <option value="Выгрузка Б5" selected>Выгрузка Б5</option>
+                </select>
+              </label>
+              <label class="sheet-sync__field">
+                <span class="sheet-sync__field-label">Web App URL</span>
+                <input class="sheet-sync__input" id="webhookUrl" type="url" placeholder="https://script.google.com/macros/s/..." />
+              </label>
+              <label class="sheet-sync__field">
+                <span class="sheet-sync__field-label">Access Key</span>
+                <input class="sheet-sync__input" id="accessKey" type="password" placeholder="YOUR_PRIVATE_KEY" />
+              </label>
+            </div>
+            <div class="sheet-sync__hint">Current отправляет только текущую строку. Queue отправляет весь сохранённый пул строк в выбранный лист.</div>
           </div>
           <div class="preview" aria-live="polite"><div class="preview-grid" id="previewGrid"></div></div>
           <label class="field-label" for="output"><span>Итоговая строка</span><span class="hint">7 полей, BOX может быть пустым</span></label>
@@ -485,9 +557,9 @@
         </div>
         <div class="panel__footer">
           <button class="btn btn--success" id="copyTsvBtn" type="button">Copy TSV</button>
-          <button class="btn btn--ghost" id="copyJsonBtn" type="button">Copy JSON</button>
           <button class="btn btn--success" id="saveResultBtn" type="button">Save To Queue</button>
-          <button class="btn btn--ghost" id="downloadBtn" type="button">Download TXT</button>
+          <button class="btn btn--success" id="sendCurrentBtn" type="button">Send Current</button>
+          <button class="btn btn--success" id="sendQueueBtn" type="button">Send Queue</button>
           <button class="btn btn--danger" id="resetOutputBtn" type="button">Reset Output</button>
         </div>
       </section>
@@ -524,11 +596,15 @@
         input: 'ultimate6pro:input',
         output: 'ultimate6pro:output',
         parsed: 'ultimate6pro:parsed',
-        queue: 'ultimate6pro:queue'
+        queue: 'ultimate6pro:queue',
+        targetSheet: 'ultimate6pro:targetSheet',
+        webhookUrl: 'ultimate6pro:webhookUrl',
+        accessKey: 'ultimate6pro:accessKey'
       };
 
       const FIELD_ORDER = ['id', 'sticker', 'status', 'name', 'price', 'location', 'box'];
       const REQUIRED_FIELDS = ['id', 'sticker', 'status', 'name', 'price', 'location'];
+      const SHEET_OPTIONS = ['Выгрузка Б3', 'Выгрузка Б4', 'Выгрузка Б5'];
       const FIELD_LABELS = {
         id: 'Identifier',
         sticker: 'WB Sticker',
@@ -561,7 +637,16 @@
 ID: 7353
 ВЛАД3.03.15.81.03.01	BOX	296777288`;
 
-      const state = { lastParsed: null, queue: [], logsLimit: 80 };
+      const state = {
+        lastParsed: null,
+        queue: [],
+        targetSheet: 'Выгрузка Б5',
+        webhookUrl: '',
+        accessKey: '',
+        sendLockUntil: 0,
+        sendLockTimer: null,
+        logsLimit: 80
+      };
 
       const elements = {
         datetime: document.getElementById('datetime'),
@@ -572,20 +657,23 @@ ID: 7353
         inputMeta: document.getElementById('input-meta'),
         badgeCompleteness: document.getElementById('badgeCompleteness'),
         badgeOptional: document.getElementById('badgeOptional'),
+        sheetTargetBadge: document.getElementById('sheetTargetBadge'),
+        sheetConnectionBadge: document.getElementById('sheetConnectionBadge'),
         summaryId: document.getElementById('summary-id'),
         summaryStatus: document.getElementById('summary-status'),
         summaryPrice: document.getElementById('summary-price'),
         summaryLocation: document.getElementById('summary-location'),
+        targetSheet: document.getElementById('targetSheet'),
+        webhookUrl: document.getElementById('webhookUrl'),
+        accessKey: document.getElementById('accessKey'),
         logList: document.getElementById('logList'),
         announce: document.getElementById('announce'),
         analyzeBtn: document.getElementById('analyzeBtn'),
-        pasteBtn: document.getElementById('pasteBtn'),
         clearInputBtn: document.getElementById('clearInputBtn'),
-        loadDemoBtn: document.getElementById('loadDemoBtn'),
         copyTsvBtn: document.getElementById('copyTsvBtn'),
-        copyJsonBtn: document.getElementById('copyJsonBtn'),
         saveResultBtn: document.getElementById('saveResultBtn'),
-        downloadBtn: document.getElementById('downloadBtn'),
+        sendCurrentBtn: document.getElementById('sendCurrentBtn'),
+        sendQueueBtn: document.getElementById('sendQueueBtn'),
         resetOutputBtn: document.getElementById('resetOutputBtn'),
         queueList: document.getElementById('queueList'),
         queueCountBadge: document.getElementById('queueCountBadge'),
@@ -616,13 +704,11 @@ ID: 7353
 
       function bindEvents() {
         elements.analyzeBtn.addEventListener('click', handleAnalyze);
-        elements.pasteBtn.addEventListener('click', handlePaste);
         elements.clearInputBtn.addEventListener('click', clearInput);
-        elements.loadDemoBtn.addEventListener('click', loadDemo);
         elements.copyTsvBtn.addEventListener('click', () => copyOutput('tsv'));
-        elements.copyJsonBtn.addEventListener('click', () => copyOutput('json'));
         elements.saveResultBtn.addEventListener('click', saveCurrentResultToQueue);
-        elements.downloadBtn.addEventListener('click', downloadOutput);
+        elements.sendCurrentBtn.addEventListener('click', sendCurrentToSheet);
+        elements.sendQueueBtn.addEventListener('click', sendQueueToSheet);
         elements.resetOutputBtn.addEventListener('click', resetOutput);
         elements.copyQueueBtn.addEventListener('click', copyQueue);
         elements.downloadQueueBtn.addEventListener('click', downloadQueue);
@@ -630,6 +716,9 @@ ID: 7353
         elements.clearLogBtn.addEventListener('click', clearLog);
         elements.input.addEventListener('input', handleInputChange);
         elements.input.addEventListener('keydown', onEditorKeydown);
+        elements.targetSheet.addEventListener('change', handleIntegrationChange);
+        elements.webhookUrl.addEventListener('input', handleIntegrationChange);
+        elements.accessKey.addEventListener('input', handleIntegrationChange);
       }
 
       function handleInputChange() {
@@ -643,6 +732,15 @@ ID: 7353
           event.preventDefault();
           handleAnalyze();
         }
+      }
+
+      function handleIntegrationChange() {
+        state.targetSheet = elements.targetSheet.value;
+        state.webhookUrl = elements.webhookUrl.value.trim();
+        state.accessKey = elements.accessKey.value.trim();
+        updateIntegrationBadges();
+        updateActionState();
+        persistState();
       }
 
       function updateClock() {
@@ -937,12 +1035,29 @@ ID: 7353
         elements.badgeOptional.textContent = `BOX: ${parsed.result.box ? 'filled' : 'empty'}`;
       }
 
+      function updateIntegrationBadges() {
+        elements.sheetTargetBadge.textContent = `Target: ${state.targetSheet}`;
+        elements.sheetConnectionBadge.textContent = state.webhookUrl && state.accessKey ? 'Sheets: ready' : 'Sheets: not configured';
+      }
+
       function updateActionState() {
         const canSave = Boolean(state.lastParsed && state.lastParsed.tsv && state.lastParsed.filledRequiredCount === REQUIRED_FIELDS.length);
+        const isSendLocked = state.sendLockUntil > Date.now();
+        const canSendCurrent = Boolean(canSave && state.webhookUrl && state.accessKey && !isSendLocked);
+        const canSendQueue = Boolean(state.queue.length && state.webhookUrl && state.accessKey && !isSendLocked);
         elements.saveResultBtn.disabled = !canSave;
+        elements.sendCurrentBtn.disabled = !canSendCurrent;
+        elements.sendQueueBtn.disabled = !canSendQueue;
         elements.copyQueueBtn.disabled = state.queue.length === 0;
         elements.downloadQueueBtn.disabled = state.queue.length === 0;
         elements.clearQueueBtn.disabled = state.queue.length === 0;
+        if (isSendLocked) {
+          elements.sendCurrentBtn.textContent = 'Sending...';
+          elements.sendQueueBtn.textContent = 'Sending...';
+        } else {
+          elements.sendCurrentBtn.textContent = 'Send Current';
+          elements.sendQueueBtn.textContent = 'Send Queue';
+        }
       }
 
       function setParseState(message) {
@@ -1158,6 +1273,179 @@ ID: 7353
         elements.announce.textContent = 'LOG_CLEARED';
       }
 
+      function validateSheetSetup() {
+        if (!SHEET_OPTIONS.includes(state.targetSheet)) {
+          writeLog('SHEETS_CONFIG_INVALID: UNKNOWN TARGET SHEET', 'error');
+          return false;
+        }
+
+        if (!state.webhookUrl) {
+          writeLog('SHEETS_CONFIG_MISSING_URL: PASTE WEB APP URL FIRST', 'warning');
+          elements.webhookUrl.focus();
+          return false;
+        }
+
+        if (!state.accessKey) {
+          writeLog('SHEETS_CONFIG_MISSING_KEY: PASTE ACCESS KEY FIRST', 'warning');
+          elements.accessKey.focus();
+          return false;
+        }
+
+        return true;
+      }
+
+      function buildRowValues(result) {
+        return FIELD_ORDER.map(key => result[key] || '');
+      }
+
+      function lockSendActions(ms) {
+        state.sendLockUntil = Date.now() + ms;
+        if (state.sendLockTimer) {
+          window.clearTimeout(state.sendLockTimer);
+        }
+        updateActionState();
+        state.sendLockTimer = window.setTimeout(() => {
+          state.sendLockUntil = 0;
+          state.sendLockTimer = null;
+          updateActionState();
+          writeLog('SHEETS_READY_FOR_NEXT_SEND', 'info');
+        }, ms);
+      }
+
+      async function postRowsToGoogleSheet(rows, sourceLabel) {
+        if (!validateSheetSetup()) return null;
+
+        const requestPayload = {
+          accessKey: state.accessKey,
+          sheetName: state.targetSheet,
+          source: sourceLabel,
+          rows
+        };
+
+        writeLog(`SHEETS_SEND_START: ${rows.length} ROW(S) TO ${state.targetSheet}`, 'info');
+
+        if (window.location.protocol === 'file:') {
+          lockSendActions(7000);
+          submitRowsViaHiddenForm(requestPayload);
+          return {
+            ok: true,
+            via: 'form',
+            addedCount: rows.length,
+            skippedCount: 0
+          };
+        }
+
+        try {
+          const response = await fetch(state.webhookUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'text/plain;charset=utf-8'
+            },
+            body: JSON.stringify(requestPayload)
+          });
+
+          const text = await response.text();
+          let payload = null;
+
+          try {
+            payload = JSON.parse(text);
+          } catch (error) {
+            payload = { ok: false, message: text || 'Unknown response from Apps Script' };
+          }
+
+          if (!response.ok || !payload.ok) {
+            throw new Error(payload.message || `HTTP ${response.status}`);
+          }
+
+          return payload;
+        } catch (error) {
+          writeLog(`SHEETS_SEND_FAILED: ${error.message}`, 'error');
+          return null;
+        }
+      }
+
+      function submitRowsViaHiddenForm(payload) {
+        const iframeName = 'ultimate6-sheet-sync-frame';
+        let iframe = document.getElementById(iframeName);
+
+        if (!iframe) {
+          iframe = document.createElement('iframe');
+          iframe.id = iframeName;
+          iframe.name = iframeName;
+          iframe.style.display = 'none';
+          document.body.appendChild(iframe);
+        }
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = state.webhookUrl;
+        form.target = iframeName;
+        form.style.display = 'none';
+
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'payloadJson';
+        input.value = JSON.stringify(payload);
+
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+
+        window.setTimeout(() => {
+          form.remove();
+        }, 1000);
+      }
+
+      async function sendCurrentToSheet() {
+        if (!state.lastParsed || state.lastParsed.filledRequiredCount !== REQUIRED_FIELDS.length) {
+          writeLog('SEND_CURRENT_BLOCKED: CURRENT RESULT IS NOT COMPLETE', 'warning');
+          return;
+        }
+
+        const payload = await postRowsToGoogleSheet([
+          {
+            signature: state.lastParsed.signature,
+            values: buildRowValues(state.lastParsed.result)
+          }
+        ], 'current');
+
+        if (!payload) return;
+
+        if (payload.via === 'form') {
+          setParseState(`Отправлено в ${state.targetSheet}, подожди 5-10 сек`);
+          writeLog(`SHEETS_REQUEST_SUBMITTED: SENT TO ${state.targetSheet}, WAIT 5-10 SEC BEFORE NEXT CLICK`, 'success');
+          return;
+        }
+
+        writeLog(`SHEETS_CURRENT_SENT: ${payload.addedCount} ADDED TO ${state.targetSheet}${payload.skippedCount ? `, ${payload.skippedCount} SKIPPED` : ''}`, 'success');
+      }
+
+      async function sendQueueToSheet() {
+        if (!state.queue.length) {
+          writeLog('SEND_QUEUE_BLOCKED: QUEUE IS EMPTY', 'warning');
+          return;
+        }
+
+        const rows = state.queue
+          .slice()
+          .reverse()
+          .map(item => ({
+            signature: item.signature,
+            values: buildRowValues(item.result)
+          }));
+
+        const payload = await postRowsToGoogleSheet(rows, 'queue');
+        if (!payload) return;
+
+        if (payload.via === 'form') {
+          setParseState(`Очередь отправлена в ${state.targetSheet}, подожди 5-10 сек`);
+          writeLog(`SHEETS_QUEUE_REQUEST_SUBMITTED: SENT TO ${state.targetSheet}, WAIT 5-10 SEC BEFORE NEXT CLICK`, 'success');
+          return;
+        }
+
+        writeLog(`SHEETS_QUEUE_SENT: ${payload.addedCount} ADDED TO ${state.targetSheet}${payload.skippedCount ? `, ${payload.skippedCount} SKIPPED` : ''}`, 'success');
+      }
+
       function saveCurrentResultToQueue() {
         if (!state.lastParsed || state.lastParsed.filledRequiredCount !== REQUIRED_FIELDS.length) {
           writeLog('SAVE_BLOCKED: CURRENT RESULT IS NOT COMPLETE', 'warning');
@@ -1321,6 +1609,9 @@ ID: 7353
             localStorage.removeItem(STORAGE_KEYS.parsed);
           }
           localStorage.setItem(STORAGE_KEYS.queue, JSON.stringify(state.queue));
+          localStorage.setItem(STORAGE_KEYS.targetSheet, state.targetSheet);
+          localStorage.setItem(STORAGE_KEYS.webhookUrl, state.webhookUrl);
+          localStorage.setItem(STORAGE_KEYS.accessKey, state.accessKey);
         } catch (error) {
           writeLog(`LOCAL_SAVE_FAILED: ${error.message}`, 'warning');
         }
@@ -1332,9 +1623,20 @@ ID: 7353
           const savedOutput = localStorage.getItem(STORAGE_KEYS.output) || '';
           const savedParsed = localStorage.getItem(STORAGE_KEYS.parsed);
           const savedQueue = localStorage.getItem(STORAGE_KEYS.queue);
+          const savedTargetSheet = localStorage.getItem(STORAGE_KEYS.targetSheet);
+          const savedWebhookUrl = localStorage.getItem(STORAGE_KEYS.webhookUrl) || '';
+          const savedAccessKey = localStorage.getItem(STORAGE_KEYS.accessKey) || '';
 
           if (savedInput) elements.input.value = savedInput;
           if (savedOutput) elements.output.value = savedOutput;
+          if (savedTargetSheet && SHEET_OPTIONS.includes(savedTargetSheet)) {
+            state.targetSheet = savedTargetSheet;
+          }
+          state.webhookUrl = savedWebhookUrl;
+          state.accessKey = savedAccessKey;
+          elements.targetSheet.value = state.targetSheet;
+          elements.webhookUrl.value = state.webhookUrl;
+          elements.accessKey.value = state.accessKey;
 
           if (savedParsed) {
             const parsed = JSON.parse(savedParsed);
@@ -1354,9 +1656,14 @@ ID: 7353
               state.queue = queue;
             }
           }
+
+          updateIntegrationBadges();
         } catch (error) {
           state.lastParsed = null;
           state.queue = [];
+          state.targetSheet = 'Выгрузка Б5';
+          state.webhookUrl = '';
+          state.accessKey = '';
           writeLog(`LOCAL_RESTORE_FAILED: ${error.message}`, 'warning');
         }
       }
